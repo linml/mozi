@@ -4,41 +4,36 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/robfig/config"
 	"os"
 )
 
 var BaseDb *sql.DB
 
 func init() {
-	c, err := config.ReadDefault("conf.ini")
+
+	user, err := Conf.String("database", "username")
 	if err != nil {
-		fmt.Println("not found file")
+		fmt.Println("Config database->username not found")
 		os.Exit(1)
 	}
-	user, err := c.String("database", "username")
+	password, err := Conf.String("database", "password")
 	if err != nil {
-		fmt.Println("not found file1")
+		fmt.Println("Config database->password not found")
 		os.Exit(1)
 	}
-	password, err := c.String("database", "password")
+	host, err := Conf.String("database", "host")
 	if err != nil {
-		fmt.Println("not found file2")
+		fmt.Println("Config database->host not found")
 		os.Exit(1)
 	}
-	host, err := c.String("database", "host")
+	port, err := Conf.Int("database", "port")
 	if err != nil {
-		fmt.Println("not found file3")
+		fmt.Println("Config database->port not found")
 		os.Exit(1)
 	}
-	port, err := c.Int("database", "port")
+	db, err := Conf.String("database", "db")
 	if err != nil {
-		fmt.Println("not found file4")
-		os.Exit(1)
-	}
-	db, err := c.String("database", "db")
-	if err != nil {
-		fmt.Println("not found file5")
+		fmt.Println("Config database->db not found")
 		os.Exit(1)
 	}
 

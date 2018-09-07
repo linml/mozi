@@ -1,26 +1,24 @@
 package common
 
 import (
-	"github.com/gomodule/redigo/redis"
-	"time"
-	"github.com/robfig/config"
-	"os"
 	"fmt"
+	"github.com/gomodule/redigo/redis"
+	"os"
+	"time"
 )
 
 var RedisPool *redis.Pool
 
 func init() {
-	c, err := config.ReadDefault("conf.ini")
+
+	host, err := Conf.String("redis", "host")
 	if err != nil {
+		fmt.Println("Config redis->host not found")
 		os.Exit(1)
 	}
-	host, err := c.String("database", "host")
+	port, err := Conf.Int("redis", "port")
 	if err != nil {
-		os.Exit(1)
-	}
-	port, err := c.Int("database", "port")
-	if err != nil {
+		fmt.Println("Config redis->port not found")
 		os.Exit(1)
 	}
 
