@@ -1,6 +1,7 @@
 package models
 
 import (
+	"database/sql"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/xorm"
 )
@@ -24,6 +25,21 @@ func (u *User) FieldItem() []interface{} {
 	return []interface{}{&u.UserID, &u.Username, &u.Password, &u.Status}
 }
 
+func CreateUserTx(tx *sql.Tx, u *User) (sql.Result, error) {
+	createSql := "INSERT INTO " + TableUser + " SET username = ?, password = ?, status = ?"
+	rs, err := tx.Exec(createSql, u.Username, &u.Password, &u.Status)
+	if err != nil {
+		return nil, err
+	}
+	return rs, nil
+}
+
+func CreateUser(u *User) error {
+	createSql := "INSERT INTO " + TableUser + " SET username = ?, password = ?, status = ?"
+	_, err := common.BaseDb.Exec(createSql, u.Username, &u.Password, &u.Status)
+	return err
+}
+
 func GetUserByID(id int) (*User, error) {
 	o := xorm.Orm{}
 	u := User{}
@@ -34,7 +50,6 @@ func GetUserByID(id int) (*User, error) {
 	err = common.BaseDb.QueryRow(querySql, o.Args()...).Scan(u.FieldItem()...)
 	return &u, err
 }
-
 
 func GetUserByName(name string) (*User, error) {
 	o := xorm.Orm{}
