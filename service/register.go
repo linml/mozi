@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-func CheckNameLeagal(name string) error {
+func CheckNameLegal(name string) error {
 	if m, _ := regexp.MatchString("^[a-zA-Z]\\w{5,17}$", name); m {
 		return nil
 	}
@@ -25,7 +25,7 @@ func CheckPasswordLegal(password string) error {
 }
 
 func RegisterUser(name string, password string, params map[string]string) error {
-	if err := CheckNameLeagal(name); err != nil {
+	if err := CheckNameLegal(name); err != nil {
 		return err
 	}
 	if err := CheckPasswordLegal(password); err != nil {
