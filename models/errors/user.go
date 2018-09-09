@@ -80,3 +80,20 @@ type RegisterUserFail struct {
 func (err RegisterUserFail) Error() string {
 	return fmt.Sprintf("注册用户事务失败")
 }
+
+type UserStatusDisableErr struct {
+	Name string
+}
+
+func (err UserStatusDisableErr) Error() string {
+	return fmt.Sprintf("用户: %s 处于状态不能使用", err.Name)
+}
+
+
+type NameOrPasswordErr struct {
+	Name string
+}
+
+func (err NameOrPasswordErr) Error() string {
+	return fmt.Sprintf("用户名或密码错误")
+}

@@ -24,6 +24,7 @@ func CheckPasswordLegal(password string) error {
 	return errors.PasswordNotLegal{}
 }
 
+// 注册用户入口
 func RegisterUser(name string, password string, params map[string]string) error {
 	if err := CheckNameLegal(name); err != nil {
 		return err
