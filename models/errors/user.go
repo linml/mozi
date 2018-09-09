@@ -34,6 +34,14 @@ func (err NameExist) Error() string {
 	return fmt.Sprintf("用户名: %s 已存在", err.Name)
 }
 
+type UserNotExist struct {
+	Name string
+}
+
+func (err UserNotExist) Error() string {
+	return fmt.Sprintf("用户不存在")
+}
+
 func IsNameExist(err error) bool {
 	_, ok := err.(NameExist)
 	return ok
@@ -89,11 +97,26 @@ func (err UserStatusDisableErr) Error() string {
 	return fmt.Sprintf("用户: %s 处于状态不能使用", err.Name)
 }
 
-
 type NameOrPasswordErr struct {
 	Name string
 }
 
 func (err NameOrPasswordErr) Error() string {
 	return fmt.Sprintf("用户名或密码错误")
+}
+
+type PasswordErr struct {
+	Name string
+}
+
+func (err PasswordErr) Error() string {
+	return fmt.Sprintf("密码错误")
+}
+
+type Unauthorized struct {
+	Name string
+}
+
+func (err Unauthorized) Error() string {
+	return fmt.Sprintf("请先登录")
 }

@@ -5,7 +5,6 @@ import (
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
 	"github.com/xiuos/mozi/models/errors"
-	"golang.org/x/crypto/bcrypt"
 	"regexp"
 	"strconv"
 )
@@ -57,12 +56,11 @@ func RegisterUser(name string, password string, params map[string]string) error 
 		}
 	}
 
-	bPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	encbPassword, err := common.HashPassword(password)
+
 	if err != nil {
 		return err
 	}
-
-	encbPassword := string(bPassword)
 
 	user := models.User{Name: name, Password: encbPassword, Status: models.UserStatusEnable}
 

@@ -10,6 +10,8 @@ import (
 	"github.com/xiuos/mozi/service"
 )
 
+// 用户注册接口。
+// 参数 name: 用户名, password: 密码, ref: 推广码(非必须)
 func Register(c *gin.Context) {
 	params := routes.ParamHelper{}
 
@@ -40,6 +42,8 @@ func Register(c *gin.Context) {
 	}
 }
 
+// 登录接口。
+// 参数 name: 用户名, password: 密码
 func Login(c *gin.Context) {
 	params := routes.ParamHelper{}
 
@@ -62,8 +66,7 @@ func Login(c *gin.Context) {
 		u, err := models.GetUserByName(name)
 		if err == nil {
 			session := sessions.Default(c)
-			session.Set("login_user_id", u.UserID)
-			session.Set("login_name", u.Name)
+			session.Set(routes.SessionApiLoginID, u.UserID)
 			session.Save()
 		}
 
@@ -73,4 +76,45 @@ func Login(c *gin.Context) {
 		}))
 	}
 
+}
+
+// 获取用户余额
+func GetBalance(c *gin.Context) {
+	uid, err := routes.GetAPILoginID(c)
+	w, err := models.GetUserWallet(uid)
+
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]interface{}{
+			"balance": w.Balance,
+		}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", map[string]interface{}{
+			"balance": w.Balance,
+		}))
+	}
+}
+
+// 获取用户基本信息集合
+func GetInfos(c *gin.Context) {
+	uid, err := routes.GetAPILoginID(c)
+	ui, err := service.GetInfos(uid)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]interface{}{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", ui))
+	}
+}
+
+// 重置密码
+func ResetPassword(c *gin.Context) {
+	uid, err := routes.GetAPILoginID(c)
+	oldPassword := c.PostForm("old_password")
+	newPassword := c.PostForm("new_password")
+
+	err = service.ResetUserPassword(uid, oldPassword, newPassword, models.OperatorTypeSelf)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+	} else {
+		c.JSON(200, routes.ApiShowResult(common.CodeOK, ""))
+	}
 }

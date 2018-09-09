@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-gonic/gin"
 	"github.com/xiuos/mozi/common"
+	"github.com/xiuos/mozi/routes"
 	"github.com/xiuos/mozi/routes/api"
 	"github.com/xiuos/xlog"
 	"os"
 	"runtime"
-	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/contrib/sessions"
 )
 
 func init() {
@@ -30,7 +31,6 @@ func main() {
 	store, _ := sessions.NewRedisStore(10, "tcp", "localhost:6379", "", []byte("secret"))
 	app.Use(sessions.Sessions("session", store))
 
-
 	apiV1 := app.Group("/api/v1")
 	{
 		apiV1.POST("/register", api.Register)
@@ -38,10 +38,12 @@ func main() {
 	}
 
 	apiAuthV1 := app.Group("/api/v1")
+	apiAuthV1.Use(routes.APIAuthMiddleWare())
 	{
-		apiAuthV1.POST("/get_balance", api.Register)
+		apiAuthV1.GET("/get_balance", api.GetBalance)
+		apiAuthV1.GET("/infos", api.GetInfos)
+		apiAuthV1.POST("/password/reset", api.ResetPassword)
 	}
-
 
 	port, err := common.Conf.Int("port", "api_port")
 	if err != nil {

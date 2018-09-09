@@ -11,7 +11,7 @@ const (
 	TableUser = "users"
 )
 
-const(
+const (
 	UserStatusDisable      = 0 // 用户状态禁用
 	UserStatusEnable       = 1 // 用户状态启用
 	USER_STATUS_UNACTIVATE = 2 // 用户状态未激活
@@ -81,4 +81,15 @@ func IsUserExist(name string) (bool, error) {
 	} else {
 		return false, nil
 	}
+}
+
+func SetPassword(uid int, password string) error {
+	hashedPassword, err := common.HashPassword(password)
+
+	if err != nil {
+		return err
+	}
+	updateSql := fmt.Sprintf("UPDATE %s SET password = ? WHERE user_id = ?", TableUser)
+	_, err = common.BaseDb.Exec(updateSql, hashedPassword, uid)
+	return err
 }

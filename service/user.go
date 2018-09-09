@@ -81,3 +81,58 @@ func AuthLogin(name string, password string, params map[string]string) error {
 
 	return nil
 }
+
+func GetInfos(uid int) (*models.UserInfos, error) {
+	var ui models.UserInfos
+	u, err := models.GetUserByID(uid)
+	if err != nil {
+		return &ui, err
+	}
+	up, err := models.GetUserProfile(uid)
+	if err != nil {
+		return &ui, err
+	}
+
+	uw, err := models.GetUserWallet(uid)
+	if err != nil {
+		return &ui, err
+	}
+	ui.UserID = u.UserID
+	ui.Name = u.Name
+	ui.Status = u.Status
+	ui.Balance = uw.Balance
+	ui.RealName = up.RealName
+	ui.Nickname = up.Nickname
+	ui.Email = up.Email
+	ui.IsEmailVerified = up.IsEmailVerified
+	ui.Mobile = up.Mobile
+	ui.IsMobileVerified = up.IsMobileVerified
+	ui.QQ = up.QQ
+	ui.Wechat = up.Wechat
+	ui.RegisterIp = up.RegisterIp
+	ui.Registered = up.Registered
+	return &ui, err
+}
+
+// 重置密码，区分admin/user不同操作者
+func ResetUserPassword(uid int, oldPass string, newPass string, operatorType int) error {
+	if err := CheckPasswordLegal(newPass); err != nil {
+		return err
+	}
+
+	if operatorType != models.OperatorTypeAdmin {
+		u, err := models.GetUserByID(uid)
+
+		if err != nil {
+			return errors.UserNotExist{}
+		}
+
+		if ok := common.CheckBCrypt(oldPass, u.Password); ok == false {
+			return errors.PasswordErr{}
+		}
+	}
+
+	err := models.SetPassword(uid, newPass)
+	return err
+
+}
