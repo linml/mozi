@@ -23,6 +23,13 @@ func CheckPasswordLegal(password string) error {
 	return errors.PasswordNotLegal{}
 }
 
+func CheckWalletPasswordLegal(username string) error {
+	if m, _ := regexp.MatchString("^\\d{6}$", username); m {
+		return nil
+	}
+	return errors.WalletPasswordNotLegal{}
+}
+
 // 注册用户入口
 func RegisterUser(name string, password string, params map[string]string) error {
 	if err := CheckNameLegal(name); err != nil {

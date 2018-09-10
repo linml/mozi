@@ -5,6 +5,7 @@ import (
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/xorm"
 	"github.com/shopspring/decimal"
+	"fmt"
 )
 
 const (
@@ -53,4 +54,21 @@ func GetUserWallet(uid int) (*UserWallet, error) {
 	}
 	err = common.BaseDb.QueryRow(querySql, o.Args()...).Scan(uw.FieldItem()...)
 	return &uw, err
+}
+
+func SetWalletPassword(uid int, password string)error  {
+	hashPassword, err:= common.HashPassword(password)
+	if err != nil{
+		return err
+	}
+	updateSql := fmt.Sprintf("UPDATE %s SET password = ? WHERE user_id = ?", TableUserWallet)
+	_, err  = common.BaseDb.Exec(updateSql, hashPassword, uid)
+	return err
+}
+
+func SetWalletStatus(uid int, status int)error  {
+
+	updateSql := fmt.Sprintf("UPDATE %s SET status = ? WHERE user_id = ?", TableUserWallet)
+	_, err  := common.BaseDb.Exec(updateSql, status, uid)
+	return err
 }

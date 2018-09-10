@@ -5,7 +5,24 @@ import (
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
 	"github.com/xiuos/mozi/models/errors"
+	"mozi/constants"
 )
+
+func GetUserIDByName(name string) (int, error) {
+	u, err := models.GetUserByName(name)
+	if err != nil {
+		return 0, err
+	}
+	return u.UserID, nil
+}
+
+func GetNameByUserID(uid int) (string, error) {
+	u, err := models.GetUserByID(uid)
+	if err != nil {
+		return "", err
+	}
+	return u.Name, nil
+}
 
 func GetBalance(uid int) (decimal.Decimal, error) {
 	uw, err := models.GetUserWallet(uid)
@@ -134,5 +151,55 @@ func ResetUserPassword(uid int, oldPass string, newPass string, operatorType int
 
 	err := models.SetPassword(uid, newPass)
 	return err
+
+}
+
+func InitUserWalletPassword(uid int, password string) error {
+	err := CheckWalletPasswordLegal(password)
+	if err != nil {
+		return err
+	}
+
+	uw, err := models.GetUserWallet(uid)
+
+	if uw.Status == models.WalletStatusUnActivate {
+		models.SetWalletPassword(uid, password)
+		models.SetWalletStatus(uid, constants.WalletStatusEnable)
+
+	} else {
+		return errors.WalletPasswordAlreadyInitErr{}
+	}
+
+	return nil
+}
+
+func RestUserWalletPassword(uid int, oldPass string, newPass string, operatorType int) error {
+
+	err := CheckWalletPasswordLegal(newPass)
+	if err != nil {
+		return err
+	}
+
+	if operatorType != models.OperatorTypeAdmin {
+		uw, err := models.GetUserWallet(uid)
+		if err != nil {
+			return err
+		}
+		if b := common.CheckBCrypt(oldPass, uw.Password); b == false {
+			return errors.PasswordErr{}
+		}
+	}
+
+	err = models.SetWalletPassword(uid, newPass)
+	return err
+
+}
+
+func GetUserWalletPasswordStatus(uid int) (int, error) {
+	uw, err := models.GetUserWallet(uid)
+	if err != nil {
+		return 0, err
+	}
+	return uw.Status, nil
 
 }

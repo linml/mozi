@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
+	"github.com/xiuos/mozi/models/errors"
 	"github.com/xiuos/mozi/routes"
 	"github.com/xiuos/mozi/service"
 )
@@ -25,8 +26,9 @@ func Register(c *gin.Context) {
 	if err != nil {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
 	} else {
-		u, _ := models.GetUserByName(name)
-		r := models.RecordUserAction{UserID: u.UserID,
+		uid, _ := service.GetUserIDByName(name)
+		r := models.RecordUserAction{
+			UserID:       uid,
 			ActionModule: models.ActionModuleUser,
 			ActionID:     models.ActionUserRegister,
 			Content:      "",
@@ -63,7 +65,7 @@ func Login(c *gin.Context) {
 	if err != nil {
 		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
 	} else {
-		u, err := models.GetUserByName(name)
+		uid, err := service.GetUserIDByName(name)
 		if err == nil {
 			session := sessions.Default(c)
 			session.Set(routes.SessionApiLoginID, u.UserID)
@@ -71,8 +73,8 @@ func Login(c *gin.Context) {
 		}
 
 		c.JSON(200, routes.ApiResult(common.CodeOK, "", map[string]interface{}{
-			"user_id": u.UserID,
-			"name":    u.Name,
+			"user_id": uid,
+			"name":    name,
 		}))
 	}
 
@@ -81,15 +83,15 @@ func Login(c *gin.Context) {
 // 获取用户余额
 func GetBalance(c *gin.Context) {
 	uid, err := routes.GetAPILoginID(c)
-	w, err := models.GetUserWallet(uid)
+	balance, err := service.GetBalance(uid)
 
 	if err != nil {
 		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]interface{}{
-			"balance": w.Balance,
+			"balance": balance,
 		}))
 	} else {
 		c.JSON(200, routes.ApiResult(common.CodeOK, "", map[string]interface{}{
-			"balance": w.Balance,
+			"balance": balance,
 		}))
 	}
 }
@@ -97,6 +99,9 @@ func GetBalance(c *gin.Context) {
 // 获取用户基本信息集合
 func GetInfos(c *gin.Context) {
 	uid, err := routes.GetAPILoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "登录校验失败"))
+	}
 	ui, err := service.GetInfos(uid)
 	if err != nil {
 		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]interface{}{}))
@@ -108,6 +113,9 @@ func GetInfos(c *gin.Context) {
 // 重置密码
 func ResetPassword(c *gin.Context) {
 	uid, err := routes.GetAPILoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "登录校验失败"))
+	}
 	oldPassword := c.PostForm("old_password")
 	newPassword := c.PostForm("new_password")
 
@@ -116,5 +124,114 @@ func ResetPassword(c *gin.Context) {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
 	} else {
 		c.JSON(200, routes.ApiShowResult(common.CodeOK, ""))
+	}
+}
+
+// 用户 profile
+func UserProfile(c *gin.Context) {
+	uid, err := routes.GetAPILoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "登录校验失败"))
+	}
+	up, err := models.GetUserProfile(uid)
+
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", up))
+	}
+}
+
+// 设置真实姓名
+// 参数：real_name
+func SetProfileRealName(c *gin.Context) {
+	uid, err := routes.GetAPILoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "登录校验失败"))
+	}
+	realName := c.PostForm("real_name")
+	up, err := models.GetUserProfile(uid)
+	if up.RealName != "" {
+		err = errors.RealNameExistErr{}
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+	} else {
+		err = service.SetUserProfileRealName(uid, realName)
+		if err != nil {
+			c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+		} else {
+			c.JSON(200, routes.ApiShowResult(common.CodeOK, ""))
+		}
+	}
+}
+
+// 设置昵称
+// 参数：nickname
+func SetProfileNicname(c *gin.Context) {
+	uid, err := routes.GetAPILoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "登录校验失败"))
+	}
+	nickname := c.PostForm("nickname")
+
+	err = service.SetUserProfileNickname(uid, nickname)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+	} else {
+		c.JSON(200, routes.ApiShowResult(common.CodeOK, ""))
+	}
+
+}
+
+// 初始化资金密码
+
+func InitUserWalletPassword(c *gin.Context) {
+	// 参数： password，范围市6位数字
+	uid, err := routes.GetAPILoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "登录校验失败"))
+	}
+
+	password := c.PostForm("password")
+
+	err = service.InitUserWalletPassword(uid, password)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+	} else {
+		c.JSON(200, routes.ApiShowResult(common.CodeOK, ""))
+	}
+}
+
+// 重置资金密码
+func ResetUserWalletPassword(c *gin.Context) {
+	uid, err := routes.GetAPILoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "登录校验失败"))
+	}
+
+	oldPassword := c.PostForm("old_password")
+	newPassword := c.PostForm("new_password")
+
+	err = service.RestUserWalletPassword(uid, oldPassword, newPassword, models.OperatorTypeSelf)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+	} else {
+		c.JSON(200, routes.ApiShowResult(common.CodeOK, ""))
+	}
+}
+
+// 获取资金密码状态
+func UserWalletPasswordStatus(c *gin.Context) {
+	uid, err := routes.GetAPILoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "登录校验失败"))
+	}
+
+	status, err := service.GetUserWalletPasswordStatus(uid)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", map[string]interface{}{
+			"status": status,
+		}))
 	}
 }

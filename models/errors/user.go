@@ -113,10 +113,25 @@ func (err PasswordErr) Error() string {
 	return fmt.Sprintf("密码错误")
 }
 
+type RealNameExistErr struct {
+	Name string
+}
+
+func (err RealNameExistErr) Error() string {
+	return fmt.Sprintf("真实姓名已存在")
+}
+
 type Unauthorized struct {
 	Name string
 }
 
 func (err Unauthorized) Error() string {
 	return fmt.Sprintf("请先登录")
+}
+
+type WalletPasswordAlreadyInitErr struct {
+}
+
+func (err WalletPasswordAlreadyInitErr) Error() string {
+	return fmt.Sprintf("资金密码已初始化无需重复操作")
 }
