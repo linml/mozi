@@ -2,6 +2,20 @@ package errors
 
 import "fmt"
 
+func New(text string) error {
+	return &errorString{text}
+}
+
+type errorString struct {
+	s string
+}
+
+func (e *errorString) Error() string {
+	return e.s
+}
+
+
+
 type NameNotLegal struct {
 	Name string
 }
@@ -52,6 +66,13 @@ type UserAddFail struct {
 
 func (err UserAddFail) Error() string {
 	return fmt.Sprintf("添加用户失败")
+}
+
+type UserDisableErr struct {
+}
+
+func (err UserDisableErr) Error() string {
+	return fmt.Sprintf("账户已禁用")
 }
 
 type UserScoreAddFail struct {
