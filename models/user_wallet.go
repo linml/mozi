@@ -2,10 +2,10 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
+	"github.com/shopspring/decimal"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/xorm"
-	"github.com/shopspring/decimal"
-	"fmt"
 )
 
 const (
@@ -56,19 +56,28 @@ func GetUserWallet(uid int) (*UserWallet, error) {
 	return &uw, err
 }
 
-func SetWalletPassword(uid int, password string)error  {
-	hashPassword, err:= common.HashPassword(password)
-	if err != nil{
+func SetWalletPassword(uid int, password string) error {
+	hashPassword, err := common.HashPassword(password)
+	if err != nil {
 		return err
 	}
 	updateSql := fmt.Sprintf("UPDATE %s SET password = ? WHERE user_id = ?", TableUserWallet)
-	_, err  = common.BaseDb.Exec(updateSql, hashPassword, uid)
+	_, err = common.BaseDb.Exec(updateSql, hashPassword, uid)
 	return err
 }
 
-func SetWalletStatus(uid int, status int)error  {
+func SetWalletStatus(uid int, status int) error {
 
 	updateSql := fmt.Sprintf("UPDATE %s SET status = ? WHERE user_id = ?", TableUserWallet)
-	_, err  := common.BaseDb.Exec(updateSql, status, uid)
+	_, err := common.BaseDb.Exec(updateSql, status, uid)
+	return err
+}
+
+// 余额变动
+// money为正数表示加钱，负数表示减钱
+func ChangeMoneyTx(tx *sql.Tx, uid int, money decimal.Decimal) error {
+	updateSql := fmt.Sprintf("UPDATE %s SET balance=balance+? WHERE user_id = ?", TableUserWallet)
+	_, err := tx.Exec(updateSql, money, uid)
+
 	return err
 }

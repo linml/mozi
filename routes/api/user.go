@@ -68,7 +68,7 @@ func Login(c *gin.Context) {
 		uid, err := service.GetUserIDByName(name)
 		if err == nil {
 			session := sessions.Default(c)
-			session.Set(routes.SessionApiLoginID, u.UserID)
+			session.Set(routes.SessionApiLoginID, uid)
 			session.Save()
 		}
 
