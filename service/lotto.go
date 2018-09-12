@@ -6,8 +6,10 @@ import (
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
 	"github.com/xiuos/mozi/models/errors"
+	"time"
 )
 
+// 下单
 func Bet(o *models.Order) error {
 	/*
 		检查用户
@@ -131,4 +133,35 @@ func Bet(o *models.Order) error {
 		return errors.New(fmt.Sprintf("添加下单事务失败! 详情:%s", err))
 	}
 	return nil
+}
+
+// 期号生成
+func CreateIssueCorn() {
+
+	facList, err := models.FindIssueFactory(map[string]string{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	d, _ := time.ParseDuration("24h")
+	for _, f := range *facList {
+
+		if f.Status != models.LottoStatusEnable {
+			continue
+		}
+
+		day := time.Now()
+
+		for i := 0; i < 3; i++ {
+			fmt.Println("GEN ISSUE >>> lotto_id:", f.LottoID, "day:", day.Format("20060102"))
+			issueInfoList, err := f.GenIssue(day)
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+			models.GenIssueInfo(issueInfoList)
+			day = day.Add(d)
+		}
+	}
 }

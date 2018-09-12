@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/xiuos/lotto"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/xorm"
 )
@@ -8,6 +9,8 @@ import (
 const (
 	TableLottoResult = "lotto_result"
 )
+
+type IssueInfo = lotto.IssueInfo
 
 type LottoResult struct {
 	LottoID    int    `json:"lotto_id"`
@@ -37,4 +40,18 @@ func GetLottoResult(lid int, issue string) (*LottoResult, error) {
 	}
 	err = common.BaseDb.QueryRow(querySql, o.Args()...).Scan(l.FieldItem()...)
 	return &l, err
+}
+
+func GenIssueInfo(data *[]IssueInfo) error {
+	var vals []interface{}
+	sql := "INSERT IGNORE INTO lotto_result (lotto_id, issue, draw_number, status, start_time, close_time, end_time, draw_time) VALUES "
+	for i, _ := range *data {
+		sql += "(?, ?, ?, ?, ?, ?, ?, ?),"
+		vals = append(vals, (*data)[i].LottoID, (*data)[i].Issue, "", 0, (*data)[i].StartTime, (*data)[i].CloseTime, (*data)[i].EndTime, "")
+	}
+	sql = sql[0:len(sql)-1] + ";"
+	stmt, _ := common.BaseDb.Prepare(sql)
+	_, err := stmt.Exec(vals...)
+
+	return err
 }
