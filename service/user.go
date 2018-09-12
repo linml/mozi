@@ -5,7 +5,6 @@ import (
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
 	"github.com/xiuos/mozi/models/errors"
-	"mozi/constants"
 )
 
 func GetUserIDByName(name string) (int, error) {
@@ -164,7 +163,7 @@ func InitUserWalletPassword(uid int, password string) error {
 
 	if uw.Status == models.WalletStatusUnActivate {
 		models.SetWalletPassword(uid, password)
-		models.SetWalletStatus(uid, constants.WalletStatusEnable)
+		models.SetWalletStatus(uid, models.WalletStatusEnable)
 
 	} else {
 		return errors.WalletPasswordAlreadyInitErr{}
