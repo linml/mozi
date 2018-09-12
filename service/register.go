@@ -127,6 +127,23 @@ func RegisterUser(name string, password string, params map[string]string) error 
 	}
 	// 添加关系信息 end
 
+	// 添加权限
+	userPower := models.UserPower{
+		UserID:   uid,
+		PowerBet: models.PowerEnable,
+		PowerLogin: models.PowerEnable,
+		PowerDeposit: models.PowerEnable,
+		PowerWithdraw: models.PowerEnable,
+
+	}
+	err = models.CreateUserPowerTx(tx, &userPower)
+	if err != nil {
+		tx.Rollback()
+		common.Logger.Error(err)
+		return errors.New("添加权限失败")
+	}
+	// 添加权限 end
+
 	// profile
 	registerIp := ""
 	if ip, ok := params["register_ip"]; ok {

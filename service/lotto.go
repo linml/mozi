@@ -47,6 +47,14 @@ func Bet(o *models.Order) error {
 		return errors.New("当期已停止投注,请投注下一期")
 	}
 
+	uPower, err := models.GetUserPower(o.UserID)
+	if err != nil {
+		return err
+	}
+	if uPower.PowerBet != models.PowerEnable {
+		return errors.New("账户无下注权限")
+	}
+
 	uw, err := models.GetUserWallet(o.UserID)
 	if err != nil {
 		return err
@@ -60,20 +68,20 @@ func Bet(o *models.Order) error {
 		return err
 	}
 
-	bc, err := models.MethodBetCount(o.MethodCode, o)
+	betCount, err := models.MethodBetCount(o.MethodCode, o)
 	if err != nil {
 		return err
 	}
-	if bc < 1 {
+	if betCount < 1 {
 		return errors.New("下注注数异常")
 	}
 	minS, _ := decimal.NewFromString("0.001")
-	bcD, _ := decimal.NewFromString(fmt.Sprintf("%d", bc))
+	bcD, _ := decimal.NewFromString(fmt.Sprintf("%d", betCount))
 	if o.Amount.Div(bcD).LessThan(minS) {
 		return errors.New(fmt.Sprintf("单注最低金额不能低于%s", minS))
 	}
 
-	o.Count = bc
+	o.Count = betCount
 	o.Username = u.Name
 	o.OrderNo = common.GetTimeNowString() + common.RandString(6)
 	o.GameKind = li.GameKind

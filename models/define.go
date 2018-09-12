@@ -1,6 +1,10 @@
 package models
 
 const (
+	PowerEnable = 1
+	PowerDisable = 0
+)
+const (
 	OperatorTypeSelf  = 0
 	OperatorTypeOther = 1
 	OperatorTypeAdmin = 2
