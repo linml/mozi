@@ -6,16 +6,16 @@ import (
 )
 
 const (
-	TableSysSettings = "sys_settings"
-)
-
-const (
 	SysDefaultParentID = "default_parent_id"
 )
 
 type SysSettings struct {
 	SysKey   string
 	SysValue string
+}
+
+func (ss *SysSettings) TableName() string {
+	return "sys_settings"
 }
 
 func (ss *SysSettings) Field() []string {
@@ -29,7 +29,7 @@ func (ss *SysSettings) FieldItem() []interface{} {
 func GetSysSettings(key string) (*SysSettings, error) {
 	o := xorm.Orm{}
 	ss := SysSettings{}
-	querySql, err := o.Table(TableSysSettings).Query().Where("sys_key = ?", key).Do(&ss)
+	querySql, err := o.Table(ss.TableName()).Query().Where("sys_key = ?", key).Do(&ss)
 	if err != nil {
 		return &ss, err
 	}

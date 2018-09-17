@@ -24,6 +24,10 @@ type User struct {
 	Status   int
 }
 
+func (u *User) TableName() string {
+	return "users"
+}
+
 func (u *User) Field() []string {
 	return []string{"user_id", "name", "password", "status"}
 }
@@ -33,7 +37,7 @@ func (u *User) FieldItem() []interface{} {
 }
 
 func CreateUserTx(tx *sql.Tx, u *User) (sql.Result, error) {
-	createSql := "INSERT INTO " + TableUser + " SET name = ?, password = ?, status = ?"
+	createSql := "INSERT INTO " + u.TableName() + " SET name = ?, password = ?, status = ?"
 	rs, err := tx.Exec(createSql, u.Name, &u.Password, &u.Status)
 	if err != nil {
 		return nil, err
@@ -42,7 +46,7 @@ func CreateUserTx(tx *sql.Tx, u *User) (sql.Result, error) {
 }
 
 func CreateUser(u *User) error {
-	createSql := "INSERT INTO " + TableUser + " SET name = ?, password = ?, status = ?"
+	createSql := "INSERT INTO " + u.TableName() + " SET name = ?, password = ?, status = ?"
 	_, err := common.BaseDb.Exec(createSql, u.Name, &u.Password, &u.Status)
 	return err
 }
@@ -50,7 +54,7 @@ func CreateUser(u *User) error {
 func GetUserByID(uid int) (*User, error) {
 	o := xorm.Orm{}
 	u := User{}
-	querySql, err := o.Table(TableUser).Query().Where("user_id = ?", uid).Do(&u)
+	querySql, err := o.Table(u.TableName()).Query().Where("user_id = ?", uid).Do(&u)
 	if err != nil {
 		return &u, err
 	}
@@ -61,7 +65,7 @@ func GetUserByID(uid int) (*User, error) {
 func GetUserByName(name string) (*User, error) {
 	o := xorm.Orm{}
 	u := User{}
-	querySql, err := o.Table(TableUser).Query().Where("name = ?", name).Do(&u)
+	querySql, err := o.Table(u.TableName()).Query().Where("name = ?", name).Do(&u)
 	if err != nil {
 		return &u, err
 	}

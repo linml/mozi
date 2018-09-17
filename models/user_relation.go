@@ -6,14 +6,14 @@ import (
 	"github.com/xiuos/xorm"
 )
 
-const (
-	TableUserRelation = "user_relation"
-)
-
 type UserRelation struct {
 	UserID   int
 	ParentID int
 	Parents  string
+}
+
+func (ur *UserRelation) TableName() string {
+	return "user_relation"
 }
 
 func (ur *UserRelation) Field() []string {
@@ -26,7 +26,7 @@ func (ur *UserRelation) FieldItem() []interface{} {
 
 func CreateUserRelationTx(tx *sql.Tx, ur *UserRelation) error {
 	o := xorm.Orm{}
-	createSql, err := o.Table(TableUserRelation).Create().Do(ur)
+	createSql, err := o.Table(ur.TableName()).Create().Do(ur)
 	if err != nil {
 		return err
 	}
@@ -37,7 +37,7 @@ func CreateUserRelationTx(tx *sql.Tx, ur *UserRelation) error {
 func GetUserRelation(uid int) (*UserRelation, error) {
 	o := xorm.Orm{}
 	ur := UserRelation{}
-	querySql, err := o.Table(TableUserRelation).Query().Where("user_id = ?", uid).Do(&ur)
+	querySql, err := o.Table(ur.TableName()).Query().Where("user_id = ?", uid).Do(&ur)
 	if err != nil {
 		return &ur, err
 	}

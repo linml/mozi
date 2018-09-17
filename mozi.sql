@@ -11,11 +11,78 @@
  Target Server Version : 50721
  File Encoding         : utf-8
 
- Date: 09/12/2018 15:53:51 PM
+ Date: 09/17/2018 14:50:18 PM
 */
 
 SET NAMES utf8;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+--  Table structure for `admin`
+-- ----------------------------
+DROP TABLE IF EXISTS `admin`;
+CREATE TABLE `admin` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  `password` varchar(128) NOT NULL DEFAULT '',
+  `google_secret` varchar(36) NOT NULL DEFAULT '',
+  `google_secret_status` tinyint(1) NOT NULL DEFAULT '0',
+  `role` varchar(32) NOT NULL DEFAULT '0' COMMENT '组',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态',
+  `created_at` varchar(14) NOT NULL DEFAULT '' COMMENT '创建时间',
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `username` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+--  Records of `admin`
+-- ----------------------------
+BEGIN;
+INSERT INTO `admin` VALUES ('1', 'boss', '$2a$10$wneCJNoLkxjpbd4ti5mHC.JHDTrieDfz9aQPUY.eQd/hTMug0ftlC', '', '0', '1', '1', '');
+COMMIT;
+
+-- ----------------------------
+--  Table structure for `admin_menu`
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_menu`;
+CREATE TABLE `admin_menu` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sort` int(11) DEFAULT NULL,
+  `pid` int(11) DEFAULT NULL,
+  `open` int(1) DEFAULT NULL,
+  `text` varchar(64) DEFAULT '',
+  `icon` varchar(128) DEFAULT '',
+  `url` varchar(128) DEFAULT '',
+  `target_type` varchar(64) DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=903 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+--  Records of `admin_menu`
+-- ----------------------------
+BEGIN;
+INSERT INTO `admin_menu` VALUES ('1', '1', '0', '0', '活动管理', 'fa fa-gift', '', ''), ('2', '2', '0', '0', '公告管理', 'fa fa-envelope', '', ''), ('3', '3', '0', '0', '账户管理', 'fa fa-users', '', ''), ('4', '4', '0', '0', '游戏管理', 'fa fa-gamepad', '', ''), ('5', '5', '0', '0', '现金系统', 'fa fa-fw fa-money', '', ''), ('6', '6', '0', '0', '退佣管理', 'fa fa-fw fa-calculator', '', ''), ('7', '7', '0', '0', '报表管理', 'fa fa-fw fa-area-chart', '', ''), ('8', '8', '0', '0', '系统管理', 'fa fa-fw fa-cogs', '', ''), ('9', '9', '0', '0', '权限管理', 'fa fa-fw fa-cogs', '', ''), ('110', '1', '1', '0', '活动记录', 'fa fa-list-alt', '', 'iframe-tab'), ('111', '2', '1', '0', '红包活动', 'fa fa-toggle-on', ' ', 'iframe-tab'), ('112', '3', '1', '0', '签到活动', 'fa fa-toggle-on', '', 'iframe-tab'), ('113', '4', '1', '0', '首存礼包', 'fa fa-toggle-on', '', 'iframe-tab'), ('114', '5', '1', '0', '每日存款', 'fa fa-toggle-on', '', 'iframe-tab'), ('130', '1', '2', '0', '通用公告', 'fa fa-edit', 'pages/notice/normal_notice.html', 'iframe-tab'), ('131', '2', '2', '0', '滚动公告', 'fa fa-edit', 'pages/notice/roll_notice.html', 'iframe-tab'), ('160', '1', '3', '0', '账户列表', 'fa fa-user', 'pages/account/member.html', 'iframe-tab'), ('161', '2', '3', '0', '登入记录', 'fa fa-list-alt', 'pages/account/record_login.html', 'iframe-tab'), ('162', '3', '3', '0', '账号银行卡', 'fa fa-list-alt', 'pages/account/member_banks.html', 'iframe-tab'), ('163', '4', '3', '0', 'IP黑名单', 'fa fa-list-alt', '', 'iframe-tab'), ('164', '5', '3', '0', '管理列表', 'fa fa-fw fa-user-secret', '', 'iframe-tab'), ('180', '1', '4', '0', '游戏结果', 'fa fa-plus-square-o', '', ''), ('181', '2', '4', '0', '玩家订单', 'fa fa-plus-square-o', '', ''), ('183', '3', '4', '0', '彩票管理', 'fa fa-plus-square-o', '', ''), ('200', '1', '180', '0', '彩票开奖', 'fa fa-life-bouy', 'pages/lotto/result.html', 'iframe-tab'), ('221', '1', '181', '0', '彩票订单', 'fa fa-life-bouy', '', 'iframe-tab'), ('222', '2', '181', '0', '电子订单', 'fa fa-life-bouy', '', 'iframe-tab'), ('223', '3', '181', '0', '体育订单', 'fa fa-life-bouy', '', 'iframe-tab'), ('224', '4', '181', '0', 'AG订单', 'fa fa-life-bouy', '', 'iframe-tab'), ('230', '1', '183', '0', '赔率房间', 'fa fa-list-alt', 'game/oddsRoom', 'iframe-tab'), ('231', '2', '183', '0', '赔率设置', 'fa fa-toggle-on', 'game/lottoOdds', 'iframe-tab'), ('232', '3', '183', '0', '实时操盘', 'fa fa-hand-pointer-o', '', 'iframe-tab'), ('233', '4', '183', '0', '实时统计', 'fa fa-bar-chart', '', 'iframe-tab'), ('234', '5', '183', '0', '彩种设置', 'fa fa-hand-pointer-o', 'pages/lotto/code_lotto.html', 'iframe-tab'), ('250', '0', '5', '0', '银行卡管理', 'fa fa-fw fa-bank', 'pages/bank/code_bank.html', 'iframe-tab'), ('251', '1', '5', '0', '收款账户', '', '', 'iframe-tab'), ('252', '2', '5', '0', '第三方收款账户', '', '', 'iframe-tab'), ('253', '3', '5', '0', '会员入款单', '', '', ''), ('254', '4', '5', '0', '会员收款单', '', '', ''), ('255', '5', '5', '0', '手动入款', 'fa fa-fw fa-hand-o-right', 'pages/finance/manual_deposit.html', 'iframe-tab'), ('256', '6', '5', '0', '手动出款', 'fa fa-fw fa-hand-o-right', '', 'iframe-tab'), ('257', '7', '5', '0', '手动转点', '', '', ''), ('258', '8', '5', '0', '流水查询', 'fa fa-fw fa-file-text', 'pages/finance/record_amount_change.html', 'iframe-tab'), ('259', '9', '5', '0', '稽核分查询', 'fa fa-fw fa-file-text', 'pages/finance/record_audit_score.html', 'iframe-tab'), ('260', '10', '5', '0', '财务汇总', '', '', ''), ('261', '0', '6', '0', '分红管理', '', '', ''), ('262', '1', '6', '0', '工资管理', '', '', ''), ('263', '2', '6', '0', '退佣管理', '', '', ''), ('270', '1', '7', '0', '游戏报表', 'fa fa-bar-chart', '', 'iframe-tab'), ('271', '2', '7', '0', '个人报表', 'fa fa-bar-chart', '', 'iframe-tab'), ('272', '3', '7', '0', '平台报表', 'fa fa-bar-chart', '', 'iframe-tab'), ('273', '4', '7', '0', '运营趋势', 'fa fa-bar-chart', '', 'iframe-tab'), ('300', '1', '8', '0', '系统设置', 'fa fa-bar-chart', '', 'iframe-tab'), ('301', '2', '8', '0', '异动记录', 'fa fa-bar-chart', 'pages/sys/record_admin_operate.html', 'iframe-tab'), ('302', '3', '8', '0', '操作记录', 'fa fa-bar-chart', '', 'iframe-tab'), ('303', '4', '8', '0', '群组管理', 'fa fa-bar-chart', '', 'iframe-tab'), ('900', '1', '9', '0', '管理员', '', '', ''), ('901', '2', '9', '0', '群组', '', '', ''), ('902', '3', '9', '0', '群组权限', '', '', '');
+COMMIT;
+
+-- ----------------------------
+--  Table structure for `admin_role`
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_role`;
+CREATE TABLE `admin_role` (
+  `id` int(11) NOT NULL,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `menu` text NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `remark` varchar(256) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+--  Records of `admin_role`
+-- ----------------------------
+BEGIN;
+INSERT INTO `admin_role` VALUES ('1', '管理员', '900,901,902,9,234,1,2,3,4,5,6,7,8,110,111,112,113,114,130,131,160,161,162,163,180,181,182,183,200,201,202,221,222,223,224,230,231,232,233,250,251,252,253,254,255,256,257,258,259,260,261,262,263,270,271,272,273,300,301,302,303', '1', '');
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `code_lotto`

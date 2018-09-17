@@ -5,11 +5,6 @@ import (
 	"github.com/xiuos/xorm"
 )
 
-const (
-	TableCodeLotto = "code_lotto"
-)
-
-
 type Lotto struct {
 	LottoID      int    `json:"lotto_id"`
 	Name         string `json:"name"`
@@ -19,6 +14,10 @@ type Lotto struct {
 	Status       int    `json:"status"`
 	SortIndex    int    `json:"sort_index"`
 	Introduction string `json:"introduction"`
+}
+
+func (l *Lotto) TableName() string {
+	return "code_lotto"
 }
 
 func (l *Lotto) Field() []string {
@@ -32,7 +31,7 @@ func (l *Lotto) FieldItem() []interface{} {
 func GetLotto(lid int) (*Lotto, error) {
 	o := xorm.Orm{}
 	l := Lotto{}
-	querySql, err := o.Table(TableCodeLotto).Query().Where("lotto_id = ?", lid).Do(&l)
+	querySql, err := o.Table(l.TableName()).Query().Where("lotto_id = ?", lid).Do(&l)
 	if err != nil {
 		return &l, err
 	}

@@ -23,6 +23,10 @@ type LottoResult struct {
 	DrawTime   string `json:"draw_time"`
 }
 
+func (l *LottoResult) TableName() string {
+	return "lotto_result"
+}
+
 func (l *LottoResult) Field() []string {
 	return []string{"lotto_id", "issue", "draw_number", "status", "start_time", "close_time", "end_time", "draw_time"}
 }
@@ -34,7 +38,7 @@ func (l *LottoResult) FieldItem() []interface{} {
 func GetLottoResult(lid int, issue string) (*LottoResult, error) {
 	o := xorm.Orm{}
 	l := LottoResult{}
-	querySql, err := o.Table(TableLottoResult).Query().Where("lotto_id = ? AND issue = ?", lid, issue).Do(&l)
+	querySql, err := o.Table(l.TableName()).Query().Where("lotto_id = ? AND issue = ?", lid, issue).Do(&l)
 	if err != nil {
 		return &l, err
 	}

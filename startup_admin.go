@@ -1,9 +1,13 @@
 package main
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/xiuos/mozi/common"
+	"github.com/xiuos/mozi/routes/admin"
 	"github.com/xiuos/xlog"
 	"os"
+	"github.com/gin-gonic/contrib/sessions"
+	"github.com/xiuos/mozi/routes"
 )
 
 func init() {
@@ -20,5 +24,29 @@ func init() {
 }
 
 func main() {
+	app := gin.Default()
+	store, _ := sessions.NewRedisStore(10, "tcp", "localhost:6379", "", []byte("secret"))
+	app.Use(sessions.Sessions("session", store))
+
+	//gin.SetMode(gin.ReleaseMode)
+	app.LoadHTMLGlob("templates/**/*")
+	app.Static("/static", "./static")
+
+
+	appV1 := app.Group("/")
+	{
+		appV1.GET("/login", admin.TmplLogin)
+		appV1.POST("/login", admin.Login)
+	}
+
+	appAuthV1 := app.Group("/")
+	appAuthV1.Use(routes.AdminAuthMiddleWare())
+	{
+		appAuthV1.GET("/index", admin.TmplIndex)
+		appAuthV1.GET("/menu", admin.AdminMenu)
+	}
+
+
+	app.Run(":9980")
 
 }

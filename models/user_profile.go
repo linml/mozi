@@ -25,6 +25,10 @@ type UserProfile struct {
 	Registered       string `json:"registered"`
 }
 
+func (up *UserProfile) TableName() string {
+	return "user_profile"
+}
+
 func (up *UserProfile) Field() []string {
 	return []string{"user_id", "real_name", "nickname", "email", "is_email_verified", "mobile", "is_mobile_verified", "qq", "wechat", "register_ip", "registered"}
 }
@@ -35,7 +39,7 @@ func (up *UserProfile) FieldItem() []interface{} {
 
 func CreateUserProfileTx(tx *sql.Tx, up *UserProfile) error {
 	o := xorm.Orm{}
-	createSql, err := o.Table(TableUserProfile).Create().Do(up)
+	createSql, err := o.Table(up.TableName()).Create().Do(up)
 	if err != nil {
 		return err
 	}
@@ -46,7 +50,7 @@ func CreateUserProfileTx(tx *sql.Tx, up *UserProfile) error {
 func GetUserProfile(uid int) (*UserProfile, error) {
 	o := xorm.Orm{}
 	up := UserProfile{}
-	querySql, err := o.Table(TableUserProfile).Query().Where("user_id = ?", uid).Do(&up)
+	querySql, err := o.Table(up.TableName()).Query().Where("user_id = ?", uid).Do(&up)
 	if err != nil {
 		return &up, err
 	}

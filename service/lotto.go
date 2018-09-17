@@ -13,12 +13,12 @@ import (
 func Bet(o *models.Order) error {
 	/*
 		检查用户
-		检查用户权限
-		检查用户余额
-		检查房间编号
-		检查彩票编号
+		检查彩票
 		检查彩票期号
+		检查用户权限
 		检查玩法编号
+		检查用户余额
+
 		检查下注信息
 	*/
 
@@ -57,17 +57,36 @@ func Bet(o *models.Order) error {
 		return errors.New("账户无下注权限")
 	}
 
+	err = models.MethodCheckBetLegal(o.MethodCode, o)
+	if err != nil {
+		return err
+	}
+
+	pInfo, err := models.GetPlayInfo(o.LottoID, o.MethodCode, o.Content)
+	if err != nil {
+		return err
+	}
+	if pInfo.Status != 1 {
+		return errors.New("该玩法已停售")
+	}
+
+	if pInfo.BetMin.GreaterThan(o.Amount){
+		return errors.New("投注金额过低")
+	}
+
+	if pInfo.BetMax.LessThan(o.Amount){
+		return errors.New("投注金额过高")
+	}
+
 	uw, err := models.GetUserWallet(o.UserID)
 	if err != nil {
 		return err
 	}
+
+
+
 	if o.Amount.GreaterThan(uw.Balance) {
 		return errors.New("账户余额不足")
-	}
-
-	err = models.MethodCheckBetLegal(o.MethodCode, o)
-	if err != nil {
-		return err
 	}
 
 	betCount, err := models.MethodBetCount(o.MethodCode, o)
@@ -83,6 +102,7 @@ func Bet(o *models.Order) error {
 		return errors.New(fmt.Sprintf("单注最低金额不能低于%s", minS))
 	}
 
+	o.Odds = pInfo.Odds
 	o.Count = betCount
 	o.Username = u.Name
 	o.OrderNo = common.GetTimeNowString() + common.RandString(6)

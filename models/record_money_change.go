@@ -5,10 +5,6 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-const (
-	TableRecordMonyeChange = "record_money_change"
-)
-
 type RecordMoneyChange struct {
 	ID            int             `json:"id"`
 	Link          string          `json:"link"`
@@ -28,6 +24,10 @@ type RecordMoneyChange struct {
 	Remark        string          `json:"remark"`
 }
 
+func (r *RecordMoneyChange) TableName() string {
+	return "record_money_change"
+}
+
 func (r *RecordMoneyChange) Field() []string {
 	return []string{"id", "link", "user_id", "username", "game_kind", "game_type", "change_kind", "change_type", "before_balance", "amount", "after_balance", "record_date", "record_at", "operate_type", "operator_id", "remark"}
 }
@@ -37,7 +37,7 @@ func (r *RecordMoneyChange) FieldItem() []interface{} {
 }
 
 func CreateRecordMoneyChangeTx(tx *sql.Tx, r *RecordMoneyChange) (sql.Result, error) {
-	createSql := "INSERT INTO " + TableRecordMonyeChange + " SET link = ?, user_id = ?, username = ?, game_kind = ?, game_type = ?, change_kind = ?, change_type = ?, before_balance = ?, amount = ?, after_balance = ?, record_date = ?, record_at = ?, operate_type = ?, operator_id = ?, remark = ?"
+	createSql := "INSERT INTO " + r.TableName() + " SET link = ?, user_id = ?, username = ?, game_kind = ?, game_type = ?, change_kind = ?, change_type = ?, before_balance = ?, amount = ?, after_balance = ?, record_date = ?, record_at = ?, operate_type = ?, operator_id = ?, remark = ?"
 	rs, err := tx.Exec(createSql, r.Link, r.UserID, r.Username, r.GameKind, r.GameType, r.ChangeKind, r.ChangeType, r.BeforeBalance, r.Amount, r.AfterBalance, r.RecordDate, r.RecordAt, r.OperateType, r.OperatorID, r.Remark)
 	if err != nil {
 		return nil, err

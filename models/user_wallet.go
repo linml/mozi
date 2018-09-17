@@ -27,6 +27,10 @@ type UserWallet struct {
 	Status   int
 }
 
+func (u *UserWallet) TableName() string {
+	return "user_wallet"
+}
+
 func (u *UserWallet) Field() []string {
 	return []string{"user_id", "password", "balance", "status"}
 }
@@ -37,7 +41,7 @@ func (u *UserWallet) FieldItem() []interface{} {
 
 func CreateUserWalletTx(tx *sql.Tx, uw *UserWallet) error {
 	o := xorm.Orm{}
-	createSql, err := o.Table(TableUserWallet).Create().Do(uw)
+	createSql, err := o.Table(uw.TableName()).Create().Do(uw)
 	if err != nil {
 		return err
 	}
@@ -48,7 +52,7 @@ func CreateUserWalletTx(tx *sql.Tx, uw *UserWallet) error {
 func GetUserWallet(uid int) (*UserWallet, error) {
 	o := xorm.Orm{}
 	uw := UserWallet{}
-	querySql, err := o.Table(TableUserWallet).Query().Where("user_id = ?", uid).Do(&uw)
+	querySql, err := o.Table(uw.TableName()).Query().Where("user_id = ?", uid).Do(&uw)
 	if err != nil {
 		return &uw, err
 	}
