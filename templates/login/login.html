@@ -43,6 +43,12 @@
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
+                <div class="form-inline">
+                    <input id="captcha"  type="text" class="form-control" placeholder="验证码">
+                    <img id="code_img" onclick="ref_img();" width="100" height="35" title="点击刷新"  />
+                </div>
+            </div>
+            <div class="form-group has-feedback">
                 <input id="g_code" type="text" class="form-control" placeholder="谷歌验证码">
                 <span class="glyphicon glyphicon-phone form-control-feedback"></span>
             </div>
@@ -78,6 +84,7 @@
             radioClass: 'iradio_square-blue',
             increaseArea: '20%' /* optional */
         });
+        ref_img();
     });
 
     function login() {
@@ -85,6 +92,7 @@
         obj.name = $("#username").val();
         obj.password = $("#password").val();
         obj.g_code = $("#g_code").val();
+        obj.code = $("#captcha").val();
 
         if (obj.username === ""){
             bootbox.alert("账户不能为空");
@@ -101,6 +109,7 @@
             success: function(rs) {
                 if (rs.code == 0){
                     bootbox.alert(rs.msg);
+                    ref_img();
                 }
                 if (rs.code == 1){
                     window.location.href="/index"
@@ -108,6 +117,9 @@
             }
         });
         return false;
+    }
+    function ref_img(){
+        $("#code_img").attr("src", "/captcha?t="+new Date().getTime());
     }
 </script>
 </body>

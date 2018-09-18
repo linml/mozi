@@ -35,7 +35,9 @@ func main() {
 
 	appV1 := app.Group("/")
 	{
+		appV1.GET("/captcha", routes.GenCaptcha)
 		appV1.GET("/login", admin.TmplLogin)
+		appV1.GET("/logout", admin.TmplLogout)
 		appV1.POST("/login", admin.Login)
 	}
 
@@ -44,6 +46,7 @@ func main() {
 	{
 		appAuthV1.GET("/index", admin.TmplIndex)
 		appAuthV1.GET("/menu", admin.AdminMenu)
+		appAuthV1.GET("/role_group", admin.TmplRoleGroup)
 	}
 
 

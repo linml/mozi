@@ -106,7 +106,6 @@ func GetAdminMenuTree(uid int) (*TreePowerMap, error) {
 	idList, _ := S2IList(mIdList)
 	m, err := FindAdminMenu(map[string]string{})
 	if err != nil {
-		fmt.Println(err)
 		return &t, err
 	}
 	var mList []AdminMenu

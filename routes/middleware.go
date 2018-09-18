@@ -1,17 +1,18 @@
 package routes
 
 import (
+	"fmt"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models/errors"
 	"net/http"
-	"fmt"
 )
 
 const (
-	SessionApiLoginID = "__session_api_login_id__"
+	SessionApiLoginID   = "__session_api_login_id__"
 	SessionAdminLoginID = "__session_admin_login_id__"
+	SessionCaptcha = "__captcha__"
 )
 
 func GetAPILoginID(c *gin.Context) (int, error) {
@@ -24,7 +25,6 @@ func GetAPILoginID(c *gin.Context) (int, error) {
 
 func GetAdminLoginID(c *gin.Context) (int, error) {
 	uid, b := c.Get(SessionAdminLoginID)
-	fmt.Println(uid)
 	if false == b {
 		return -1, errors.Unauthorized{}
 	}
@@ -54,7 +54,6 @@ func AdminAuthMiddleWare() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		uid := session.Get(SessionAdminLoginID)
-		fmt.Println(uid)
 		if uid == nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code": common.CodeUserNotLogin,
@@ -68,4 +67,14 @@ func AdminAuthMiddleWare() gin.HandlerFunc {
 		return
 
 	}
+}
+
+func CheckIsLogin(c *gin.Context) bool {
+	session := sessions.Default(c)
+	uid := session.Get(SessionAdminLoginID)
+	fmt.Println(uid)
+	if uid == nil {
+		return false
+	}
+	return true
 }

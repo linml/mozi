@@ -1,17 +1,28 @@
 package admin
 
 import (
-	"github.com/gin-gonic/gin"
-	"net/http"
-	"github.com/xiuos/mozi/routes"
-	"github.com/xiuos/mozi/common"
 	"fmt"
-	"github.com/xiuos/mozi/service"
 	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-gonic/gin"
+	"github.com/xiuos/mozi/common"
+	"github.com/xiuos/mozi/models"
+	"github.com/xiuos/mozi/routes"
+	"github.com/xiuos/mozi/service"
+	"net/http"
 )
 
 func TmplLogin(c *gin.Context) {
+	if b := routes.CheckIsLogin(c); b == true {
+		c.Redirect(http.StatusFound, "/index")
+	}
 	c.HTML(http.StatusOK, "login.html", gin.H{"title": "登录"})
+}
+
+func TmplLogout(c *gin.Context) {
+	session := sessions.Default(c)
+	session.Delete(routes.SessionAdminLoginID)
+	session.Save()
+	c.Redirect(http.StatusFound, "/login")
 }
 
 func Login(c *gin.Context) {
@@ -19,6 +30,11 @@ func Login(c *gin.Context) {
 
 	name := c.PostForm("name")
 	password := c.PostForm("password")
+	code := c.PostForm("code")
+	if b := routes.CheckCaptcha(c, code); b == false{
+		c.JSON(200, routes.ApiResult(common.CodeFail, "验证码错误", map[string]string{}))
+		return
+	}
 
 	params.Set("ip", c.ClientIP())
 	params.Set("user_agent", c.Request.Header.Get("User-Agent"))
@@ -46,11 +62,12 @@ func Login(c *gin.Context) {
 	}
 }
 
-
 func TmplIndex(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.html", gin.H{"title": "管理后台"})
+	uid, _ := routes.GetAdminLoginID(c)
+	u, _ := models.GetAdminUserByID(uid)
+	c.HTML(http.StatusOK, "index.html", gin.H{"title": "管理后台", "admin_user": u.Name})
 }
 
-func Render(c *gin.Context)  {
-	c.HTML(http.StatusOK, "login.html", gin.H{"title": "管理后台"})
+func TmplRoleGroup(c *gin.Context) {
+	c.HTML(http.StatusOK, "admin_role_group.html", gin.H{"title": "管理后台"})
 }
