@@ -1129,7 +1129,7 @@ function _init() {
 })(jQuery, $.AdminLTE);
 
 var App = function() {
-    var mzImg = '/img/';
+    var mzImg = '/static/img/';
     var basePath = '/content/';
 
     var imgPath = 'ui/img/';
