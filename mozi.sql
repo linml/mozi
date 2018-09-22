@@ -38,7 +38,7 @@ CREATE TABLE `admin` (
 -- Records of admin
 -- ----------------------------
 BEGIN;
-INSERT INTO `admin` VALUES (1, 'boss', '$2a$10$wneCJNoLkxjpbd4ti5mHC.JHDTrieDfz9aQPUY.eQd/hTMug0ftlC', '', 0, '1', 1, '');
+INSERT INTO `admin` VALUES (1, 'boss', '$2a$10$1HdEWW.7Ob6aCZUkuhKl7O16gs0jYwe9/jsN4NYsQKZok8eQ/uxFS', '', 0, '1', 1, '');
 COMMIT;
 
 -- ----------------------------
