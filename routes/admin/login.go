@@ -63,7 +63,7 @@ func Login(c *gin.Context) {
 }
 
 func TmplRoot(c *gin.Context) {
-	c.Redirect(http.StatusFound, "/index")
+	c.Redirect(http.StatusFound, "/login")
 }
 
 func TmplIndex(c *gin.Context) {
