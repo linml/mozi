@@ -31,7 +31,7 @@ func Login(c *gin.Context) {
 	name := c.PostForm("name")
 	password := c.PostForm("password")
 	code := c.PostForm("code")
-	if b := routes.CheckCaptcha(c, code); b == false{
+	if b := routes.CheckCaptcha(c, code); b == false {
 		c.JSON(200, routes.ApiResult(common.CodeFail, "验证码错误", map[string]string{}))
 		return
 	}
@@ -60,6 +60,10 @@ func Login(c *gin.Context) {
 			"name":    name,
 		}))
 	}
+}
+
+func TmplRoot(c *gin.Context) {
+	c.Redirect(http.StatusFound, "/index")
 }
 
 func TmplIndex(c *gin.Context) {

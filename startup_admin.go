@@ -1,13 +1,13 @@
 package main
 
 import (
+	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/xiuos/mozi/common"
+	"github.com/xiuos/mozi/routes"
 	"github.com/xiuos/mozi/routes/admin"
 	"github.com/xiuos/xlog"
 	"os"
-	"github.com/gin-gonic/contrib/sessions"
-	"github.com/xiuos/mozi/routes"
 )
 
 func init() {
@@ -32,9 +32,9 @@ func main() {
 	app.LoadHTMLGlob("templates/**/*")
 	app.Static("/static", "./static")
 
-
 	appV1 := app.Group("/")
 	{
+		appV1.GET("/", admin.TmplRoot)
 		appV1.GET("/captcha", routes.GenCaptcha)
 		appV1.GET("/login", admin.TmplLogin)
 		appV1.GET("/logout", admin.TmplLogout)
@@ -49,7 +49,6 @@ func main() {
 		appAuthV1.GET("/page/role_group", admin.TmplRoleGroup)
 		appAuthV1.GET("/page/account/list", admin.TmplAccountList)
 	}
-
 
 	app.Run(":9980")
 
