@@ -46,7 +46,8 @@ func main() {
 	{
 		appAuthV1.GET("/index", admin.TmplIndex)
 		appAuthV1.GET("/menu", admin.AdminMenu)
-		appAuthV1.GET("/role_group", admin.TmplRoleGroup)
+		appAuthV1.GET("/page/role_group", admin.TmplRoleGroup)
+		appAuthV1.GET("/page/account/list", admin.TmplAccountList)
 	}
 
 
