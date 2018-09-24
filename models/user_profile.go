@@ -23,6 +23,8 @@ type UserProfile struct {
 	Wechat           string `json:"wechat"`
 	RegisterIp       string `json:"register_ip"`
 	Registered       string `json:"registered"`
+	LastLoginAt      string `json:"last_login_at"`
+	LastLoginIp      string `json:"last_login_ip"`
 }
 
 func (up *UserProfile) TableName() string {
@@ -30,11 +32,11 @@ func (up *UserProfile) TableName() string {
 }
 
 func (up *UserProfile) Field() []string {
-	return []string{"user_id", "real_name", "nickname", "email", "is_email_verified", "mobile", "is_mobile_verified", "qq", "wechat", "register_ip", "registered"}
+	return []string{"user_id", "real_name", "nickname", "email", "is_email_verified", "mobile", "is_mobile_verified", "qq", "wechat", "register_ip", "registered", "last_login_at", "last_login_ip"}
 }
 
 func (up *UserProfile) FieldItem() []interface{} {
-	return []interface{}{&up.UserID, &up.RealName, &up.Nickname, &up.Email, &up.IsEmailVerified, &up.Mobile, &up.IsMobileVerified, &up.QQ, &up.Wechat, &up.RegisterIp, &up.Registered}
+	return []interface{}{&up.UserID, &up.RealName, &up.Nickname, &up.Email, &up.IsEmailVerified, &up.Mobile, &up.IsMobileVerified, &up.QQ, &up.Wechat, &up.RegisterIp, &up.Registered, &up.LastLoginAt, &up.LastLoginIp}
 }
 
 func CreateUserProfileTx(tx *sql.Tx, up *UserProfile) error {

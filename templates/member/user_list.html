@@ -267,144 +267,93 @@
 
 <body class="hold-transition skin-blue sidebar-mini">
 
-<section class="content">
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="box">
-                <div class="box-header">
-
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <table id="example2" class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th>Rendering engine</th>
-                            <th>Browser</th>
-                            <th>Platform(s)</th>
-                            <th>Engine version</th>
-                            <th>CSS grade</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 4.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td> 4</td>
-                            <td>X</td>
-                        </tr>
-                        <tr>
-                            <td>Trident</td>
-                            <td>Internet
-                                Explorer 5.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td>5</td>
-                            <td>C</td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.box-body -->
-            </div>
-            <!-- /.box -->
-        </div>
-        <!-- /.col -->
-    </div>
-    <!-- /.row -->
-</section>
-
-<!-- Content Header (Page header) -->
-<section class="content-header">
-    <input type="hidden" id="parent_id" name="extra" value="0">
-    <div class="row">
-        <div class="col-md-2">
-            <div class="form-group">
-                <label for="username">账户名</label>
-                <label class=" pull-right"><input type="checkbox">模糊查询</label>
-                <input type="text" class="form-control " id="username" placeholder="输入账户名">
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="form-group">
-                <label for="user_id">账户编号</label>
-                <input type="text" class="form-control " id="user_id" placeholder="账户编号">
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="form-group">
-                <label for="login_ip">登录IP</label>
-                <input type="text" class="form-control " id="login_ip" placeholder="登录IP">
-            </div>
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <label>状态</label>
-                <select id="status" class="form-control select2" style="width: 100%;">
-                    <option value="">全部</option>
-                    <option value=1>启用</option>
-                    <option value=0>禁用</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <label>类型</label>
-                <select id="is_test" class="form-control select2" style="width: 100%;">
-                    <option value="">全部</option>
-                    <option value=1>测试</option>
-                    <option value=0>真实</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label>操作</label>
-                <div class="row">
-                    <div class="btn-group">
-                        <button onclick="query_member()" type="button" class="btn btn-primary ">查询</button>
-                        <button onclick="query_reset()" type="button" class="btn btn-primary ">重置</button>
-                        <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#member_add">新增</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</section>
-
 <!-- Main content -->
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
-            <table id="member" class="table table-bordered table-hover  table_style">
-                <thead>
-                <tr>
-                    <th class="text-center">账户名</th>
-                    <th class="text-center">编号</th>
-                    <th class="text-center">余额</th>
-                    <th class="text-center">类型</th>
-                    <th class="text-center">状态</th>
-                    <th class="text-center">创建时间</th>
-                    <th class="text-center">最后登录时间</th>
-                    <th class="text-center">最后登录IP</th>
-                    <th class="text-center">操作</th>
-                </tr>
-                </thead>
-                <tbody id="member_data" class="text-center"></tbody>
-            </table>
+
+            <div class="box">
+                <div class="box-header">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="username">账户名</label>
+                                <label class=" pull-right"><input type="checkbox">模糊查询</label>
+                                <input type="text" class="form-control " id="username" placeholder="输入账户名">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="user_id">账户编号</label>
+                                <input type="text" class="form-control " id="user_id" placeholder="账户编号">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="login_ip">登录IP</label>
+                                <input type="text" class="form-control " id="login_ip" placeholder="登录IP">
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label>状态</label>
+                                <select id="status" class="form-control select2" style="width: 100%;">
+                                    <option value="">全部</option>
+                                    <option value=1>启用</option>
+                                    <option value=0>禁用</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label>类型</label>
+                                <select id="is_test" class="form-control select2" style="width: 100%;">
+                                    <option value="">全部</option>
+                                    <option value=1>测试</option>
+                                    <option value=0>真实</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>操作</label>
+                                <div class="row">
+                                    <div class="btn-group">
+                                        <button onclick="query_member()" type="button" class="btn btn-primary ">查询</button>
+                                        <button onclick="query_reset()" type="button" class="btn btn-primary ">重置</button>
+                                        <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#member_add">新增</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table id="member" class="table table-bordered table-hover  table_style">
+                        <thead>
+                        <tr>
+                            <th class="text-center">账户名</th>
+                            <th class="text-center">余额</th>
+                            <th class="text-center">类型</th>
+                            <th class="text-center">状态</th>
+                            <th class="text-center">创建时间</th>
+                            <th class="text-center">最后登录时间</th>
+                            <th class="text-center">最后登录IP</th>
+                            <th class="text-center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="member_data" class="text-center"></tbody>
+                    </table>
+                </div>
+
+            </div>
+
         </div>
     </div>
     <!-- /.row -->
 </section>
 <!-- /.content -->
 
-
-<!-- ./wrapper -->
 
 
 <!-- jQuery 3 -->
@@ -429,9 +378,8 @@
 <script src="/static/ckeditor/ckeditor.js"></script>
 
 <!-- page script -->
-<script src="/static/js/laydate/laydate.js"></script>
-<script src="/js/utils.js"></script>
-<script type="text/javascript" src="/js/app.js"></script>
+<script src="/static/laydate/laydate.js"></script>
+<script src="/static/js/utils.js"></script>
 <script src="/static/js/bootbox.min.js"></script>
 <script>
     $(function () {
