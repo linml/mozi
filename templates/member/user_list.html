@@ -34,7 +34,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>账户名</label>
-                            <input type="text" class="form-control pull-right" id="detail_username" disabled>
+                            <input type="text" class="form-control pull-right" id="detail_name" disabled>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -242,7 +242,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>账户名</label>
-                            <input type="text" class="form-control" id="add_username" style="width: 100%;">
+                            <input type="text" class="form-control" id="add_name" style="width: 100%;">
                         </div>
                     </div>
                 </div>
@@ -277,9 +277,9 @@
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="username">账户名</label>
+                                <label for="name">账户名</label>
                                 <label class=" pull-right"><input type="checkbox">模糊查询</label>
-                                <input type="text" class="form-control " id="username" placeholder="输入账户名">
+                                <input type="text" class="form-control " id="name" placeholder="输入账户名">
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -420,7 +420,7 @@
                 if (rs.code === 1) {
                     var modal = $(this);
                     $('#detail_user_id').val(rs.data.user_id);
-                    $('#detail_username').val(rs.data.username);
+                    $('#detail_name').val(rs.data.name);
                     $('#detail_status').val(rs.data.status).trigger("change");
                     $('#detail_status').change();
                 }else{
@@ -481,13 +481,12 @@
         ordering: false,
         order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
         columns: [
-            {"data": "username"},
-            {"data": "user_id"},
+            {"data": "name"},
             {"data": "balance"},
             {"data": "is_test"},
             {"data": "status"},
-            {"data": "created_at"},
-            {"data": "last_login_time"},
+            {"data": "registered"},
+            {"data": "last_login_at"},
             {"data": "last_login_ip"},
             {"data": null}
         ],
@@ -499,7 +498,7 @@
                     }
                     return '<p class="text-red">测试号</p>';
                 },
-                "targets": 3
+                "targets": 2
             },
             {
                 "render": function(data, type, row, meta) {
@@ -508,17 +507,17 @@
                     }
                     return '<p class="text-red">禁用</p>';
                 },
-                "targets": 4
+                "targets": 3
             }, {
                 "render": function(data, type, row, meta) {
-                    return format_time(row.created_at);
+                    return format_time(row.registered);
                 },
-                "targets": 5
+                "targets": 4
             },{
                 "render": function(data, type, row, meta) {
-                    return format_time(row.last_login_time);
+                    return format_time(row.last_login_at);
                 },
-                "targets": 6
+                "targets": 5
             },{
                 "render": function(data, type, row, meta) {
                     var html_str = '<div class="btn-group"><button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#member_detail" data-user_id="'+row.user_id +'">详情</i></button>';
@@ -534,7 +533,7 @@
 
 
                 },
-                "targets": 8
+                "targets": 7
             }
         ],
         ajax:function(data, callback, settings){
@@ -551,8 +550,8 @@
                 param.user_id = $('#user_id').val();
                 delete param.parent_id
             }
-            if ($('#username').val() !== ""){
-                param.username = $('#username').val();
+            if ($('#name').val() !== ""){
+                param.name = $('#name').val();
                 delete param.parent_id
             }
             if ($('#login_ip').val() !== ""){
@@ -567,7 +566,7 @@
 
 
 
-            var url = "/admin/member/list";
+            var url = "/pages/user/list";
 
             $.ajax({
                 type: "GET",
@@ -616,7 +615,7 @@
     function query_reset() {
         $('#parent_id').val(0);
         $('#user_id').val("");
-        $('#username').val("");
+        $('#name').val("");
         $('#login_ip').val("");
         $('#status').val("").trigger("change");
         $('#status').change();
@@ -627,14 +626,14 @@
     }
 
     function lower_member(parent_id) {
-        $('#username').val("");
+        $('#name').val("");
         $('#user_id').val("");
         $('#parent_id').val(parent_id);
         myTable.ajax.reload();
     }
 
     function uper_member(user_id) {
-        $('#username').val("");
+        $('#name').val("");
         $('#parent_id').val("");
         $('#user_id').val(user_id);
         myTable.ajax.reload();
@@ -649,7 +648,7 @@
         }else {
             params.parent_name = parent_name
         }
-        params.username = $('#add_username').val();
+        params.name = $('#add_name').val();
         params.password = $('#add_password').val();
         $.post('/admin/member/add', params, function (rs) {
             if (rs.code === 1) {

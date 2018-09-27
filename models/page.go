@@ -1,5 +1,10 @@
 package models
 
+const (
+	PageDefaultRow  = 10
+	PageDefaultPage = 1
+)
+
 // 分页查询条件
 type PageParams struct {
 	PageRow     int               `json:"page_row"`

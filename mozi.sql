@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 22/09/2018 12:03:01
+ Date: 27/09/2018 08:13:24
 */
 
 SET NAMES utf8mb4;
@@ -38,7 +38,7 @@ CREATE TABLE `admin` (
 -- Records of admin
 -- ----------------------------
 BEGIN;
-INSERT INTO `admin` VALUES (1, 'boss', '$2a$10$1HdEWW.7Ob6aCZUkuhKl7O16gs0jYwe9/jsN4NYsQKZok8eQ/uxFS', '', 0, '1', 1, '');
+INSERT INTO `admin` VALUES (1, 'boss', '$2a$10$wneCJNoLkxjpbd4ti5mHC.JHDTrieDfz9aQPUY.eQd/hTMug0ftlC', '', 0, '1', 1, '');
 COMMIT;
 
 -- ----------------------------
@@ -77,7 +77,7 @@ INSERT INTO `admin_menu` VALUES (113, 4, 1, 0, '首存礼包', 'fa fa-toggle-on'
 INSERT INTO `admin_menu` VALUES (114, 5, 1, 0, '每日存款', 'fa fa-toggle-on', '', 'iframe-tab');
 INSERT INTO `admin_menu` VALUES (130, 1, 2, 0, '通用公告', 'fa fa-edit', 'pages/notice/normal_notice.html', 'iframe-tab');
 INSERT INTO `admin_menu` VALUES (131, 2, 2, 0, '滚动公告', 'fa fa-edit', 'pages/notice/roll_notice.html', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (160, 1, 3, 0, '账户列表', 'fa fa-user', 'page/account/list', 'iframe-tab');
+INSERT INTO `admin_menu` VALUES (160, 1, 3, 0, '账户列表', 'fa fa-user', 'html/account/list', 'iframe-tab');
 INSERT INTO `admin_menu` VALUES (161, 2, 3, 0, '登入记录', 'fa fa-list-alt', 'pages/account/record_login.html', 'iframe-tab');
 INSERT INTO `admin_menu` VALUES (162, 3, 3, 0, '账号银行卡', 'fa fa-list-alt', 'pages/account/member_banks.html', 'iframe-tab');
 INSERT INTO `admin_menu` VALUES (163, 4, 3, 0, 'IP黑名单', 'fa fa-list-alt', '', 'iframe-tab');
@@ -1871,6 +1871,8 @@ CREATE TABLE `user_profile` (
   `wechat` varchar(64) NOT NULL DEFAULT '',
   `register_ip` varchar(64) NOT NULL DEFAULT '',
   `registered` varchar(14) NOT NULL DEFAULT '',
+  `last_login_at` varchar(14) NOT NULL DEFAULT '',
+  `last_login_ip` varchar(16) NOT NULL DEFAULT '',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
@@ -1878,7 +1880,7 @@ CREATE TABLE `user_profile` (
 -- Records of user_profile
 -- ----------------------------
 BEGIN;
-INSERT INTO `user_profile` VALUES (1, '', '', '', 0, '', 0, '', '', '', '');
+INSERT INTO `user_profile` VALUES (1, '', '', '', 0, '', 0, '', '', '127.0.0.1', '20180101000000', '', '127.0.0.1');
 COMMIT;
 
 -- ----------------------------
