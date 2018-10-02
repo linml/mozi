@@ -10,6 +10,7 @@ type UserRelation struct {
 	UserID   int
 	ParentID int
 	Parents  string
+	UserType int
 }
 
 func (ur *UserRelation) TableName() string {
@@ -17,11 +18,11 @@ func (ur *UserRelation) TableName() string {
 }
 
 func (ur *UserRelation) Field() []string {
-	return []string{"user_id", "parent_id", "parents"}
+	return []string{"user_id", "parent_id", "parents", "user_type"}
 }
 
 func (ur *UserRelation) FieldItem() []interface{} {
-	return []interface{}{&ur.UserID, &ur.ParentID, &ur.Parents}
+	return []interface{}{&ur.UserID, &ur.ParentID, &ur.Parents, &ur.UserType}
 }
 
 func CreateUserRelationTx(tx *sql.Tx, ur *UserRelation) error {
