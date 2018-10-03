@@ -493,10 +493,10 @@
         columnDefs: [
             {
                 "render": function(data, type, row, meta) {
-                    if (row.is_test === 0){
-                        return '真实号';
+                    if (row.user_type === 0){
+                        return '代理';
                     }
-                    return '<p class="text-red">测试号</p>';
+                    return '<p class="text-red">会员</p>';
                 },
                 "targets": 2
             },

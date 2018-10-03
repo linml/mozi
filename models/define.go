@@ -1,7 +1,12 @@
 package models
 
 const (
-	PowerEnable = 1
+	UserTypeProxy = 0 // 代理
+	UserTypePlay  = 1 // 会员
+)
+
+const (
+	PowerEnable  = 1
 	PowerDisable = 0
 )
 const (

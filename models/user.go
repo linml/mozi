@@ -46,6 +46,7 @@ type User4Admin struct {
 	Registered  string          `json:"registered"`
 	LastLoginAt string          `json:"last_login_at"`
 	LastLoginIP string          `json:"last_login_ip"`
+	UserType    int             `json:"user_type"`
 }
 
 func CreateUserTx(tx *sql.Tx, u *User) (sql.Result, error) {
@@ -111,9 +112,9 @@ func SetPassword(uid int, password string) error {
 }
 
 func PageFindUserList(pageParam PageParams) (*PageResult, *[]User4Admin, error) {
-	conditionSql := " FROM users a LEFT JOIN user_wallet b ON a.user_id=b.user_id LEFT JOIN user_profile c ON a.user_id=c.user_id WHERE 1=1 "
+	conditionSql := " FROM users a LEFT JOIN user_wallet b ON a.user_id=b.user_id LEFT JOIN user_profile c ON a.user_id=c.user_id LEFT JOIN user_relation d ON a.user_id=d.user_id WHERE 1=1 "
 	countSql := "SELECT COUNT(*) AS count " + conditionSql
-	querySql := "SELECT a.user_id,a.name,a.status,b.balance,c.registered,c.last_login_at,c.last_login_ip " + conditionSql
+	querySql := "SELECT a.user_id,a.name,a.status,b.balance,c.registered,c.last_login_at,c.last_login_ip,d.user_type " + conditionSql
 	sqlWhere, args := "", []interface{}{}
 	if v, ok := pageParam.Params["user_id"]; ok {
 		sqlWhere += " AND a.user_id = ?"
@@ -152,7 +153,7 @@ func PageFindUserList(pageParam PageParams) (*PageResult, *[]User4Admin, error) 
 	}
 	for rows.Next() {
 		d := User4Admin{}
-		err = rows.Scan(&d.UserID, &d.Name, &d.Status, &d.Balance, &d.Registered, &d.LastLoginAt, &d.LastLoginIP)
+		err = rows.Scan(&d.UserID, &d.Name, &d.Status, &d.Balance, &d.Registered, &d.LastLoginAt, &d.LastLoginIP, &d.UserType)
 		if err != nil {
 			return &pg, &data, err
 		}

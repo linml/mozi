@@ -50,6 +50,10 @@ func RandString(n int) string {
 	return string(b)
 }
 
+func RandLowerString(n int) string {
+	return strings.ToLower(RandString(n))
+}
+
 func Str2Time(s string) (time.Time, error) {
 	loc, _ := time.LoadLocation("Local") //重要：获取时区
 	t, err := time.ParseInLocation("20060102150405", s, loc)
@@ -122,7 +126,7 @@ func GetInt(str string) int {
 
 func GetContent(m map[string]string) string {
 	s := ""
-	for i,_ := range m{
+	for i, _ := range m {
 		s += fmt.Sprintf("%s:%s;", i, m[i])
 	}
 	return s
@@ -130,16 +134,15 @@ func GetContent(m map[string]string) string {
 
 func GetContentWithMosaics(m map[string]string, keys []string) string {
 	s := ""
-	for i,_ := range m{
-		if CheckInStr(keys, i){
+	for i, _ := range m {
+		if CheckInStr(keys, i) {
 			s += fmt.Sprintf("%s:%s;", i, "***")
-		}else {
+		} else {
 			s += fmt.Sprintf("%s:%s;", i, m[i])
 		}
 	}
 	return s
 }
-
 
 func CheckInStr(dis []string, k string) bool {
 	for i, _ := range dis {
@@ -158,7 +161,6 @@ func CheckInInt(dis []int, k int) bool {
 	}
 	return false
 }
-
 
 func GetFloat64(str string) float64 {
 	f, _ := strconv.ParseFloat(str, 64)
@@ -246,5 +248,5 @@ func Mosaics(s string, start int, end int) string {
 	if sLen <= start+end {
 		return "***"
 	}
-	return string(nameRune[0:start]) + "***" + string(nameRune[sLen - end:])
+	return string(nameRune[0:start]) + "***" + string(nameRune[sLen-end:])
 }

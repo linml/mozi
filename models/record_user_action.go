@@ -12,6 +12,7 @@ const (
 const (
 	ActionUserRegister = 1 // 用户注册
 	ActionUserLogin    = 2 // 用户登入
+	ActionCreateRef    = 3 // 生成推广码
 )
 
 type RecordUserAction struct {

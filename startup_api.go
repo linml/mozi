@@ -43,6 +43,7 @@ func main() {
 		apiAuthV1.GET("/get_balance", api.GetBalance)
 		apiAuthV1.GET("/infos", api.GetInfos)
 		apiAuthV1.POST("/password/reset", api.ResetPassword)
+		apiAuthV1.POST("/ref", api.UserGenLink)
 		apiAuthV1.GET("/profile", api.UserProfile)
 		apiAuthV1.POST("/profile/real_name", api.SetProfileRealName)
 		apiAuthV1.POST("/profile/nickname", api.SetProfileNicname)

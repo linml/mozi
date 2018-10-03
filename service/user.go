@@ -202,3 +202,30 @@ func GetUserWalletPasswordStatus(uid int) (int, error) {
 	return uw.Status, nil
 
 }
+
+func GenUserRef(refInfo models.UserLinks) error {
+	uid := refInfo.UserID
+	uRelation, err := models.GetUserRelation(uid)
+	if err != nil {
+		return err
+	}
+
+	if uRelation.UserType == models.UserTypePlay {
+		return errors.New("暂无权限")
+	}
+
+	tx, err := common.BaseDb.Begin()
+
+	if err != nil {
+		return err
+	}
+
+	refInfo.Ref = common.RandLowerString(6)
+	err = models.CreateUserLinksTx(tx, &refInfo)
+	if err != nil {
+		tx.Rollback()
+		return errors.New("添加连接失败")
+	}
+	err = tx.Commit()
+	return err
+}

@@ -6,7 +6,6 @@ import (
 	"github.com/xiuos/mozi/models"
 	"github.com/xiuos/mozi/models/errors"
 	"regexp"
-	"strconv"
 )
 
 func CheckNameLegal(name string) error {
@@ -46,11 +45,14 @@ func RegisterUser(name string, password string, params map[string]string) error 
 		return errors.NameExist{Name: name}
 	}
 	pRelation := &models.UserRelation{}
+	uType := 1
 	if ref, ok := params["ref"]; ok {
-		refID, _ := strconv.Atoi(ref)
-		pRelation, err = models.GetUserRelation(refID)
+		refInfo, err := models.GetUserLinkByRef(ref)
+		uType = refInfo.UserType
+
+		pRelation, err = models.GetUserRelation(refInfo.UserID)
 		if err != nil {
-			return errors.RefNotFound{Ref: refID}
+			return errors.RefNotFound{}
 		}
 	} else {
 		sysSettings, err := models.GetSysSettings(models.SysDefaultParentID)
@@ -118,6 +120,7 @@ func RegisterUser(name string, password string, params map[string]string) error 
 		UserID:   uid,
 		ParentID: pRelation.UserID,
 		Parents:  fmt.Sprintf("%s,%d", pRelation.Parents, uid),
+		UserType: uType,
 	}
 	err = models.CreateUserRelationTx(tx, &userRelation)
 	if err != nil {
@@ -129,12 +132,11 @@ func RegisterUser(name string, password string, params map[string]string) error 
 
 	// 添加权限
 	userPower := models.UserPower{
-		UserID:   uid,
-		PowerBet: models.PowerEnable,
-		PowerLogin: models.PowerEnable,
-		PowerDeposit: models.PowerEnable,
+		UserID:        uid,
+		PowerBet:      models.PowerEnable,
+		PowerLogin:    models.PowerEnable,
+		PowerDeposit:  models.PowerEnable,
 		PowerWithdraw: models.PowerEnable,
-
 	}
 	err = models.CreateUserPowerTx(tx, &userPower)
 	if err != nil {

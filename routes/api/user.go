@@ -235,3 +235,33 @@ func UserWalletPasswordStatus(c *gin.Context) {
 		}))
 	}
 }
+
+// 生成推广链接
+func UserGenLink(c *gin.Context) {
+	uid, err := routes.GetAPILoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "登录校验失败"))
+	}
+	uType := common.GetInt(c.PostForm("user_type"))
+
+	refInfo := models.UserLinks{UserID: uid, UserType: uType}
+
+	err = service.GenUserRef(refInfo)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+	} else {
+		r := models.RecordUserAction{
+			UserID:       uid,
+			ActionModule: models.ActionModuleUser,
+			ActionID:     models.ActionCreateRef,
+			Content:      "",
+			IP:           c.ClientIP(),
+			RecordAt:     common.GetTimeNowString(),
+			Success:      common.CodeOK,
+			Message:      "操作成功",
+			OperatorType: models.OperatorTypeSelf,
+		}
+		models.LogRecordUserAction(&r)
+		c.JSON(200, routes.ApiShowResult(common.CodeOK, ""))
+	}
+}
