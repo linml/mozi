@@ -6,6 +6,7 @@ import (
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
 	"github.com/xiuos/mozi/routes"
+	"github.com/xiuos/mozi/service"
 )
 
 func PageFindUserList(c *gin.Context) {
@@ -35,5 +36,45 @@ func PageFindUserList(c *gin.Context) {
 		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
 	} else {
 		c.JSON(200, routes.ApiResult(common.CodeOK, "", pr))
+	}
+}
+
+func GetMemberInfos(c *gin.Context) {
+	uid := common.GetInt(c.Query("user_id"))
+	infos, err := service.GetInfos(uid)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", infos))
+	}
+}
+
+func GetMemberProfile(c *gin.Context) {
+	uid := common.GetInt(c.Query("user_id"))
+	infos, err := models.GetUserProfile(uid)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", infos))
+	}
+}
+
+func GetMemberRelation(c *gin.Context) {
+	uid := common.GetInt(c.Query("user_id"))
+	infos, err := models.GetUserRelation(uid)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", infos))
+	}
+}
+
+func GetMemberPower(c *gin.Context) {
+	uid := common.GetInt(c.Query("user_id"))
+	infos, err := models.GetUserPower(uid)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", infos))
 	}
 }

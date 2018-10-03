@@ -51,22 +51,14 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>类型</label>
-                            <select id="detail_is_test" class="form-control select2" style="width: 100%;" disabled>
-                                <option value=1>测试</option>
-                                <option value=0>真实</option>
-                            </select>
-                        </div>
-                    </div>
+
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>级别</label>
                             <div class="input-group">
                                 <select id="detail_type" class="form-control select2" style="width: 100%;">
-                                    <option value=0>会员</option>
-                                    <option value=1>代理</option>
+                                    <option value=0>代理</option>
+                                    <option value=1>会员</option>
                                 </select>
                                 <span class="input-group-btn">
                                   <button type="button" class="btn btn-primary btn-flat">保存</button>
@@ -162,39 +154,32 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label>备注</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="detail_remark">
-                                <span class="input-group-btn">
-                                  <button type="button" class="btn btn-primary btn-flat">保存</button>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
                             <label>权限</label>
                             <div class="row inline">
                                 <div class="checkbox inline">
                                     <label>
-                                        <input type="checkbox">
+                                        <input type="checkbox" id="power_login">
                                         登录
                                     </label>
                                 </div>
 
                                 <div class="checkbox inline">
                                     <label>
-                                        <input type="checkbox">
+                                        <input type="checkbox" id="power_bet">
                                         游戏
                                     </label>
                                 </div>
 
                                 <div class="checkbox inline">
                                     <label>
-                                        <input type="checkbox">
-                                        转点
+                                        <input type="checkbox" id="power_deposit">
+                                        充值
+                                    </label>
+                                </div>
+                                <div class="checkbox inline">
+                                    <label>
+                                        <input type="checkbox" id="power_withdraw">
+                                        提款
                                     </label>
                                 </div>
                                 <button type="button" class="btn btn-primary btn-flat">保存</button>
@@ -416,7 +401,7 @@
             var user_id = button.data('user_id');
             var params = {};
             params.user_id = user_id;
-            $.get('/admin/member/info', params, function (rs) {
+            $.get('/member/infos', params, function (rs) {
                 if (rs.code === 1) {
                     var modal = $(this);
                     $('#detail_user_id').val(rs.data.user_id);
@@ -427,35 +412,54 @@
                     bootbox.alert(rs.msg)
                 }
             })
-            $.get('/admin/member/basic_profile', params, function (rs) {
-                if (rs.code === 1) {
-                    var modal = $(this);
-                    $('#detail_nickname').val(rs.data.nickname);
-                    $('#detail_real_name').val(rs.data.real_name);
-                    $('#detail_register_ip').val(rs.data.register_ip);
-                    $('#detail_remark').val(rs.data.remark);
-                }else{
-                    bootbox.alert(rs.msg)
-                }
-            })
-            $.get('/admin/member/contact_profile', params, function (rs) {
+            $.get('/member/profile', params, function (rs) {
                 if (rs.code === 1) {
                     var modal = $(this);
                     $('#detail_qq').val(rs.data.qq);
                     $('#detail_mobile').val(rs.data.mobile);
                     $('#detail_email').val(rs.data.email);
+                    $('#detail_nickname').val(rs.data.nickname);
+                    $('#detail_real_name').val(rs.data.real_name);
+                    $('#detail_register_ip').val(rs.data.register_ip);
                 }else{
                     bootbox.alert(rs.msg)
                 }
             })
-            $.get('/admin/member/relation', params, function (rs) {
+            $.get('/member/relation', params, function (rs) {
                 if (rs.code === 1) {
                     var modal = $(this);
                     $('#detail_parent_id').val(rs.data.parent_id);
-                    $('#detail_type').val(rs.data.type).trigger("change");
+                    $('#detail_type').val(rs.data.user_type).trigger("change");
                     $('#detail_type').change();
-                    $('#detail_is_test').val(rs.data.is_test).trigger("change");
-                    $('#detail_is_test').change();
+                }else{
+                    bootbox.alert(rs.msg)
+                }
+            })
+            $.get('/member/power', params, function (rs) {
+                if (rs.code === 1) {
+                    var modal = $(this);
+                    if (rs.data.power_bet === 1){
+                        $('#power_bet').iCheck("check");
+                    }else{
+                        $('#power_bet').iCheck("uncheck");
+                    }
+                    if (rs.data.power_login === 1){
+                        $('#power_login').iCheck("check");
+                    }else{
+                        $('#power_login').iCheck("uncheck");
+                    }
+                    if (rs.data.power_deposit === 1){
+                        $('#power_deposit').iCheck("check");
+                    }else{
+                        $('#power_deposit').iCheck("uncheck");
+                    }
+                    if (rs.data.power_withdraw === 1){
+                        $('#power_withdraw').iCheck("check");
+                    }else{
+                        $('#power_withdraw').iCheck("uncheck");
+                    }
+
+
                 }else{
                     bootbox.alert(rs.msg)
                 }

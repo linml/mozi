@@ -50,6 +50,11 @@ func main() {
 		appAuthV1.GET("/html/account/list", admin.TmplAccountList)
 
 		appAuthV1.GET("/pages/user/list", admin.PageFindUserList)
+		appAuthV1.GET("/member/infos", admin.GetMemberInfos)
+		appAuthV1.GET("/member/profile", admin.GetMemberProfile)
+		appAuthV1.GET("/member/relation", admin.GetMemberRelation)
+		appAuthV1.GET("/member/power", admin.GetMemberPower)
+
 	}
 
 	app.Run(":9980")

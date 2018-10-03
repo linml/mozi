@@ -7,10 +7,10 @@ import (
 )
 
 type UserRelation struct {
-	UserID   int
-	ParentID int
-	Parents  string
-	UserType int
+	UserID   int    `json:"user_id"`
+	ParentID int    `json:"parent_id"`
+	Parents  string `json:"parents"`
+	UserType int    `json:"user_type"`
 }
 
 func (ur *UserRelation) TableName() string {
