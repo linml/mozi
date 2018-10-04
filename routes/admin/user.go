@@ -39,6 +39,36 @@ func PageFindUserList(c *gin.Context) {
 	}
 }
 
+func PageFindUserRecordLogin(c *gin.Context) {
+	params := routes.ParamHelper{}
+	params.GetQuery(c, "draw")
+	params.GetQuery(c, "username")
+	params.GetQuery(c, "login_ip")
+	params.GetQuery(c, "status")
+	params.GetQuery(c, "start_at")
+	params.GetQuery(c, "end_at")
+	params.GetQuery(c, "status")
+	params.GetQuery(c, "curr_page")
+	params.GetQuery(c, "page_row")
+	currPage := common.GetInt(params.Get("curr_page"))
+	pageRow := common.GetInt(params.Get("page_row"))
+
+	if currPage < 1 {
+		currPage = models.PageDefaultPage
+	}
+
+	if pageRow < 1 {
+		pageRow = models.PageDefaultRow
+	}
+	pp := models.PageParams{CurrentPage: currPage, PageRow: pageRow, Params: params}
+	pr, _, err := models.PageFindUserRecordLogin(pp)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", pr))
+	}
+}
+
 func GetMemberInfos(c *gin.Context) {
 	uid := common.GetInt(c.Query("user_id"))
 	infos, err := service.GetInfos(uid)

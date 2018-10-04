@@ -76,6 +76,10 @@ func TmplRoleGroup(c *gin.Context) {
 	c.HTML(http.StatusOK, "admin_role_group.html", gin.H{"title": "管理后台"})
 }
 
-func TmplAccountList(c *gin.Context) {
+func TmplMemberList(c *gin.Context) {
 	c.HTML(http.StatusOK, "user_list.html", gin.H{})
+}
+
+func TmplRecordLogin(c *gin.Context) {
+	c.HTML(http.StatusOK, "record_login.html", gin.H{})
 }

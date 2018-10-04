@@ -91,6 +91,7 @@ func AuthLogin(name string, password string, params map[string]string) error {
 		IP:         ip,
 		UserAgent:  userAgent,
 		Url:        url,
+		Status:     1,
 		RecordAt:   common.GetTimeNowString(),
 	}
 	models.LogRecordUserLogin(&r)
