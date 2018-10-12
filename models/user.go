@@ -129,7 +129,7 @@ func PageFindUserList(pageParam PageParams) (*PageResult, *[]User4Admin, error) 
 		args = append(args, v)
 	}
 	if v, ok := pageParam.Params["parent_id"]; ok {
-		sqlWhere += " AND c.parent_id = ?"
+		sqlWhere += " AND d.parent_id = ?"
 		args = append(args, v)
 	}
 	var pg PageResult

@@ -84,6 +84,8 @@ func AuthLogin(name string, password string, params map[string]string) error {
 		url = val
 	}
 
+	models.SetUserProfile(u.UserID, "last_login_at", common.GetTimeNowString())
+	models.SetUserProfile(u.UserID, "last_login_ip", ip)
 	r := models.RecordUserLogin{
 		UserID:     u.UserID,
 		Name:       u.Name,
