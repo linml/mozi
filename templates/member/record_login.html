@@ -38,7 +38,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>账户名</label>
-                                <input type="text" class="form-control" id="username">
+                                <input type="text" class="form-control" id="name">
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -99,7 +99,7 @@
                                     <th class="text-center">浏览器</th>
                                     <th class="text-center">IP</th>
                                     <th class="text-center">登录时间</th>
-                                    <th class="text-center">信息</th>
+                                    <th class="text-center">设备类型</th>
                                 </tr>
                                 </thead>
                                 <tbody id="login_data" class="text-center"></tbody>
@@ -190,12 +190,12 @@
         ordering: false,
         order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
         columns: [
-            {"data": "username"},
+            {"data": "name"},
             {"data": "url"},
             {"data": "user_agent"},
             {"data": "ip"},
             {"data": "record_at"},
-            {"data": "remark"}
+            {"data": "device_type"},
         ],
         columnDefs: [
             {
@@ -203,6 +203,29 @@
                     return format_time(row.record_at);
                 },
                 "targets": 4
+            },{
+                "render": function(data, type, row, meta) {
+                    x = "";
+                    switch (row.device_type) {
+                        case 0:
+                            x = "其他";
+                            break;
+                        case 1:
+                            x = "网页";
+                            break;
+                        case 2:
+                            x = "手机";
+                            break;
+                        case 3:
+                            x = "API";
+                            break;
+                        default:
+                            x = "暂定";
+                            break;
+                    }
+                    return x;
+                },
+                "targets": 5
             }
         ],
         ajax:function(data, callback, settings){
@@ -213,13 +236,13 @@
             param.curr_page = (data.start / data.length)+1;//当前页码
             param.draw = data.draw+1;//当前页码
 
-            var username = $('#username').val();
+            var name = $('#name').val();
             var url = $('#url').val();
             var ip = $('#ip').val();
 
 
-            if (username !== ""){
-                param.username = username
+            if (name !== ""){
+                param.name = name
             }
             if (url !== ""){
                 param.url = url
@@ -231,7 +254,7 @@
             param.start_at = format_time_1($('#start_at').val());
             param.end_at = format_time_1($('#end_at').val());
 
-            var url = "/admin/member/page_login_history";
+            var url = "/pages/user/record_login";
 
             $.ajax({
                 type: "GET",

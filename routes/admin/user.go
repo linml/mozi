@@ -43,7 +43,7 @@ func PageFindUserRecordLogin(c *gin.Context) {
 	params := routes.ParamHelper{}
 	params.GetQuery(c, "draw")
 	params.GetQuery(c, "username")
-	params.GetQuery(c, "login_ip")
+	params.GetQuery(c, "ip")
 	params.GetQuery(c, "status")
 	params.GetQuery(c, "start_at")
 	params.GetQuery(c, "end_at")
@@ -61,7 +61,7 @@ func PageFindUserRecordLogin(c *gin.Context) {
 		pageRow = models.PageDefaultRow
 	}
 	pp := models.PageParams{CurrentPage: currPage, PageRow: pageRow, Params: params}
-	pr, _, err := models.PageFindUserRecordLogin(pp)
+	pr, _, err := models.PageFindUserRecordLogin4Admin(pp)
 	if err != nil {
 		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
 	} else {
