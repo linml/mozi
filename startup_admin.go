@@ -60,5 +60,4 @@ func main() {
 	}
 
 	app.Run(":9980")
-
 }
