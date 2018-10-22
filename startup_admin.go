@@ -58,6 +58,5 @@ func main() {
 		appAuthV1.GET("/member/power", admin.GetMemberPower)
 
 	}
-
 	app.Run(":9980")
 }
