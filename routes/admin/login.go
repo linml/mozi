@@ -83,3 +83,7 @@ func TmplMemberList(c *gin.Context) {
 func TmplRecordLogin(c *gin.Context) {
 	c.HTML(http.StatusOK, "record_login.html", gin.H{})
 }
+
+func TmplUserBank(c *gin.Context) {
+	c.HTML(http.StatusOK, "user_bank.html", gin.H{})
+}

@@ -49,9 +49,11 @@ func main() {
 		appAuthV1.GET("/html/role_group", admin.TmplRoleGroup)
 		appAuthV1.GET("/html/member/list", admin.TmplMemberList)
 		appAuthV1.GET("/html/member/record_login", admin.TmplRecordLogin)
+		appAuthV1.GET("/html/member/user_bank", admin.TmplUserBank)
 
 		appAuthV1.GET("/pages/user/list", admin.PageFindUserList)
 		appAuthV1.GET("/pages/user/record_login", admin.PageFindUserRecordLogin)
+		appAuthV1.GET("/pages/user/bank/list", admin.PageFindUserBank)
 		appAuthV1.GET("/member/infos", admin.GetMemberInfos)
 		appAuthV1.GET("/member/profile", admin.GetMemberProfile)
 		appAuthV1.GET("/member/relation", admin.GetMemberRelation)

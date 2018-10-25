@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 27/09/2018 08:13:24
+ Date: 25/10/2018 22:53:12
 */
 
 SET NAMES utf8mb4;
@@ -22,17 +22,17 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) NOT NULL,
-  `password` varchar(128) NOT NULL DEFAULT '',
-  `google_secret` varchar(36) NOT NULL DEFAULT '',
-  `google_secret_status` tinyint(1) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '账号编号',
+  `name` varchar(32) NOT NULL COMMENT '账号名',
+  `password` varchar(128) NOT NULL DEFAULT '' COMMENT '密码',
+  `google_secret` varchar(36) NOT NULL DEFAULT '' COMMENT '谷歌验证码secret',
+  `google_secret_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '谷歌验证码是否已经绑定(0:否，1:是)',
   `role` varchar(32) NOT NULL DEFAULT '0' COMMENT '组',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态',
   `created_at` varchar(14) NOT NULL DEFAULT '' COMMENT '创建时间',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员';
 
 -- ----------------------------
 -- Records of admin
@@ -46,16 +46,16 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_menu`;
 CREATE TABLE `admin_menu` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sort` int(11) DEFAULT NULL,
-  `pid` int(11) DEFAULT NULL,
-  `open` int(1) DEFAULT NULL,
-  `text` varchar(64) DEFAULT '',
-  `icon` varchar(128) DEFAULT '',
-  `url` varchar(128) DEFAULT '',
-  `target_type` varchar(64) DEFAULT '',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `sort` int(11) DEFAULT NULL COMMENT '排序',
+  `pid` int(11) DEFAULT NULL COMMENT '上级id',
+  `open` int(1) DEFAULT NULL COMMENT '是否打开',
+  `text` varchar(64) DEFAULT '' COMMENT '文本',
+  `icon` varchar(128) DEFAULT '' COMMENT '图标',
+  `url` varchar(128) DEFAULT '' COMMENT '访问地址',
+  `target_type` varchar(64) DEFAULT '' COMMENT '类型',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=903 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=903 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员菜单';
 
 -- ----------------------------
 -- Records of admin_menu
@@ -77,9 +77,9 @@ INSERT INTO `admin_menu` VALUES (113, 4, 1, 0, '首存礼包', 'fa fa-toggle-on'
 INSERT INTO `admin_menu` VALUES (114, 5, 1, 0, '每日存款', 'fa fa-toggle-on', '', 'iframe-tab');
 INSERT INTO `admin_menu` VALUES (130, 1, 2, 0, '通用公告', 'fa fa-edit', 'pages/notice/normal_notice.html', 'iframe-tab');
 INSERT INTO `admin_menu` VALUES (131, 2, 2, 0, '滚动公告', 'fa fa-edit', 'pages/notice/roll_notice.html', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (160, 1, 3, 0, '账户列表', 'fa fa-user', 'html/account/list', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (161, 2, 3, 0, '登入记录', 'fa fa-list-alt', 'pages/account/record_login.html', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (162, 3, 3, 0, '账号银行卡', 'fa fa-list-alt', 'pages/account/member_banks.html', 'iframe-tab');
+INSERT INTO `admin_menu` VALUES (160, 1, 3, 0, '账户列表', 'fa fa-user', 'html/member/list', 'iframe-tab');
+INSERT INTO `admin_menu` VALUES (161, 2, 3, 0, '登入记录', 'fa fa-list-alt', 'html/member/record_login', 'iframe-tab');
+INSERT INTO `admin_menu` VALUES (162, 3, 3, 0, '账号银行卡', 'fa fa-list-alt', 'html/member/user_bank', 'iframe-tab');
 INSERT INTO `admin_menu` VALUES (163, 4, 3, 0, 'IP黑名单', 'fa fa-list-alt', '', 'iframe-tab');
 INSERT INTO `admin_menu` VALUES (164, 5, 3, 0, '管理列表', 'fa fa-fw fa-user-secret', '', 'iframe-tab');
 INSERT INTO `admin_menu` VALUES (180, 1, 4, 0, '游戏结果', 'fa fa-plus-square-o', '', '');
@@ -127,13 +127,13 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_role`;
 CREATE TABLE `admin_role` (
-  `id` int(11) NOT NULL,
-  `name` varchar(64) NOT NULL DEFAULT '',
-  `menu` text NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `remark` varchar(256) NOT NULL DEFAULT '',
+  `id` int(11) NOT NULL COMMENT '编号',
+  `name` varchar(64) NOT NULL DEFAULT '' COMMENT '管理员',
+  `menu` text NOT NULL COMMENT '权限菜单',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态',
+  `remark` varchar(256) NOT NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员权限';
 
 -- ----------------------------
 -- Records of admin_role
@@ -143,20 +143,60 @@ INSERT INTO `admin_role` VALUES (1, '管理员', '900,901,902,9,234,1,2,3,4,5,6,
 COMMIT;
 
 -- ----------------------------
+-- Table structure for code_bank
+-- ----------------------------
+DROP TABLE IF EXISTS `code_bank`;
+CREATE TABLE `code_bank` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `bank_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '银行编号',
+  `bank_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '银行名称',
+  `group` int(8) NOT NULL DEFAULT '0' COMMENT '归类',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态(0:禁用,1:启用)',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `bank_code` (`bank_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='银行码表';
+
+-- ----------------------------
+-- Records of code_bank
+-- ----------------------------
+BEGIN;
+INSERT INTO `code_bank` VALUES (1, 'ICBC', '工商银行', 0, 1);
+INSERT INTO `code_bank` VALUES (2, 'ABC', '农业银行', 0, 1);
+INSERT INTO `code_bank` VALUES (3, 'BOC', '中国银行(大额)', 0, 1);
+INSERT INTO `code_bank` VALUES (4, 'BOCSH', '中国银行', 0, 1);
+INSERT INTO `code_bank` VALUES (5, 'CCB', '建设银行', 0, 1);
+INSERT INTO `code_bank` VALUES (6, 'CMB', '招商银行', 0, 1);
+INSERT INTO `code_bank` VALUES (7, 'SPDB', '浦发银行', 0, 1);
+INSERT INTO `code_bank` VALUES (8, 'GDB', '广发银行', 0, 1);
+INSERT INTO `code_bank` VALUES (9, 'BOCOM', '交通银行', 0, 1);
+INSERT INTO `code_bank` VALUES (10, 'CNCB', '中信银行', 0, 1);
+INSERT INTO `code_bank` VALUES (11, 'CMBC', '民生银行', 0, 1);
+INSERT INTO `code_bank` VALUES (12, 'CIB', '兴业银行', 0, 1);
+INSERT INTO `code_bank` VALUES (13, 'CEB', '光大银行', 0, 1);
+INSERT INTO `code_bank` VALUES (14, 'HXB', '华夏银行', 0, 1);
+INSERT INTO `code_bank` VALUES (15, 'BOS', '上海银行', 0, 1);
+INSERT INTO `code_bank` VALUES (16, 'SRCB', '上海农商', 0, 1);
+INSERT INTO `code_bank` VALUES (17, 'PSBC', '邮政储蓄', 0, 1);
+INSERT INTO `code_bank` VALUES (18, 'BCCB', '北京银行', 0, 1);
+INSERT INTO `code_bank` VALUES (19, 'BRCB', '北京农商', 0, 1);
+INSERT INTO `code_bank` VALUES (20, 'PAB', '平安银行', 0, 1);
+COMMIT;
+
+-- ----------------------------
 -- Table structure for code_lotto
 -- ----------------------------
 DROP TABLE IF EXISTS `code_lotto`;
 CREATE TABLE `code_lotto` (
-  `lotto_id` int(11) NOT NULL,
+  `lotto_id` int(11) NOT NULL COMMENT '彩票编号',
   `name` varchar(36) NOT NULL DEFAULT '' COMMENT '彩票名',
   `lotto_type` int(11) NOT NULL DEFAULT '0' COMMENT '彩票类型',
   `game_kind` int(11) NOT NULL DEFAULT '0' COMMENT '游戏类型',
   `game_type` int(11) NOT NULL DEFAULT '0' COMMENT '游戏种类',
-  `sort_index` int(11) NOT NULL DEFAULT '0',
+  `sort_index` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0:停止,1:正常,2:停售',
   `introduction` varchar(64) NOT NULL DEFAULT '' COMMENT '简介',
   PRIMARY KEY (`lotto_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='彩票码表';
 
 -- ----------------------------
 -- Records of code_lotto
@@ -209,13 +249,13 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `code_method`;
 CREATE TABLE `code_method` (
-  `lotto_type` int(11) NOT NULL,
-  `method_code` varchar(32) NOT NULL,
+  `lotto_type` int(11) NOT NULL COMMENT '彩票类型',
+  `method_code` varchar(32) NOT NULL COMMENT '玩法编号',
   `name` varchar(32) NOT NULL DEFAULT '' COMMENT '名称',
   `odds_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1: 独立赔率, 2:多号码单赔率,3:多号码多赔率',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态',
   PRIMARY KEY (`lotto_type`,`method_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='玩法码表';
 
 -- ----------------------------
 -- Records of code_method
@@ -243,19 +283,19 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `issue_factory`;
 CREATE TABLE `issue_factory` (
-  `lotto_id` int(11) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `count` int(11) NOT NULL DEFAULT '0',
-  `issue_interval` int(11) NOT NULL DEFAULT '0',
+  `lotto_id` int(11) NOT NULL COMMENT '彩票编号',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态',
+  `count` int(11) NOT NULL DEFAULT '0' COMMENT '每日期数',
+  `issue_interval` int(11) NOT NULL DEFAULT '0' COMMENT '每期间隔时间',
   `iss_bit` tinyint(1) NOT NULL DEFAULT '0',
-  `block_sec` int(11) NOT NULL DEFAULT '0',
-  `start_time` varchar(6) NOT NULL DEFAULT '',
-  `end_time` varchar(6) NOT NULL DEFAULT '',
-  `issue_type` tinyint(1) NOT NULL DEFAULT '1',
-  `offset` int(3) NOT NULL DEFAULT '0',
-  `extra_info` text NOT NULL,
+  `block_sec` int(11) NOT NULL DEFAULT '0' COMMENT '提前封单时间(秒)',
+  `start_time` varchar(6) NOT NULL DEFAULT '' COMMENT '开始销售时间',
+  `end_time` varchar(6) NOT NULL DEFAULT '' COMMENT '结束销售时间',
+  `issue_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '期号类型',
+  `offset` int(3) NOT NULL DEFAULT '0' COMMENT '偏移时间',
+  `extra_info` text NOT NULL COMMENT '额外信息',
   PRIMARY KEY (`lotto_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='彩票期号工厂';
 
 -- ----------------------------
 -- Records of issue_factory
@@ -1723,18 +1763,18 @@ CREATE TABLE `record_log_user_action` (
   `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户编号',
   `action_module` smallint(8) NOT NULL DEFAULT '0' COMMENT '操作模块',
   `action_id` smallint(8) NOT NULL DEFAULT '0',
-  `content` text COLLATE utf8_unicode_ci NOT NULL COMMENT '操作内容',
-  `ip` varchar(16) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '操作IP',
-  `record_at` varchar(14) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '操作时间',
+  `content` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT '操作内容',
+  `ip` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '操作IP',
+  `record_at` varchar(14) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '操作时间',
   `success` tinyint(1) NOT NULL DEFAULT '0' COMMENT '操作结果',
-  `message` varchar(64) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '操作消息',
+  `message` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '操作消息',
   `operator_id` int(11) NOT NULL DEFAULT '0' COMMENT '操作人',
   `operator_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '操作用户类型,对应后台用户类型(0:用户自身,1:非用户自身)',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`,`action_module`,`action_id`,`record_at`),
   KEY `user_id_2` (`user_id`,`record_at`),
   KEY `action_module` (`action_module`,`action_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ROW_FORMAT=COMPACT COMMENT='操作日志';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='操作日志';
 
 -- ----------------------------
 -- Table structure for record_lotto_order
@@ -1808,6 +1848,7 @@ CREATE TABLE `record_user_login` (
   `ip` varchar(16) NOT NULL DEFAULT '0.0.0.0' COMMENT '登入地址',
   `user_agent` text NOT NULL COMMENT '浏览器详情',
   `url` varchar(64) NOT NULL DEFAULT '' COMMENT '登入地址',
+  `status` tinyint(1) NOT NULL DEFAULT '0',
   `record_at` varchar(14) NOT NULL DEFAULT '' COMMENT '记录时间',
   `remark` varchar(128) NOT NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`id`),
@@ -1834,6 +1875,34 @@ CREATE TABLE `sys_settings` (
 BEGIN;
 INSERT INTO `sys_settings` VALUES ('default_parent_id', '1');
 COMMIT;
+
+-- ----------------------------
+-- Table structure for user_bank
+-- ----------------------------
+DROP TABLE IF EXISTS `user_bank`;
+CREATE TABLE `user_bank` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `bank_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `card_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
+  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
+  `create_at` varchar(14) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
+  `update_at` varchar(14) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for user_links
+-- ----------------------------
+DROP TABLE IF EXISTS `user_links`;
+CREATE TABLE `user_links` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `ref` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `user_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:代理，1:会员',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ref` (`ref`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user_power
@@ -1891,6 +1960,7 @@ CREATE TABLE `user_relation` (
   `user_id` int(11) NOT NULL,
   `parent_id` int(11) NOT NULL DEFAULT '0',
   `parents` text NOT NULL,
+  `user_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:代理，1:会员',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
@@ -1898,7 +1968,7 @@ CREATE TABLE `user_relation` (
 -- Records of user_relation
 -- ----------------------------
 BEGIN;
-INSERT INTO `user_relation` VALUES (1, 0, '1');
+INSERT INTO `user_relation` VALUES (1, 0, '1', 0);
 COMMIT;
 
 -- ----------------------------
@@ -1936,7 +2006,7 @@ CREATE TABLE `user_wallet` (
 -- Records of user_wallet
 -- ----------------------------
 BEGIN;
-INSERT INTO `user_wallet` VALUES (1, 3.000, '', 0);
+INSERT INTO `user_wallet` VALUES (1, 3.670, '', 0);
 COMMIT;
 
 -- ----------------------------
@@ -1950,7 +2020,7 @@ CREATE TABLE `users` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态(0:冻结,1:正常, 2:开户成功但部分功能未开通)',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of users
