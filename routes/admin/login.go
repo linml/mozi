@@ -87,3 +87,7 @@ func TmplRecordLogin(c *gin.Context) {
 func TmplUserBank(c *gin.Context) {
 	c.HTML(http.StatusOK, "user_bank.html", gin.H{})
 }
+
+func TmplcodeBank(c *gin.Context) {
+	c.HTML(http.StatusOK, "code_bank.html", gin.H{})
+}

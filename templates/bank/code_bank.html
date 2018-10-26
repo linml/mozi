@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>银行</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="/static/css/ionicons.min.css">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="/static/plugins/iCheck/all.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="/static/select2/dist/css/select2.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/static/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="/static/css/skins/_all-skins.min.css">
+
+</head>
+
+
+<body class="hold-transition skin-blue sidebar-mini">
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <!-- Content Header (Page header) -->
+                <div class="box-header">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>银行编码</label>
+                                <input type="text" class="form-control" id="bank_code">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>银行</label>
+                                <input type="text" class="form-control" id="bank_name">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>操作</label>
+                                <div class="row">
+                                    <button onclick="query_login_history()" type="button" class="btn btn-primary " style="width: 100%;">查询</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Main content -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <table id="bank_table" class="table table-bordered table-hover  table_style">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">序号</th>
+                                    <th class="text-center">银行编码</th>
+                                    <th class="text-center">银行</th>
+                                    <th class="text-center">排序</th>
+                                    <th class="text-center">归类</th>
+                                    <th class="text-center">状态</th>
+                                    <th class="text-center">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="bank_data" class="text-center"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.content -->
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
+<!-- ./wrapper -->
+
+
+<!-- jQuery 3 -->
+<script src="/static/js/jquery.min.js"></script>
+<!--<script src="/js/jquery-3.2.1.js"></script>-->
+<!-- Bootstrap 3.3.7 -->
+<script src="/static/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+<script src="/static/datatables.net/js/jquery.dataTables.js"></script>
+<script src="/static/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+<!-- Select2 -->
+<script src="/static/select2/dist/js/select2.full.min.js"></script>
+<!-- SlimScroll -->
+<script src="/static/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="/static/plugins/iCheck/icheck.min.js"></script>
+<!-- FastClick -->
+<script src="/static/fastclick/lib/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/js/adminlte.min.js"></script>
+<script src="/static/ckeditor/ckeditor.js"></script>
+
+<!-- page script -->
+<script src="/static/laydate/laydate.js"></script>
+<script src="/static/js/utils.js"></script>
+{{/*<script type="text/javascript" src="/js/app.js"></script>*/}}
+<script src="/static/js/bootbox.min.js"></script>
+<script>
+    $(function () {
+        $('.select2').select2();
+        laydate.render({
+            elem: '#start_at' //指定元素
+            ,type: 'datetime'
+            ,theme: '#393D49'
+            ,value: get_current_day_begin_time()
+        });
+        laydate.render({
+            elem: '#end_at' //指定元素
+            ,type: 'datetime'
+            ,theme: '#393D49'
+            ,value: get_current_day_end_time()
+        });
+        laydate.render({
+            elem: '#add_start_at' //指定元素
+            ,type: 'datetime'
+            ,theme: '#393D49'
+            ,value: get_current_day_begin_time()
+        });
+        laydate.render({
+            elem: '#add_end_at' //指定元素
+            ,type: 'datetime'
+            ,theme: '#393D49'
+            ,value: get_current_day_end_time()
+        });
+    })
+</script>
+<script>
+    var myTable;
+    myTable = $("#bank_table").DataTable({
+        language: datatable_lang,  //提示信息
+        autoWidth: false,  //禁用自动调整列宽
+        stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
+        // processing: true,  //隐藏加载提示,自行处理
+        serverSide: true,  //启用服务器端分页，即开启后端分页
+        searching: false,  //禁用原生搜索
+        lengthChange: false,
+        // destroy: true,
+        ordering: false,
+        order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
+        columns: [
+            {"data": "id"},
+            {"data": "bank_code"},
+            {"data": "bank_name"},
+            {"data": "sort_index"},
+            {"data": "group_type"},
+            {"data": "status"},
+            {"data": null},
+        ],
+        columnDefs: [
+            {
+                "render": function(data, type, row, meta) {
+                    if (row.status === 1 || row.status === "1"){
+                        return "启用"
+                    }else {
+                        return "禁用"
+                    }
+                },
+                "targets": 5
+            },{
+                "render": function(data, type, row, meta) {
+                    var html_str = '<div class="btn-group">' +
+                            '<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#member_detail" data-user_id="'+row.id +'">编辑</i>' +
+                            '</button></div>';
+                    return html_str
+
+
+                },
+                "targets": 6
+            }
+        ],
+        ajax:function(data, callback, settings){
+            var param = {};
+            //其他的参数
+            param.page_row = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+            // param.start = data.start;//开始的记录序号
+            param.curr_page = (data.start / data.length)+1;//当前页码
+            param.draw = data.draw+1;//当前页码
+
+            var bank_code = $('#bank_code').val();
+            var bank_name = $('#bank_name').val();
+
+
+            if (bank_code !== ""){
+                param.bank_code = bank_code
+            }
+
+            if (bank_name !== ""){
+                param.bank_name = bank_name
+            }
+
+
+            var url = "/pages/code_bank/list";
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: param,    //传入已封装的参数
+                dataType: "json",
+                success: function(result) {
+                    //setTimeout仅为测试延迟效果
+                    setTimeout(function(){
+                        //异常判断与处理
+                        if (result.code !== 1) {
+                            bootbox.alert("错误码:"+result.code+" 提示:" + result.msg);
+                            return;
+                        }
+                        $("#bank_data tr").remove();
+
+                        //封装返回数据，这里仅演示了修改属性名
+                        var returnData = {};
+                        returnData.draw = result.data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                        returnData.recordsTotal = result.data.total_count;
+                        returnData.recordsFiltered = result.data.total_count;//后台不实现过滤功能，每次查询均视作全部结果
+                        if (result.data.record_data === null){
+                            returnData.data = []
+                        }else {
+                            returnData.data = result.data.record_data;
+                        }
+
+                        if (result.data.total_count > 0){
+                            callback(returnData);
+                        }else {
+                            TableDataIsNull('bank_data');
+                        }
+
+                    },200);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    $.dialog.alert("查询失败");
+                }
+            });
+        },
+    });
+
+    function query_login_history() {
+        myTable.ajax.reload();
+    }
+
+</script>
+
+</body>
+</html>

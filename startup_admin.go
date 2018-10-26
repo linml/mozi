@@ -50,10 +50,12 @@ func main() {
 		appAuthV1.GET("/html/member/list", admin.TmplMemberList)
 		appAuthV1.GET("/html/member/record_login", admin.TmplRecordLogin)
 		appAuthV1.GET("/html/member/user_bank", admin.TmplUserBank)
+		appAuthV1.GET("/html/bank/code_bank", admin.TmplcodeBank)
 
 		appAuthV1.GET("/pages/user/list", admin.PageFindUserList)
 		appAuthV1.GET("/pages/user/record_login", admin.PageFindUserRecordLogin)
 		appAuthV1.GET("/pages/user/bank/list", admin.PageFindUserBank)
+		appAuthV1.GET("/pages/code_bank/list", admin.PageFindCodeBank)
 		appAuthV1.GET("/member/infos", admin.GetMemberInfos)
 		appAuthV1.GET("/member/profile", admin.GetMemberProfile)
 		appAuthV1.GET("/member/relation", admin.GetMemberRelation)
