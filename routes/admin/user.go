@@ -69,6 +69,37 @@ func PageFindUserRecordLogin(c *gin.Context) {
 	}
 }
 
+// 管理员添加新用户
+func AddMember(c *gin.Context) {
+	params := routes.ParamHelper{}
+	params.GetPostForm(c, "is_new_line")
+	params.GetPostForm(c, "parent_name")
+	params.GetPostForm(c, "name")
+	params.GetPostForm(c, "password")
+
+	isNewLine := common.GetInt(params.Get("is_new_line"))
+
+	param := map[string]string{}
+	if isNewLine == 1 {
+		param["is_new_line"] = "1"
+	} else {
+		parentInfo, err := models.GetUserByName(params.Get("parent_name"))
+		if err != nil {
+			c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", "找不到此上级用户"), map[string]string{}))
+			return
+		}
+		param["parent_id"] = fmt.Sprintf("%d", parentInfo.UserID)
+	}
+	fmt.Println(param)
+	err := service.RegisterUser(params.Get("name"), params.Get("password"), param, models.OperatorTypeAdmin)
+
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+	} else {
+		c.JSON(200, routes.ApiShowResult(common.CodeOK, "添加成功"))
+	}
+}
+
 func GetMemberInfos(c *gin.Context) {
 	uid := common.GetInt(c.Query("user_id"))
 	infos, err := service.GetInfos(uid)

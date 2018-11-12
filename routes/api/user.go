@@ -22,7 +22,7 @@ func Register(c *gin.Context) {
 	params.GetPostForm(c, "ref")
 	params.Set("register_ip", c.ClientIP())
 
-	err := service.RegisterUser(name, password, params)
+	err := service.RegisterUser(name, password, params, models.OperatorTypeSelf)
 	if err != nil {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
 	} else {

@@ -30,7 +30,7 @@ func CheckWalletPasswordLegal(username string) error {
 }
 
 // 注册用户入口
-func RegisterUser(name string, password string, params map[string]string) error {
+func RegisterUser(name string, password string, params map[string]string, operatorType int) error {
 	if err := CheckNameLegal(name); err != nil {
 		return err
 	}
@@ -45,23 +45,48 @@ func RegisterUser(name string, password string, params map[string]string) error 
 		return errors.NameExist{Name: name}
 	}
 	pRelation := &models.UserRelation{}
-	uType := 1
-	if ref, ok := params["ref"]; ok {
-		refInfo, err := models.GetUserLinkByRef(ref)
-		uType = refInfo.UserType
+	uType := 0
 
-		pRelation, err = models.GetUserRelation(refInfo.UserID)
-		if err != nil {
-			return errors.RefNotFound{}
+	if operatorType == models.OperatorTypeAdmin {
+		if isNewLine, ok := params["is_new_line"]; ok {
+			newLine := common.GetInt(isNewLine)
+			if newLine == 1 {
+				pRelation.UserID = 0
+				pRelation.ParentID = -1
+				pRelation.Parents = "0"
+				pRelation.UserType = uType
+			}
+		} else if parentID, ok := params["parent_id"]; ok {
+			parentInfo, err := models.GetUserRelation(common.GetInt(parentID))
+			if err != nil {
+				return errors.New("找不到此上级用户")
+			}
+			pRelation.UserID = parentInfo.UserID
+			pRelation.ParentID = parentInfo.ParentID
+			pRelation.Parents = parentInfo.Parents
+			pRelation.UserType = uType
+		} else {
+			return errors.New("信息不全")
 		}
+
 	} else {
-		sysSettings, err := models.GetSysSettings(models.SysDefaultParentID)
-		if err != nil {
-			return err
-		}
-		pRelation, err = models.GetUserRelation(common.GetInt(sysSettings.SysValue))
-		if err != nil {
-			return err
+		if ref, ok := params["ref"]; ok {
+			refInfo, err := models.GetUserLinkByRef(ref)
+			uType = refInfo.UserType
+
+			pRelation, err = models.GetUserRelation(refInfo.UserID)
+			if err != nil {
+				return errors.RefNotFound{}
+			}
+		} else {
+			sysSettings, err := models.GetSysSettings(models.SysDefaultParentID)
+			if err != nil {
+				return err
+			}
+			pRelation, err = models.GetUserRelation(common.GetInt(sysSettings.SysValue))
+			if err != nil {
+				return err
+			}
 		}
 	}
 

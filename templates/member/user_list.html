@@ -238,10 +238,8 @@
                         <label>上级模式选择</label>
                         <div class="row inline">
                             <select id="parent_type" class="form-control select2 inline" style="width: 20%;">
-                                <option value=0>公司直属</option>
-                                <option value=1>测试线</option>
-                                <option value=2>指定上级</option>
-                                <option value=3>另开代理线</option>
+                                <option value=0>指定上级</option>
+                                <option value=1>另开代理线</option>
                             </select>
                             <input type="text" class="form-control inline" id="add_parent_name" style="width: 25%;">
                         </div>
@@ -387,19 +385,11 @@
 
         var parent_type_select2 = $('#parent_type').select2();
         parent_type_select2.on("change", function (e) {
-            var parent_type = $('#parent_type').val()
+            var parent_type = $('#parent_type').val();
             if (parent_type === "0" ||parent_type === 0  ){
                 $('#add_parent_name').val("");
-                $('#add_parent_name').val("公司直属");
-                $('#add_parent_name').attr("disabled","disabled");
-            }else if (parent_type === "1" ||parent_type === 1  ){
-                $('#add_parent_name').val("");
-                $('#add_parent_name').val("测试线");
-                $('#add_parent_name').attr("disabled","disabled");
-            }else if (parent_type === "2" ||parent_type === 2  ){
-                $('#add_parent_name').val("");
                 $('#add_parent_name').removeAttr("disabled");
-            }else if (parent_type === "3" ||parent_type === 3  ){
+            }else if (parent_type === "1" ||parent_type === 1  ){
                 $('#add_parent_name').val("");
                 $('#add_parent_name').attr("disabled","disabled");
             }
@@ -662,14 +652,15 @@
         var parent_type = $('#parent_type').val();
         var parent_name = $('#add_parent_name').val();
         var params = {};
-        if (parent_type === "3"|| parent_type === 3){
-            params.new_line = 1
+        if (parent_type === "1"|| parent_type === 1){
+            params.is_new_line = 1;
         }else {
-            params.parent_name = parent_name
+            params.is_new_line = 0;
+            params.parent_name = parent_name;
         }
         params.name = $('#add_name').val();
         params.password = $('#add_password').val();
-        $.post('/admin/member/add', params, function (rs) {
+        $.post('/member/add', params, function (rs) {
             if (rs.code === 1) {
                 bootbox.alert(rs.msg|| "添加成功");
             }else{

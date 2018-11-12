@@ -57,6 +57,7 @@ func main() {
 		appAuthV1.GET("/pages/user/bank/list", admin.PageFindUserBank)
 		appAuthV1.GET("/pages/code_bank/list", admin.PageFindCodeBank)
 		appAuthV1.GET("/member/infos", admin.GetMemberInfos)
+		appAuthV1.POST("/member/add", admin.AddMember)
 		appAuthV1.GET("/member/profile", admin.GetMemberProfile)
 		appAuthV1.GET("/member/relation", admin.GetMemberRelation)
 		appAuthV1.GET("/member/power", admin.GetMemberPower)
