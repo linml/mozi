@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
+
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/routes"
 	"github.com/xiuos/mozi/routes/api"
@@ -27,9 +29,12 @@ func init() {
 
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
 	app := gin.Default()
 	store, _ := sessions.NewRedisStore(10, "tcp", "localhost:6379", "", []byte("secret"))
 	app.Use(sessions.Sessions("session", store))
+	app.Use(cors.New(config))
 
 	apiV1 := app.Group("/api/v1")
 	{
