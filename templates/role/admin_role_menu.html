@@ -47,28 +47,31 @@
             <div class="col-md-6">
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">群组管理</h3>
+                        <h3 class="box-title">角色管理</h3>
                     </div>
                     <form class="form-horizontal">
                         <div class="box-body">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>选择群组</label>
-                                    <div class="input-group">
-                                        <select id="role" class="form-control select2" style="width: 100%;">
-                                        </select>
-                                        <span class="input-group-btn">
-                                  <button type="button" onclick="query_role_menu()" class="btn btn-primary btn-flat">查询</button>
-                                  <button type="button" class="btn btn-primary btn-flat">保存</button>
-                                </span>
-                                    </div>
-                                </div>
-                            </div>
+                            <span class="input-group-btn">
+                              <button type="button" class="btn btn-primary btn-flat">刷新</button>
+                              <button type="button" class="btn btn-primary btn-flat">新增</button>
+                            </span>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10px">ID</th>
+                                        <th>角色</th>
+                                        <th style="width: 200px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin_role_list">
+
+                                </tbody>
+                            </table>
+
                         </div>
                     </form>
                 </div>
             </div>
-
         </div>
         <!-- /.row -->
 
@@ -78,7 +81,6 @@
 
 
 <script src="/static/js/jquery.min.js"></script>
-<script src="/static/layui/layui.js?s=36"></script>
 
 <!-- Bootstrap 3.3.7 -->
 <script src="/static/js/bootstrap.min.js"></script>
@@ -90,7 +92,30 @@
 <!-- Select2 -->
 <script src="/static/select2/dist/js/select2.full.min.js"></script>
 
-
+<script>
+    String.prototype.format = function(){
+        var result = this;
+        var len = arguments == null ? 0 : arguments.length;
+        if(len > 0){
+            var i = 0;
+            for(; i<len; i++){
+                var reg = '{' + i + '}', value = arguments[i];
+                if(result.indexOf(reg) >= 0) {
+                    while (result.indexOf(reg) >= 0) {
+                        result = result.replace(reg, value);
+                    }
+                }
+                else{
+                    break;
+                }
+            }
+            for(; i<len; i++){
+                result = result.replace('%s', arguments[i]);
+            }
+        }
+        return '' + result;
+    };
+</script>
 <script>
 
     var zNodes = [{ id:1, pId:0, name:"数据错误"}];
@@ -118,11 +143,12 @@
     $(function () {
         $('.select2').select2();
         refresh_role();
+        refresh_admin_role_list();
 
     });
 
-    function query_role_menu() {
-        var role_id = $('#role').val();
+    function query_role_menu(role_id) {
+        // var role_id = $('#role').val();
         refresh_tree(role_id)
     }
     function refresh_role() {
@@ -145,7 +171,7 @@
                     }
                     $('#role').select2({
                         dropdownAutoWidth: true,
-                        multiple: true,
+                        multiple: false,
                         data: data
                     });
 
@@ -240,7 +266,26 @@
 
     }
 
-    // });
+   function refresh_admin_role_list() {
+       $.ajax({
+           type: "GET",
+           url: "/role/list",
+           data: {},
+           dataType: 'json',
+           success: function(rsp) {
+               if(rsp.code===1){
+                   $('#admin_role_list').html('');
+                   var html = '';
+                   var tpl = "<tr><td>%s</td><td>%s</td><td><button type=\"button\" onclick=\"query_role_menu(%s)\" class=\"btn btn-primary btn-flat\">查看</button><button type=\"button\" class=\"btn btn-primary btn-flat\">保存</button></td></tr>"
+                   for(var i=0;i<rsp.data.length;i++) {
+                       html += tpl.format(rsp.data[i].id,rsp.data[i].name,rsp.data[i].id)
+                   }
+                   $('#admin_role_list').html(html);
+
+               }
+           }
+       });
+   }
 </script>
 
 </body>
