@@ -7,10 +7,8 @@ import (
 )
 
 type AdminRole struct {
-	ID     int    `json:"id"`
-	Name   string `json:"name"`
-	Menu   string `json:"menu"`
-	Status int    `json:"status"`
+	ID   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 func (am *AdminRole) TableName() string {
@@ -18,16 +16,16 @@ func (am *AdminRole) TableName() string {
 }
 
 func (am *AdminRole) Field() []string {
-	return []string{"id", "name", "menu", "status"}
+	return []string{"id", "name"}
 }
 
 func (ar *AdminRole) FieldItem() []interface{} {
-	return []interface{}{&ar.ID, &ar.Name, &ar.Menu, &ar.Status}
+	return []interface{}{&ar.ID, &ar.Name}
 }
 
 func CreateAdminRole(ar *AdminRole) error {
-	createSql := fmt.Sprintf("INSERT INTO %s SET name = ?, menu = ?, status = ?", ar.TableName())
-	_, err := common.BaseDb.Exec(createSql, ar.Name, ar.Menu, ar.Status)
+	createSql := fmt.Sprintf("INSERT INTO %s SET name = ?", ar.TableName())
+	_, err := common.BaseDb.Exec(createSql, ar.Name)
 	return err
 }
 
@@ -40,4 +38,33 @@ func GetAdminRole(role int) (*AdminRole, error) {
 	}
 	err = common.BaseDb.QueryRow(querySql, o.Args()...).Scan(ar.FieldItem()...)
 	return &ar, err
+}
+
+func FindAdminRole(param map[string]string) (*[]AdminRole, error) {
+	arl := []AdminRole{}
+	querySql := "SELECT id, name FROM admin_role WHERE 1=1"
+	sqlWhere, args := "", []interface{}{}
+	if v, ok := param["id"]; ok {
+		sqlWhere += " AND id = ?"
+		args = append(args, v)
+	}
+	if v, ok := param["name"]; ok {
+		sqlWhere += " AND name = ?"
+		args = append(args, v)
+	}
+	querySql += sqlWhere
+	rows, err := common.BaseDb.Query(querySql, args...)
+	if err != nil {
+		fmt.Println(err)
+		return &arl, err
+	}
+	for rows.Next() {
+		am := AdminRole{}
+		err = rows.Scan(&am.ID, &am.Name)
+		if err != nil {
+			return &arl, err
+		}
+		arl = append(arl, am)
+	}
+	return &arl, nil
 }

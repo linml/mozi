@@ -72,8 +72,12 @@ func TmplIndex(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", gin.H{"title": "管理后台", "admin_user": u.Name})
 }
 
-func TmplRoleGroup(c *gin.Context) {
-	c.HTML(http.StatusOK, "admin_role_group.html", gin.H{"title": "管理后台"})
+func TmplAdminRole(c *gin.Context) {
+	c.HTML(http.StatusOK, "admin_role.html", gin.H{"title": "管理后台"})
+}
+
+func TmplAdminRoleMenu(c *gin.Context) {
+	c.HTML(http.StatusOK, "admin_role_menu.html", gin.H{"title": "管理后台"})
 }
 
 func TmplMemberList(c *gin.Context) {

@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 25/10/2018 22:53:12
+ Date: 02/12/2018 21:13:04
 */
 
 SET NAMES utf8mb4;
@@ -54,6 +54,7 @@ CREATE TABLE `admin_menu` (
   `icon` varchar(128) DEFAULT '' COMMENT '图标',
   `url` varchar(128) DEFAULT '' COMMENT '访问地址',
   `target_type` varchar(64) DEFAULT '' COMMENT '类型',
+  `is_show` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=903 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员菜单';
 
@@ -61,65 +62,59 @@ CREATE TABLE `admin_menu` (
 -- Records of admin_menu
 -- ----------------------------
 BEGIN;
-INSERT INTO `admin_menu` VALUES (1, 1, 0, 0, '活动管理', 'fa fa-gift', '', '');
-INSERT INTO `admin_menu` VALUES (2, 2, 0, 0, '公告管理', 'fa fa-envelope', '', '');
-INSERT INTO `admin_menu` VALUES (3, 3, 0, 0, '账户管理', 'fa fa-users', '', '');
-INSERT INTO `admin_menu` VALUES (4, 4, 0, 0, '游戏管理', 'fa fa-gamepad', '', '');
-INSERT INTO `admin_menu` VALUES (5, 5, 0, 0, '现金系统', 'fa fa-fw fa-money', '', '');
-INSERT INTO `admin_menu` VALUES (6, 6, 0, 0, '退佣管理', 'fa fa-fw fa-calculator', '', '');
-INSERT INTO `admin_menu` VALUES (7, 7, 0, 0, '报表管理', 'fa fa-fw fa-area-chart', '', '');
-INSERT INTO `admin_menu` VALUES (8, 8, 0, 0, '系统管理', 'fa fa-fw fa-cogs', '', '');
-INSERT INTO `admin_menu` VALUES (9, 9, 0, 0, '权限管理', 'fa fa-fw fa-cogs', '', '');
-INSERT INTO `admin_menu` VALUES (110, 1, 1, 0, '活动记录', 'fa fa-list-alt', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (111, 2, 1, 0, '红包活动', 'fa fa-toggle-on', ' ', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (112, 3, 1, 0, '签到活动', 'fa fa-toggle-on', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (113, 4, 1, 0, '首存礼包', 'fa fa-toggle-on', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (114, 5, 1, 0, '每日存款', 'fa fa-toggle-on', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (130, 1, 2, 0, '通用公告', 'fa fa-edit', 'pages/notice/normal_notice.html', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (131, 2, 2, 0, '滚动公告', 'fa fa-edit', 'pages/notice/roll_notice.html', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (160, 1, 3, 0, '账户列表', 'fa fa-user', 'html/member/list', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (161, 2, 3, 0, '登入记录', 'fa fa-list-alt', 'html/member/record_login', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (162, 3, 3, 0, '账号银行卡', 'fa fa-list-alt', 'html/member/user_bank', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (163, 4, 3, 0, 'IP黑名单', 'fa fa-list-alt', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (164, 5, 3, 0, '管理列表', 'fa fa-fw fa-user-secret', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (180, 1, 4, 0, '游戏结果', 'fa fa-plus-square-o', '', '');
-INSERT INTO `admin_menu` VALUES (181, 2, 4, 0, '玩家订单', 'fa fa-plus-square-o', '', '');
-INSERT INTO `admin_menu` VALUES (183, 3, 4, 0, '彩票管理', 'fa fa-plus-square-o', '', '');
-INSERT INTO `admin_menu` VALUES (200, 1, 180, 0, '彩票开奖', 'fa fa-life-bouy', 'pages/lotto/result.html', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (221, 1, 181, 0, '彩票订单', 'fa fa-life-bouy', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (222, 2, 181, 0, '电子订单', 'fa fa-life-bouy', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (223, 3, 181, 0, '体育订单', 'fa fa-life-bouy', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (224, 4, 181, 0, 'AG订单', 'fa fa-life-bouy', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (230, 1, 183, 0, '赔率房间', 'fa fa-list-alt', 'game/oddsRoom', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (231, 2, 183, 0, '赔率设置', 'fa fa-toggle-on', 'game/lottoOdds', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (232, 3, 183, 0, '实时操盘', 'fa fa-hand-pointer-o', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (233, 4, 183, 0, '实时统计', 'fa fa-bar-chart', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (234, 5, 183, 0, '彩种设置', 'fa fa-hand-pointer-o', 'pages/lotto/code_lotto.html', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (250, 0, 5, 0, '银行卡管理', 'fa fa-fw fa-bank', 'pages/bank/code_bank.html', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (251, 1, 5, 0, '收款账户', '', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (252, 2, 5, 0, '第三方收款账户', '', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (253, 3, 5, 0, '会员入款单', '', '', '');
-INSERT INTO `admin_menu` VALUES (254, 4, 5, 0, '会员收款单', '', '', '');
-INSERT INTO `admin_menu` VALUES (255, 5, 5, 0, '手动入款', 'fa fa-fw fa-hand-o-right', 'pages/finance/manual_deposit.html', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (256, 6, 5, 0, '手动出款', 'fa fa-fw fa-hand-o-right', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (257, 7, 5, 0, '手动转点', '', '', '');
-INSERT INTO `admin_menu` VALUES (258, 8, 5, 0, '流水查询', 'fa fa-fw fa-file-text', 'pages/finance/record_amount_change.html', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (259, 9, 5, 0, '稽核分查询', 'fa fa-fw fa-file-text', 'pages/finance/record_audit_score.html', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (260, 10, 5, 0, '财务汇总', '', '', '');
-INSERT INTO `admin_menu` VALUES (261, 0, 6, 0, '分红管理', '', '', '');
-INSERT INTO `admin_menu` VALUES (262, 1, 6, 0, '工资管理', '', '', '');
-INSERT INTO `admin_menu` VALUES (263, 2, 6, 0, '退佣管理', '', '', '');
-INSERT INTO `admin_menu` VALUES (270, 1, 7, 0, '游戏报表', 'fa fa-bar-chart', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (271, 2, 7, 0, '个人报表', 'fa fa-bar-chart', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (272, 3, 7, 0, '平台报表', 'fa fa-bar-chart', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (273, 4, 7, 0, '运营趋势', 'fa fa-bar-chart', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (300, 1, 8, 0, '系统设置', 'fa fa-bar-chart', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (301, 2, 8, 0, '异动记录', 'fa fa-bar-chart', 'pages/sys/record_admin_operate.html', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (302, 3, 8, 0, '操作记录', 'fa fa-bar-chart', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (303, 4, 8, 0, '群组管理', 'fa fa-bar-chart', '', 'iframe-tab');
-INSERT INTO `admin_menu` VALUES (900, 1, 9, 0, '管理员', '', '', '');
-INSERT INTO `admin_menu` VALUES (901, 2, 9, 0, '群组', '', '', '');
-INSERT INTO `admin_menu` VALUES (902, 3, 9, 0, '群组权限', '', '', '');
+INSERT INTO `admin_menu` VALUES (1, 0, 0, 1, '所有权限', '', '', '', 1);
+INSERT INTO `admin_menu` VALUES (2, 1, 1, 0, '活动管理', 'fa fa-gift', '', '', 1);
+INSERT INTO `admin_menu` VALUES (3, 2, 1, 0, '公告管理', 'fa fa-envelope', '', '', 1);
+INSERT INTO `admin_menu` VALUES (4, 3, 1, 0, '账户管理', 'fa fa-users', '', '', 1);
+INSERT INTO `admin_menu` VALUES (5, 4, 1, 0, '游戏管理', 'fa fa-gamepad', '', '', 1);
+INSERT INTO `admin_menu` VALUES (6, 5, 1, 0, '现金系统', 'fa fa-fw fa-money', '', '', 1);
+INSERT INTO `admin_menu` VALUES (7, 6, 1, 0, '退佣管理', 'fa fa-fw fa-calculator', '', '', 1);
+INSERT INTO `admin_menu` VALUES (8, 7, 1, 0, '报表管理', 'fa fa-fw fa-area-chart', '', '', 1);
+INSERT INTO `admin_menu` VALUES (9, 8, 1, 0, '系统管理', 'fa fa-fw fa-cogs', '', '', 1);
+INSERT INTO `admin_menu` VALUES (10, 9, 1, 0, '权限管理', 'fa fa-fw fa-cogs', '', '', 1);
+INSERT INTO `admin_menu` VALUES (110, 1, 2, 0, '活动记录', 'fa fa-list-alt', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (111, 2, 2, 0, '红包活动', 'fa fa-toggle-on', ' ', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (112, 3, 2, 0, '签到活动', 'fa fa-toggle-on', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (113, 4, 2, 0, '首存礼包', 'fa fa-toggle-on', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (114, 5, 2, 0, '每日存款', 'fa fa-toggle-on', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (130, 1, 3, 0, '通用公告', 'fa fa-edit', 'pages/notice/normal_notice.html', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (131, 2, 3, 0, '滚动公告', 'fa fa-edit', 'pages/notice/roll_notice.html', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (160, 1, 4, 0, '账户列表', 'fa fa-user', 'html/member/list', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (161, 2, 4, 0, '登入记录', 'fa fa-list-alt', 'html/member/record_login', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (162, 3, 4, 0, '账号银行卡', 'fa fa-list-alt', 'html/member/user_bank', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (163, 4, 4, 0, 'IP黑名单', 'fa fa-list-alt', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (164, 5, 4, 0, '管理列表', 'fa fa-fw fa-user-secret', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (200, 1, 5, 0, '彩票开奖', 'fa fa-life-bouy', 'pages/lotto/result.html', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (221, 1, 5, 0, '彩票订单', 'fa fa-life-bouy', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (231, 2, 5, 0, '赔率设置', 'fa fa-toggle-on', 'game/lottoOdds', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (232, 3, 5, 0, '实时操盘', 'fa fa-hand-pointer-o', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (233, 4, 5, 0, '实时统计', 'fa fa-bar-chart', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (234, 5, 5, 0, '彩种设置', 'fa fa-hand-pointer-o', 'pages/lotto/code_lotto.html', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (250, 0, 6, 0, '银行卡管理', 'fa fa-fw fa-bank', 'html/bank/code_bank', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (251, 1, 6, 0, '收款账户', '', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (252, 2, 6, 0, '第三方收款账户', '', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (253, 3, 6, 0, '会员入款单', '', '', '', 1);
+INSERT INTO `admin_menu` VALUES (254, 4, 6, 0, '会员收款单', '', '', '', 1);
+INSERT INTO `admin_menu` VALUES (255, 5, 6, 0, '手动入款', 'fa fa-fw fa-hand-o-right', 'pages/finance/manual_deposit.html', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (256, 6, 6, 0, '手动出款', 'fa fa-fw fa-hand-o-right', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (257, 7, 6, 0, '手动转点', '', '', '', 1);
+INSERT INTO `admin_menu` VALUES (258, 8, 6, 0, '流水查询', 'fa fa-fw fa-file-text', 'pages/finance/record_amount_change.html', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (259, 9, 6, 0, '稽核分查询', 'fa fa-fw fa-file-text', 'pages/finance/record_audit_score.html', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (260, 10, 6, 0, '财务汇总', '', '', '', 1);
+INSERT INTO `admin_menu` VALUES (261, 0, 7, 0, '分红管理', '', '', '', 1);
+INSERT INTO `admin_menu` VALUES (262, 1, 7, 0, '工资管理', '', '', '', 1);
+INSERT INTO `admin_menu` VALUES (263, 2, 7, 0, '退佣管理', '', '', '', 1);
+INSERT INTO `admin_menu` VALUES (270, 1, 8, 0, '游戏报表', 'fa fa-bar-chart', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (271, 2, 8, 0, '个人报表', 'fa fa-bar-chart', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (272, 3, 8, 0, '平台报表', 'fa fa-bar-chart', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (273, 4, 8, 0, '运营趋势', 'fa fa-bar-chart', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (300, 1, 9, 0, '系统设置', 'fa fa-bar-chart', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (301, 2, 9, 0, '异动记录', 'fa fa-bar-chart', 'pages/sys/record_admin_operate.html', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (302, 3, 9, 0, '操作记录', 'fa fa-bar-chart', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (303, 4, 9, 0, '群组管理', 'fa fa-bar-chart', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (900, 1, 10, 0, '管理员', '', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (901, 2, 10, 0, '群组', '', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (902, 3, 10, 0, '群组权限', '', 'html/admin_role_menu', 'iframe-tab', 1);
 COMMIT;
 
 -- ----------------------------
@@ -129,17 +124,83 @@ DROP TABLE IF EXISTS `admin_role`;
 CREATE TABLE `admin_role` (
   `id` int(11) NOT NULL COMMENT '编号',
   `name` varchar(64) NOT NULL DEFAULT '' COMMENT '管理员',
-  `menu` text NOT NULL COMMENT '权限菜单',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态',
-  `remark` varchar(256) NOT NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员权限';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员角色';
 
 -- ----------------------------
 -- Records of admin_role
 -- ----------------------------
 BEGIN;
-INSERT INTO `admin_role` VALUES (1, '管理员', '900,901,902,9,234,1,2,3,4,5,6,7,8,110,111,112,113,114,130,131,160,161,162,163,180,181,182,183,200,201,202,221,222,223,224,230,231,232,233,250,251,252,253,254,255,256,257,258,259,260,261,262,263,270,271,272,273,300,301,302,303', 1, '');
+INSERT INTO `admin_role` VALUES (1, '管理员');
+COMMIT;
+
+-- ----------------------------
+-- Table structure for admin_role_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `admin_role_menu`;
+CREATE TABLE `admin_role_menu` (
+  `role_id` int(11) NOT NULL,
+  `menu_id` int(11) NOT NULL,
+  PRIMARY KEY (`role_id`,`menu_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='管理员角色菜单';
+
+-- ----------------------------
+-- Records of admin_role_menu
+-- ----------------------------
+BEGIN;
+INSERT INTO `admin_role_menu` VALUES (1, 1);
+INSERT INTO `admin_role_menu` VALUES (1, 2);
+INSERT INTO `admin_role_menu` VALUES (1, 3);
+INSERT INTO `admin_role_menu` VALUES (1, 4);
+INSERT INTO `admin_role_menu` VALUES (1, 5);
+INSERT INTO `admin_role_menu` VALUES (1, 6);
+INSERT INTO `admin_role_menu` VALUES (1, 7);
+INSERT INTO `admin_role_menu` VALUES (1, 8);
+INSERT INTO `admin_role_menu` VALUES (1, 9);
+INSERT INTO `admin_role_menu` VALUES (1, 10);
+INSERT INTO `admin_role_menu` VALUES (1, 110);
+INSERT INTO `admin_role_menu` VALUES (1, 111);
+INSERT INTO `admin_role_menu` VALUES (1, 112);
+INSERT INTO `admin_role_menu` VALUES (1, 113);
+INSERT INTO `admin_role_menu` VALUES (1, 114);
+INSERT INTO `admin_role_menu` VALUES (1, 130);
+INSERT INTO `admin_role_menu` VALUES (1, 131);
+INSERT INTO `admin_role_menu` VALUES (1, 160);
+INSERT INTO `admin_role_menu` VALUES (1, 161);
+INSERT INTO `admin_role_menu` VALUES (1, 162);
+INSERT INTO `admin_role_menu` VALUES (1, 163);
+INSERT INTO `admin_role_menu` VALUES (1, 164);
+INSERT INTO `admin_role_menu` VALUES (1, 200);
+INSERT INTO `admin_role_menu` VALUES (1, 221);
+INSERT INTO `admin_role_menu` VALUES (1, 231);
+INSERT INTO `admin_role_menu` VALUES (1, 232);
+INSERT INTO `admin_role_menu` VALUES (1, 233);
+INSERT INTO `admin_role_menu` VALUES (1, 234);
+INSERT INTO `admin_role_menu` VALUES (1, 250);
+INSERT INTO `admin_role_menu` VALUES (1, 251);
+INSERT INTO `admin_role_menu` VALUES (1, 252);
+INSERT INTO `admin_role_menu` VALUES (1, 253);
+INSERT INTO `admin_role_menu` VALUES (1, 254);
+INSERT INTO `admin_role_menu` VALUES (1, 255);
+INSERT INTO `admin_role_menu` VALUES (1, 256);
+INSERT INTO `admin_role_menu` VALUES (1, 257);
+INSERT INTO `admin_role_menu` VALUES (1, 258);
+INSERT INTO `admin_role_menu` VALUES (1, 259);
+INSERT INTO `admin_role_menu` VALUES (1, 260);
+INSERT INTO `admin_role_menu` VALUES (1, 261);
+INSERT INTO `admin_role_menu` VALUES (1, 262);
+INSERT INTO `admin_role_menu` VALUES (1, 263);
+INSERT INTO `admin_role_menu` VALUES (1, 270);
+INSERT INTO `admin_role_menu` VALUES (1, 271);
+INSERT INTO `admin_role_menu` VALUES (1, 272);
+INSERT INTO `admin_role_menu` VALUES (1, 273);
+INSERT INTO `admin_role_menu` VALUES (1, 300);
+INSERT INTO `admin_role_menu` VALUES (1, 301);
+INSERT INTO `admin_role_menu` VALUES (1, 302);
+INSERT INTO `admin_role_menu` VALUES (1, 303);
+INSERT INTO `admin_role_menu` VALUES (1, 900);
+INSERT INTO `admin_role_menu` VALUES (1, 901);
+INSERT INTO `admin_role_menu` VALUES (1, 902);
 COMMIT;
 
 -- ----------------------------
@@ -150,7 +211,8 @@ CREATE TABLE `code_bank` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
   `bank_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '银行编号',
   `bank_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '银行名称',
-  `group` int(8) NOT NULL DEFAULT '0' COMMENT '归类',
+  `sort_index` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
+  `group_type` int(8) NOT NULL DEFAULT '0' COMMENT '归类',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态(0:禁用,1:启用)',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `bank_code` (`bank_code`)
@@ -160,26 +222,26 @@ CREATE TABLE `code_bank` (
 -- Records of code_bank
 -- ----------------------------
 BEGIN;
-INSERT INTO `code_bank` VALUES (1, 'ICBC', '工商银行', 0, 1);
-INSERT INTO `code_bank` VALUES (2, 'ABC', '农业银行', 0, 1);
-INSERT INTO `code_bank` VALUES (3, 'BOC', '中国银行(大额)', 0, 1);
-INSERT INTO `code_bank` VALUES (4, 'BOCSH', '中国银行', 0, 1);
-INSERT INTO `code_bank` VALUES (5, 'CCB', '建设银行', 0, 1);
-INSERT INTO `code_bank` VALUES (6, 'CMB', '招商银行', 0, 1);
-INSERT INTO `code_bank` VALUES (7, 'SPDB', '浦发银行', 0, 1);
-INSERT INTO `code_bank` VALUES (8, 'GDB', '广发银行', 0, 1);
-INSERT INTO `code_bank` VALUES (9, 'BOCOM', '交通银行', 0, 1);
-INSERT INTO `code_bank` VALUES (10, 'CNCB', '中信银行', 0, 1);
-INSERT INTO `code_bank` VALUES (11, 'CMBC', '民生银行', 0, 1);
-INSERT INTO `code_bank` VALUES (12, 'CIB', '兴业银行', 0, 1);
-INSERT INTO `code_bank` VALUES (13, 'CEB', '光大银行', 0, 1);
-INSERT INTO `code_bank` VALUES (14, 'HXB', '华夏银行', 0, 1);
-INSERT INTO `code_bank` VALUES (15, 'BOS', '上海银行', 0, 1);
-INSERT INTO `code_bank` VALUES (16, 'SRCB', '上海农商', 0, 1);
-INSERT INTO `code_bank` VALUES (17, 'PSBC', '邮政储蓄', 0, 1);
-INSERT INTO `code_bank` VALUES (18, 'BCCB', '北京银行', 0, 1);
-INSERT INTO `code_bank` VALUES (19, 'BRCB', '北京农商', 0, 1);
-INSERT INTO `code_bank` VALUES (20, 'PAB', '平安银行', 0, 1);
+INSERT INTO `code_bank` VALUES (1, 'ICBC', '工商银行', 1, 0, 1);
+INSERT INTO `code_bank` VALUES (2, 'ABC', '农业银行', 2, 0, 1);
+INSERT INTO `code_bank` VALUES (3, 'BOC', '中国银行(大额)', 3, 0, 1);
+INSERT INTO `code_bank` VALUES (4, 'BOCSH', '中国银行', 4, 0, 1);
+INSERT INTO `code_bank` VALUES (5, 'CCB', '建设银行', 5, 0, 1);
+INSERT INTO `code_bank` VALUES (6, 'CMB', '招商银行', 6, 0, 1);
+INSERT INTO `code_bank` VALUES (7, 'SPDB', '浦发银行', 7, 0, 1);
+INSERT INTO `code_bank` VALUES (8, 'GDB', '广发银行', 8, 0, 1);
+INSERT INTO `code_bank` VALUES (9, 'BOCOM', '交通银行', 9, 0, 1);
+INSERT INTO `code_bank` VALUES (10, 'CNCB', '中信银行', 10, 0, 1);
+INSERT INTO `code_bank` VALUES (11, 'CMBC', '民生银行', 11, 0, 1);
+INSERT INTO `code_bank` VALUES (12, 'CIB', '兴业银行', 12, 0, 1);
+INSERT INTO `code_bank` VALUES (13, 'CEB', '光大银行', 13, 0, 1);
+INSERT INTO `code_bank` VALUES (14, 'HXB', '华夏银行', 14, 0, 1);
+INSERT INTO `code_bank` VALUES (15, 'BOS', '上海银行', 15, 0, 1);
+INSERT INTO `code_bank` VALUES (16, 'SRCB', '上海农商', 16, 0, 1);
+INSERT INTO `code_bank` VALUES (17, 'PSBC', '邮政储蓄', 17, 0, 1);
+INSERT INTO `code_bank` VALUES (18, 'BCCB', '北京银行', 18, 0, 1);
+INSERT INTO `code_bank` VALUES (19, 'BRCB', '北京农商', 19, 0, 1);
+INSERT INTO `code_bank` VALUES (20, 'PAB', '平安银行', 20, 0, 1);
 COMMIT;
 
 -- ----------------------------
@@ -352,7 +414,7 @@ CREATE TABLE `lotto_odds` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态',
   `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否显示(0:不显示,1:显示)',
   PRIMARY KEY (`lotto_id`,`method_code`,`play_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='彩票赔率';
 
 -- ----------------------------
 -- Table structure for lotto_odds_template
@@ -373,7 +435,7 @@ CREATE TABLE `lotto_odds_template` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态',
   `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否显示(0:不显示,1:显示)',
   PRIMARY KEY (`lotto_type`,`method_code`,`play_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='彩票赔率模板';
 
 -- ----------------------------
 -- Records of lotto_odds_template
@@ -1752,7 +1814,7 @@ CREATE TABLE `lotto_result` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `lotto_id` (`lotto_id`,`issue`),
   KEY `lotto_id_2` (`lotto_id`,`issue`,`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='彩票开奖结果';
 
 -- ----------------------------
 -- Table structure for record_log_user_action
@@ -1807,7 +1869,7 @@ CREATE TABLE `record_lotto_order` (
   `bet_time` varchar(14) NOT NULL DEFAULT '' COMMENT '下注时间',
   `update_time` varchar(14) NOT NULL DEFAULT '' COMMENT '结算时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
 
 -- ----------------------------
 -- Table structure for record_money_change
@@ -1834,7 +1896,7 @@ CREATE TABLE `record_money_change` (
   KEY `user_id_r` (`user_id`,`record_at`),
   KEY `user_id_g_m` (`user_id`,`game_kind`,`change_kind`),
   KEY `game_id_m_r` (`game_kind`,`change_kind`,`record_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户资金变动记录';
 
 -- ----------------------------
 -- Table structure for record_user_login
@@ -1857,7 +1919,45 @@ CREATE TABLE `record_user_login` (
   KEY `ip` (`ip`,`record_at`),
   KEY `url` (`url`,`record_at`),
   KEY `record_time` (`record_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
+
+-- ----------------------------
+-- Records of record_user_login
+-- ----------------------------
+BEGIN;
+INSERT INTO `record_user_login` VALUES (1, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181129224941', '');
+INSERT INTO `record_user_login` VALUES (2, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181129224947', '');
+INSERT INTO `record_user_login` VALUES (3, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181129225108', '');
+INSERT INTO `record_user_login` VALUES (4, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181129225307', '');
+INSERT INTO `record_user_login` VALUES (5, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181129225311', '');
+INSERT INTO `record_user_login` VALUES (6, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181129225348', '');
+INSERT INTO `record_user_login` VALUES (7, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181129230223', '');
+INSERT INTO `record_user_login` VALUES (8, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181129230246', '');
+INSERT INTO `record_user_login` VALUES (9, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181129230251', '');
+INSERT INTO `record_user_login` VALUES (10, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181129230451', '');
+INSERT INTO `record_user_login` VALUES (11, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181129230529', '');
+INSERT INTO `record_user_login` VALUES (12, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130210703', '');
+INSERT INTO `record_user_login` VALUES (13, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130210808', '');
+INSERT INTO `record_user_login` VALUES (14, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130215236', '');
+INSERT INTO `record_user_login` VALUES (15, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130215522', '');
+INSERT INTO `record_user_login` VALUES (16, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130215824', '');
+INSERT INTO `record_user_login` VALUES (17, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130220909', '');
+INSERT INTO `record_user_login` VALUES (18, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130221056', '');
+INSERT INTO `record_user_login` VALUES (19, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130222128', '');
+INSERT INTO `record_user_login` VALUES (20, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130222332', '');
+INSERT INTO `record_user_login` VALUES (21, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130222438', '');
+INSERT INTO `record_user_login` VALUES (22, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130223328', '');
+INSERT INTO `record_user_login` VALUES (23, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130223359', '');
+INSERT INTO `record_user_login` VALUES (24, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130223517', '');
+INSERT INTO `record_user_login` VALUES (25, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130223640', '');
+INSERT INTO `record_user_login` VALUES (26, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130225052', '');
+INSERT INTO `record_user_login` VALUES (27, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130225248', '');
+INSERT INTO `record_user_login` VALUES (28, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130225354', '');
+INSERT INTO `record_user_login` VALUES (29, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130225627', '');
+INSERT INTO `record_user_login` VALUES (30, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181130225849', '');
+INSERT INTO `record_user_login` VALUES (31, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181201200438', '');
+INSERT INTO `record_user_login` VALUES (32, 24, 'test773', 0, '127.0.0.1', 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1', 'http://127.0.0.1:9500/api/v1/login', 1, '20181201201325', '');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_settings
@@ -1889,7 +1989,7 @@ CREATE TABLE `user_bank` (
   `create_at` varchar(14) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   `update_at` varchar(14) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户银行卡';
 
 -- ----------------------------
 -- Table structure for user_links
@@ -1915,7 +2015,7 @@ CREATE TABLE `user_power` (
   `power_deposit` tinyint(1) NOT NULL,
   `power_withdraw` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0:禁用,1:启用',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户权限';
 
 -- ----------------------------
 -- Records of user_power
@@ -1943,7 +2043,7 @@ CREATE TABLE `user_profile` (
   `last_login_at` varchar(14) NOT NULL DEFAULT '',
   `last_login_ip` varchar(16) NOT NULL DEFAULT '',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户profile';
 
 -- ----------------------------
 -- Records of user_profile
@@ -1962,7 +2062,7 @@ CREATE TABLE `user_relation` (
   `parents` text NOT NULL,
   `user_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:代理，1:会员',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户关系';
 
 -- ----------------------------
 -- Records of user_relation
@@ -1981,7 +2081,7 @@ CREATE TABLE `user_score` (
   `audit_score` decimal(20,3) NOT NULL DEFAULT '0.000',
   `up_score` decimal(20,3) NOT NULL DEFAULT '0.000',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户积分';
 
 -- ----------------------------
 -- Records of user_score
@@ -2000,13 +2100,13 @@ CREATE TABLE `user_wallet` (
   `password` varchar(128) NOT NULL DEFAULT '',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未设置初始化密码，1:正常，2:禁用， 3:需要重置密码',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户钱包';
 
 -- ----------------------------
 -- Records of user_wallet
 -- ----------------------------
 BEGIN;
-INSERT INTO `user_wallet` VALUES (1, 3.670, '', 0);
+INSERT INTO `user_wallet` VALUES (1, 0.000, '', 0);
 COMMIT;
 
 -- ----------------------------
@@ -2020,7 +2120,7 @@ CREATE TABLE `users` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态(0:冻结,1:正常, 2:开户成功但部分功能未开通)',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 -- ----------------------------
 -- Records of users

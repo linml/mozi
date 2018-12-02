@@ -46,7 +46,8 @@ func main() {
 	{
 		appAuthV1.GET("/index", admin.TmplIndex)
 		appAuthV1.GET("/menu", admin.AdminMenu)
-		appAuthV1.GET("/html/role_group", admin.TmplRoleGroup)
+		appAuthV1.GET("/html/admin_role", admin.TmplAdminRole)
+		appAuthV1.GET("/html/admin_role_menu", admin.TmplAdminRoleMenu)
 		appAuthV1.GET("/html/member/list", admin.TmplMemberList)
 		appAuthV1.GET("/html/member/record_login", admin.TmplRecordLogin)
 		appAuthV1.GET("/html/member/user_bank", admin.TmplUserBank)
@@ -61,6 +62,9 @@ func main() {
 		appAuthV1.GET("/member/profile", admin.GetMemberProfile)
 		appAuthV1.GET("/member/relation", admin.GetMemberRelation)
 		appAuthV1.GET("/member/power", admin.GetMemberPower)
+		appAuthV1.GET("/menu/node/list", admin.FindAdminMenuNode)
+		appAuthV1.GET("/role/list", admin.FindAdminRole)
+		appAuthV1.GET("/role_menu/list", admin.FindAdminRoleMenu)
 
 	}
 	app.Run(":9980")

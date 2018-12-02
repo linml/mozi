@@ -16,6 +16,7 @@ type AdminMenu struct {
 	Icon       string `json:"icon"`
 	Url        string `json:"url"`
 	TargetType string `json:"target_type"`
+	IsShow     int    `json:"is_show"`
 }
 
 func (am *AdminMenu) TableName() string {
@@ -23,11 +24,11 @@ func (am *AdminMenu) TableName() string {
 }
 
 func (am *AdminMenu) Field() []string {
-	return []string{"id", "sort", "pid", "open", "text", "icon", "url", "target_type"}
+	return []string{"id", "sort", "pid", "open", "text", "icon", "url", "target_type", "is_show"}
 }
 
 func (am *AdminMenu) FieldItem() []interface{} {
-	return []interface{}{&am.ID, &am.Sort, &am.PID, &am.Open, &am.Text, &am.Icon, &am.Url, &am.TargetType}
+	return []interface{}{&am.ID, &am.Sort, &am.PID, &am.Open, &am.Text, &am.Icon, &am.Url, &am.TargetType, &am.IsShow}
 }
 
 type TreePowerMap struct {
@@ -39,6 +40,7 @@ type TreePowerMap struct {
 	Icon       string         `json:"icon"`
 	Url        string         `json:"url"`
 	TargetType string         `json:"targetType"`
+	IsShow     int            `json:"is_show"`
 	Child      []TreePowerMap `json:"children"`
 }
 
@@ -68,7 +70,7 @@ func CheckInInt(dis []int, k int) bool {
 func GetTreeMenu(mp *TreePowerMap, pid int, dataList *[]AdminMenu) {
 	for _, v := range *dataList {
 		if pid == v.PID {
-			d := TreePowerMap{ID: v.ID, Sort: v.Sort, PID: v.PID, IsOpen: v.Open, Text: v.Text, Icon: v.Icon, Url: v.Url, TargetType: v.TargetType, Child: []TreePowerMap{}}
+			d := TreePowerMap{ID: v.ID, Sort: v.Sort, PID: v.PID, IsOpen: v.Open, Text: v.Text, Icon: v.Icon, Url: v.Url, TargetType: v.TargetType, IsShow: v.IsShow, Child: []TreePowerMap{}}
 			GetTreeMenu(&d, v.ID, dataList)
 			mp.Child = append(mp.Child, d)
 		}
@@ -102,8 +104,16 @@ func GetAdminMenuTree(uid int) (*TreePowerMap, error) {
 		return &t, err
 	}
 	roleInfo, err := GetAdminRole(u.Role)
-	mIdList := strings.Split(roleInfo.Menu, ",")
-	idList, _ := S2IList(mIdList)
+	roleMenuList, err := FindRoleMenu(map[string]string{
+		"role_id": fmt.Sprintf("%d", roleInfo.ID),
+	})
+	if err != nil {
+		return &t, err
+	}
+	idList := []int{}
+	for i, _ := range *roleMenuList {
+		idList = append(idList, (*roleMenuList)[i].MenuID)
+	}
 	m, err := FindAdminMenu(map[string]string{})
 	if err != nil {
 		return &t, err
