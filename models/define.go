@@ -16,6 +16,11 @@ const (
 )
 
 const (
+	OperatorTypeAdminSelf   = 0
+	OperatorTypeAdminSystem = 1
+)
+
+const (
 	LottoStatusDisable = 0 // 关闭
 	LottoStatusEnable  = 1 // 正常
 	LottoStatusPause   = 2 // 停售

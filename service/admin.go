@@ -1,10 +1,10 @@
 package service
 
 import (
+	"fmt"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
 	"github.com/xiuos/mozi/models/errors"
-	"fmt"
 )
 
 func GetAdminUserIDByName(name string) (int, error) {
@@ -19,7 +19,6 @@ func AuthAdminLogin(name string, password string, params map[string]string) erro
 	u, err := models.GetAdminUserByName(name)
 
 	if err != nil {
-		fmt.Println(err)
 		return errors.NameOrPasswordErr{}
 	}
 
@@ -59,5 +58,28 @@ func AuthAdminLogin(name string, password string, params map[string]string) erro
 	}
 	models.LogRecordAdminUserLogin(&r)
 
+	return nil
+}
+
+func UpdateRoleMenu(roleID int, newMenu []int) error {
+	oldRoleList, err := models.FindRoleMenu(map[string]string{"role_id": fmt.Sprintf("%d", roleID)})
+	if err != nil {
+		return err
+	}
+	for i, _ := range *oldRoleList {
+		r := models.AdminRoleMenu{
+			RoleID: roleID,
+			MenuID: (*oldRoleList)[i].MenuID,
+		}
+		fmt.Println(models.DelRoleMenu(&r))
+	}
+
+	for _, mID := range newMenu {
+		r := models.AdminRoleMenu{
+			RoleID: roleID,
+			MenuID: mID,
+		}
+		models.AddRoleMenu(&r)
+	}
 	return nil
 }

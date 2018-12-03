@@ -250,3 +250,17 @@ func Mosaics(s string, start int, end int) string {
 	}
 	return string(nameRune[0:start]) + "***" + string(nameRune[sLen-end:])
 }
+
+func S2IList(l []string) ([]int, error) {
+	_l := make([]int, len(l))
+
+	for i, v := range l {
+		b, err := strconv.Atoi(v)
+		if err != nil {
+			return _l, err
+		} else {
+			_l[i] = b
+		}
+	}
+	return _l, nil
+}

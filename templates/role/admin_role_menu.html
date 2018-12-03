@@ -21,20 +21,47 @@
     <style type="text/css">
         html {
             overflow: hidden;
-        },
-        bc{
-            background: #000;
         }
     </style>
 </head>
 <body>
-<div class="bc">
+
+<div class="modal fade" id="role_add">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">新增角色</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="add_role_name" class="col-sm-2 control-label">角色名</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="add_role_name" placeholder="角色">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-danger" onclick="add_role()">确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="">
     <section class="content">
         <div>
             <div class="col-md-6">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">菜单管理</h3>
+                        <h3 class="box-title">菜单管理:<span id="q-role" style="color: red;"></span></h3>
+                        <input type="hidden" id="tree_role_id" value="value">
+                        <button type="button" id="save_menu" onclick="save_role_menu()" class="btn btn-danger btn-flat pull-right" disabled>保存</button>
                     </div>
                     <form class="form-horizontal">
                         <div class="box-body">
@@ -52,15 +79,15 @@
                     <form class="form-horizontal">
                         <div class="box-body">
                             <span class="input-group-btn">
-                              <button type="button" class="btn btn-primary btn-flat">刷新</button>
-                              <button type="button" class="btn btn-primary btn-flat">新增</button>
+                              <button type="button" onclick="refresh_admin_role_list()" class="btn btn-primary btn-flat">刷新</button>
+                              <button type="button" class="btn btn-primary btn-flat" data-toggle="modal" data-target="#role_add">新增</button>
                             </span>
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th style="width: 10px">ID</th>
                                         <th>角色</th>
-                                        <th style="width: 200px">操作</th>
+                                        <th style="width: 100px">操作</th>
                                     </tr>
                                 </thead>
                                 <tbody id="admin_role_list">
@@ -84,13 +111,14 @@
 
 <!-- Bootstrap 3.3.7 -->
 <script src="/static/js/bootstrap.min.js"></script>
-<script src="/static/js/supershopui.common.js"></script>
+<script src="/static/js/adminlte.min.js"></script>
 <script src="/static/js/bootbox.min.js"></script>
 <script src="/static/zTree3/js/jquery.ztree.core.js"></script>
 <script src="/static/zTree3/js/jquery.ztree.excheck.js"></script>
 <script src="/static/zTree3/js/jquery.ztree.exedit.js"></script>
 <!-- Select2 -->
 <script src="/static/select2/dist/js/select2.full.min.js"></script>
+<script src="/static/js/bootbox.min.js"></script>
 
 <script>
     String.prototype.format = function(){
@@ -147,8 +175,20 @@
 
     });
 
+    function foucs() {
+        $("table").on("click","tr",function(e){
+            var arr = [];
+            $(this).children().map(function(el){
+                arr.push($(this)[0].innerText)
+            });
+            $('#q-role').html(arr[1])
+        })
+    }
+
     function query_role_menu(role_id) {
-        // var role_id = $('#role').val();
+        $('#save_menu').removeAttr('disabled');
+        $('#tree_role_id').val(role_id);
+        foucs();
         refresh_tree(role_id)
     }
     function refresh_role() {
@@ -276,12 +316,52 @@
                if(rsp.code===1){
                    $('#admin_role_list').html('');
                    var html = '';
-                   var tpl = "<tr><td>%s</td><td>%s</td><td><button type=\"button\" onclick=\"query_role_menu(%s)\" class=\"btn btn-primary btn-flat\">查看</button><button type=\"button\" class=\"btn btn-primary btn-flat\">保存</button></td></tr>"
+                   var tpl = "<tr><td>%s</td><td>%s</td><td><button type=\"button\" onclick=\"query_role_menu(%s)\" class=\"btn btn-primary btn-flat\">查看</button></td></tr>"
                    for(var i=0;i<rsp.data.length;i++) {
                        html += tpl.format(rsp.data[i].id,rsp.data[i].name,rsp.data[i].id)
                    }
                    $('#admin_role_list').html(html);
 
+               }
+           }
+       });
+   }
+
+   function add_role() {
+       var name = $('#add_role_name').val();
+       $.ajax({
+           type: "POST",
+           url: "/role/add",
+           data: {name: name},
+           dataType: 'json',
+           success: function(rsp) {
+               if(rsp.code===1){
+                   bootbox.alert("新增角色成功");
+               }else{
+                   bootbox.alert(rsp.msg);
+               }
+           }
+       });
+
+   }
+
+   function save_role_menu() {
+        var id_list = [];
+       var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+       var nodes = treeObj.getCheckedNodes(true);
+       for(var i=0;i<nodes.length;i++) {
+           id_list.push(nodes[i].id)
+       }
+       $.ajax({
+           type: "POST",
+           url: "/role_menu/set",
+           data: {role_id: $('#tree_role_id').val(), menu_id_list: id_list.toString()},
+           dataType: 'json',
+           success: function(rsp) {
+               if(rsp.code===1){
+                   bootbox.alert("保存成功");
+               }else{
+                   bootbox.alert(rsp.msg);
                }
            }
        });

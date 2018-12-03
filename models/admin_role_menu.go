@@ -29,7 +29,7 @@ func AddRoleMenu(ar *AdminRoleMenu) error {
 }
 
 func DelRoleMenu(ar *AdminRoleMenu) error {
-	deleteSql := fmt.Sprintf("DELETE FROM %s WHERE role_id = ?, menu_id = ?", ar.TableName())
+	deleteSql := fmt.Sprintf("DELETE FROM %s WHERE role_id = ? AND menu_id = ?", ar.TableName())
 	_, err := common.BaseDb.Exec(deleteSql, ar.RoleID, ar.MenuID)
 	return err
 }

@@ -65,6 +65,8 @@ func main() {
 		appAuthV1.GET("/menu/node/list", admin.FindAdminMenuNode)
 		appAuthV1.GET("/role/list", admin.FindAdminRole)
 		appAuthV1.GET("/role_menu/list", admin.FindAdminRoleMenu)
+		appAuthV1.POST("/role/add", admin.AddAdminRole)
+		appAuthV1.POST("/role_menu/set", admin.UpdateRoleMenu)
 
 	}
 	app.Run(":9980")
