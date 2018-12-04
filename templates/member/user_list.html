@@ -407,7 +407,7 @@
             var params = {};
             params.user_id = user_id;
             $.get('/member/infos', params, function (rs) {
-                if (rs.code === 1) {
+                if (rs.code === 0) {
                     var modal = $(this);
                     $('#detail_user_id').val(rs.data.user_id);
                     $('#detail_name').val(rs.data.name);
@@ -416,9 +416,9 @@
                 }else{
                     bootbox.alert(rs.msg)
                 }
-            })
+            });
             $.get('/member/profile', params, function (rs) {
-                if (rs.code === 1) {
+                if (rs.code === 0) {
                     var modal = $(this);
                     $('#detail_qq').val(rs.data.qq);
                     $('#detail_mobile').val(rs.data.mobile);
@@ -429,9 +429,9 @@
                 }else{
                     bootbox.alert(rs.msg)
                 }
-            })
+            });
             $.get('/member/relation', params, function (rs) {
-                if (rs.code === 1) {
+                if (rs.code === 0) {
                     var modal = $(this);
                     $('#detail_parent_id').val(rs.data.parent_id);
                     $('#detail_type').val(rs.data.user_type).trigger("change");
@@ -439,9 +439,9 @@
                 }else{
                     bootbox.alert(rs.msg)
                 }
-            })
+            });
             $.get('/member/power', params, function (rs) {
-                if (rs.code === 1) {
+                if (rs.code === 0) {
                     var modal = $(this);
                     if (rs.data.power_bet === 1){
                         $('#power_bet').iCheck("check");
@@ -586,8 +586,8 @@
                     //setTimeout仅为测试延迟效果
                     setTimeout(function(){
                         //异常判断与处理
-                        if (result.code !== 1) {
-                            $.dialog.alert("查询失败。错误码："+result.code);
+                        if (result.code !== 0) {
+                            bootbox.alert("查询失败。错误码："+result.code);
                             return;
                         }
                         $("#member_data tr").remove();
@@ -612,7 +612,7 @@
                     },200);
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    $.dialog.alert("查询失败");
+                    bootbox.alert("查询失败");
                 }
             });
         },
@@ -661,7 +661,7 @@
         params.name = $('#add_name').val();
         params.password = $('#add_password').val();
         $.post('/member/add', params, function (rs) {
-            if (rs.code === 1) {
+            if (rs.code === 0) {
                 bootbox.alert(rs.msg|| "添加成功");
             }else{
                 bootbox.alert(rs.msg)

@@ -13,10 +13,9 @@ func PageFindUserList(c *gin.Context) {
 	params := routes.ParamHelper{}
 	params.GetQuery(c, "draw")
 	params.GetQuery(c, "user_id")
-	params.GetQuery(c, "username")
+	params.GetQuery(c, "name")
 	params.GetQuery(c, "login_ip")
 	params.GetQuery(c, "status")
-	params.GetQuery(c, "is_test")
 	params.GetQuery(c, "parent_id")
 	params.GetQuery(c, "curr_page")
 	params.GetQuery(c, "page_row")
@@ -32,6 +31,34 @@ func PageFindUserList(c *gin.Context) {
 	}
 	pp := models.PageParams{CurrentPage: currPage, PageRow: pageRow, Params: params}
 	pr, _, err := models.PageFindUserList(pp)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", pr))
+	}
+}
+
+func PageFindAdminList(c *gin.Context) {
+	params := routes.ParamHelper{}
+	params.GetQuery(c, "draw")
+	params.GetQuery(c, "user_id")
+	params.GetQuery(c, "name")
+	params.GetQuery(c, "status")
+	params.GetQuery(c, "role")
+	params.GetQuery(c, "curr_page")
+	params.GetQuery(c, "page_row")
+	currPage := common.GetInt(params.Get("curr_page"))
+	pageRow := common.GetInt(params.Get("page_row"))
+
+	if currPage < 1 {
+		currPage = models.PageDefaultPage
+	}
+
+	if pageRow < 1 {
+		pageRow = models.PageDefaultRow
+	}
+	pp := models.PageParams{CurrentPage: currPage, PageRow: pageRow, Params: params}
+	pr, _, err := models.PageFindAdmin(pp)
 	if err != nil {
 		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
 	} else {
@@ -137,5 +164,99 @@ func GetMemberPower(c *gin.Context) {
 		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
 	} else {
 		c.JSON(200, routes.ApiResult(common.CodeOK, "", infos))
+	}
+}
+
+func SetAdminRole(c *gin.Context) {
+	uid, err := routes.GetAdminLoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+		return
+	}
+	params := routes.ParamHelper{}
+	params.GetPostForm(c, "user_id")
+	params.GetPostForm(c, "role_id")
+
+	userID := common.GetInt(params.Get("user_id"))
+	roleID := common.GetInt(params.Get("role_id"))
+
+	beforeUser, err := models.GetAdminUserByID(userID)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("找不到该用户%s", err)))
+		return
+	}
+	var beforeRoleName, nowRoleName string
+	bInfo, err := models.GetAdminRole(beforeUser.Role)
+	if err != nil {
+
+	} else {
+		beforeRoleName = bInfo.Name
+	}
+
+	err = service.SetAdminRole(userID, roleID)
+	afterUser, err := models.GetAdminUserByID(userID)
+	nInfo, err := models.GetAdminRole(afterUser.Role)
+	if err != nil {
+
+	} else {
+		nowRoleName = nInfo.Name
+	}
+
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+	} else {
+		r := models.RecordAdminAction{
+			ActionModule: models.ActionAdminModuleSystem,
+			ActionID:     models.ActionAdminSetAdminRole,
+			Content:      fmt.Sprintf("修改管理员角色:用户名:%s,原角色:%s,现角色:%s", beforeUser.Name, beforeRoleName, nowRoleName),
+			IP:           c.ClientIP(),
+			RecordAt:     common.GetTimeNowString(),
+			Success:      common.CodeOK,
+			Message:      "操作成功",
+			OperatorID:   uid,
+			OperatorType: models.OperatorTypeAdminSelf,
+		}
+		models.LogRecordAdminAction(&r)
+		c.JSON(200, routes.ApiShowResult(common.CodeOK, ""))
+	}
+}
+
+func SetAdminStatus(c *gin.Context) {
+	uid, err := routes.GetAdminLoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+		return
+	}
+	params := routes.ParamHelper{}
+	params.GetPostForm(c, "user_id")
+	params.GetPostForm(c, "status")
+
+	userID := common.GetInt(params.Get("user_id"))
+	status := common.GetInt(params.Get("status"))
+
+	beforeUser, err := models.GetAdminUserByID(userID)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("找不到该用户%s", err)))
+		return
+	}
+
+	err = service.SetAdminStatus(userID, status)
+
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+	} else {
+		r := models.RecordAdminAction{
+			ActionModule: models.ActionAdminModuleSystem,
+			ActionID:     models.ActionAdminSetAdminStatus,
+			Content:      fmt.Sprintf("修改管理员状态:用户名:%s,原状态:%d,现状态:%d", beforeUser.Name, beforeUser.Status, status),
+			IP:           c.ClientIP(),
+			RecordAt:     common.GetTimeNowString(),
+			Success:      common.CodeOK,
+			Message:      "操作成功",
+			OperatorID:   uid,
+			OperatorType: models.OperatorTypeAdminSelf,
+		}
+		models.LogRecordAdminAction(&r)
+		c.JSON(200, routes.ApiShowResult(common.CodeOK, ""))
 	}
 }

@@ -71,7 +71,7 @@ func UpdateRoleMenu(roleID int, newMenu []int) error {
 			RoleID: roleID,
 			MenuID: (*oldRoleList)[i].MenuID,
 		}
-		fmt.Println(models.DelRoleMenu(&r))
+		models.DelRoleMenu(&r)
 	}
 
 	for _, mID := range newMenu {
@@ -82,4 +82,12 @@ func UpdateRoleMenu(roleID int, newMenu []int) error {
 		models.AddRoleMenu(&r)
 	}
 	return nil
+}
+
+func SetAdminRole(uid int, roleID int) error {
+	return models.SetAdminInfo(uid, "role", roleID)
+}
+
+func SetAdminStatus(uid int, status int) error {
+	return models.SetAdminInfo(uid, "status", status)
 }

@@ -47,6 +47,7 @@ func main() {
 		appAuthV1.GET("/index", admin.TmplIndex)
 		appAuthV1.GET("/menu", admin.AdminMenu)
 		appAuthV1.GET("/html/admin_role", admin.TmplAdminRole)
+		appAuthV1.GET("/html/admin_list", admin.TmplAdminList)
 		appAuthV1.GET("/html/admin_role_menu", admin.TmplAdminRoleMenu)
 		appAuthV1.GET("/html/member/list", admin.TmplMemberList)
 		appAuthV1.GET("/html/member/record_login", admin.TmplRecordLogin)
@@ -54,6 +55,7 @@ func main() {
 		appAuthV1.GET("/html/bank/code_bank", admin.TmplcodeBank)
 
 		appAuthV1.GET("/pages/user/list", admin.PageFindUserList)
+		appAuthV1.GET("/pages/admin/list", admin.PageFindAdminList)
 		appAuthV1.GET("/pages/user/record_login", admin.PageFindUserRecordLogin)
 		appAuthV1.GET("/pages/user/bank/list", admin.PageFindUserBank)
 		appAuthV1.GET("/pages/code_bank/list", admin.PageFindCodeBank)
@@ -67,6 +69,9 @@ func main() {
 		appAuthV1.GET("/role_menu/list", admin.FindAdminRoleMenu)
 		appAuthV1.POST("/role/add", admin.AddAdminRole)
 		appAuthV1.POST("/role_menu/set", admin.UpdateRoleMenu)
+		appAuthV1.POST("/admin/role/set", admin.SetAdminRole)
+		appAuthV1.POST("/admin/status/set", admin.SetAdminStatus)
+		appAuthV1.POST("/admin/add", admin.SetAdminStatus)
 
 	}
 	app.Run(":9980")

@@ -76,6 +76,10 @@ func TmplAdminRole(c *gin.Context) {
 	c.HTML(http.StatusOK, "admin_role.html", gin.H{"title": "管理后台"})
 }
 
+func TmplAdminList(c *gin.Context) {
+	c.HTML(http.StatusOK, "admin_list.html", gin.H{"title": "管理后台"})
+}
+
 func TmplAdminRoleMenu(c *gin.Context) {
 	c.HTML(http.StatusOK, "admin_role_menu.html", gin.H{"title": "管理后台"})
 }

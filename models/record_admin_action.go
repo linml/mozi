@@ -14,7 +14,9 @@ const (
 	ActionAdminDeleteRole  = 2 // 删除角色
 	ActionAdminUpdateeRole = 3 // 设置角色
 
-	ActionAdminSetRoleMenu = 4 // 设置角色菜单
+	ActionAdminSetRoleMenu    = 4 // 设置角色菜单
+	ActionAdminSetAdminRole   = 5 // 修改管理员角色
+	ActionAdminSetAdminStatus = 6 // 修改管理员状态
 )
 
 type RecordAdminAction struct {

@@ -3,8 +3,8 @@ package common
 // 接口返回操作码
 
 const (
-	CodeFail = 0
-	CodeOK   = 1
+	CodeOK   = 0
+	CodeFail = 100
 
 	CodeUserNotLogin = 2
 )

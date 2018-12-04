@@ -31,7 +31,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span></button>
+                    <span aria-hidden="true"></span></button>
                 <h4 class="modal-title">新增角色</h4>
             </div>
             <div class="modal-body">
@@ -147,6 +147,7 @@
 <script>
 
     var zNodes = [{ id:1, pId:0, name:"数据错误"}];
+    var roleMap = {};
     var checked = [];
     var setting = {
         check: {
@@ -188,7 +189,7 @@
     function query_role_menu(role_id) {
         $('#save_menu').removeAttr('disabled');
         $('#tree_role_id').val(role_id);
-        foucs();
+        $('#q-role').html(roleMap[role_id]);
         refresh_tree(role_id)
     }
     function refresh_role() {
@@ -236,7 +237,7 @@
             data: {role_id:Number(rid)},
             dataType: 'json',
             success: function(rsp) {
-                if(rsp.code===1){
+                if(rsp.code===0){
                     $.each(rsp.data,function(k,v){
                         // console.log(v)
                         checked.push(v.menu_id);
@@ -250,7 +251,7 @@
             data: {time:time},
             dataType: 'json',
             success: function(data) {
-                if(data.code===1){
+                if(data.code===0){
                     zNodes = init_checked(data.data);
                     zNodes = data.data;
                     $.fn.zTree.init($("#treeDemo"), setting, zNodes);
@@ -313,12 +314,13 @@
            data: {},
            dataType: 'json',
            success: function(rsp) {
-               if(rsp.code===1){
+               if(rsp.code===0){
                    $('#admin_role_list').html('');
                    var html = '';
                    var tpl = "<tr><td>%s</td><td>%s</td><td><button type=\"button\" onclick=\"query_role_menu(%s)\" class=\"btn btn-primary btn-flat\">查看</button></td></tr>"
                    for(var i=0;i<rsp.data.length;i++) {
-                       html += tpl.format(rsp.data[i].id,rsp.data[i].name,rsp.data[i].id)
+                       html += tpl.format(rsp.data[i].id,rsp.data[i].name,rsp.data[i].id);
+                       roleMap[rsp.data[i].id] = rsp.data[i].name;
                    }
                    $('#admin_role_list').html(html);
 
@@ -335,7 +337,7 @@
            data: {name: name},
            dataType: 'json',
            success: function(rsp) {
-               if(rsp.code===1){
+               if(rsp.code===0){
                    bootbox.alert("新增角色成功");
                }else{
                    bootbox.alert(rsp.msg);
@@ -358,7 +360,7 @@
            data: {role_id: $('#tree_role_id').val(), menu_id_list: id_list.toString()},
            dataType: 'json',
            success: function(rsp) {
-               if(rsp.code===1){
+               if(rsp.code===0){
                    bootbox.alert("保存成功");
                }else{
                    bootbox.alert(rsp.msg);
