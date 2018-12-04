@@ -98,6 +98,11 @@ func PageFindUserRecordLogin(c *gin.Context) {
 
 // 管理员添加新用户
 func AddMember(c *gin.Context) {
+	uid, err := routes.GetAdminLoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+		return
+	}
 	params := routes.ParamHelper{}
 	params.GetPostForm(c, "is_new_line")
 	params.GetPostForm(c, "parent_name")
@@ -107,8 +112,11 @@ func AddMember(c *gin.Context) {
 	isNewLine := common.GetInt(params.Get("is_new_line"))
 
 	param := map[string]string{}
+
+	recordText := fmt.Sprintf("新增用户:用户名:%s;", params.Get("name"))
 	if isNewLine == 1 {
 		param["is_new_line"] = "1"
+		recordText += "新开线;"
 	} else {
 		parentInfo, err := models.GetUserByName(params.Get("parent_name"))
 		if err != nil {
@@ -116,15 +124,30 @@ func AddMember(c *gin.Context) {
 			return
 		}
 		param["parent_id"] = fmt.Sprintf("%d", parentInfo.UserID)
+		recordText += fmt.Sprintf("指定上级:%s", parentInfo.Name)
 	}
-	fmt.Println(param)
-	err := service.RegisterUser(params.Get("name"), params.Get("password"), param, models.OperatorTypeAdmin)
+	err = service.RegisterUser(params.Get("name"), params.Get("password"), param, models.OperatorTypeAdmin)
+
+	r := models.RecordAdminAction{
+		ActionModule: models.ActionAdminModuleUser,
+		ActionID:     models.ActionAdminAddMember,
+		Content:      recordText,
+		IP:           c.ClientIP(),
+		RecordAt:     common.GetTimeNowString(),
+		OperatorID:   uid,
+		OperatorType: models.OperatorTypeAdminSelf,
+	}
 
 	if err != nil {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+		r.Success = common.CodeFail
+		r.Message = fmt.Sprintf("%s", err)
 	} else {
+		r.Success = common.CodeOK
+		r.Message = "添加成功"
 		c.JSON(200, routes.ApiShowResult(common.CodeOK, "添加成功"))
 	}
+	models.LogRecordAdminAction(&r)
 }
 
 func GetMemberInfos(c *gin.Context) {
@@ -249,6 +272,42 @@ func SetAdminStatus(c *gin.Context) {
 			ActionModule: models.ActionAdminModuleSystem,
 			ActionID:     models.ActionAdminSetAdminStatus,
 			Content:      fmt.Sprintf("修改管理员状态:用户名:%s,原状态:%d,现状态:%d", beforeUser.Name, beforeUser.Status, status),
+			IP:           c.ClientIP(),
+			RecordAt:     common.GetTimeNowString(),
+			Success:      common.CodeOK,
+			Message:      "操作成功",
+			OperatorID:   uid,
+			OperatorType: models.OperatorTypeAdminSelf,
+		}
+		models.LogRecordAdminAction(&r)
+		c.JSON(200, routes.ApiShowResult(common.CodeOK, ""))
+	}
+}
+
+func CreateAdmin(c *gin.Context) {
+	uid, err := routes.GetAdminLoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+		return
+	}
+	params := routes.ParamHelper{}
+	params.GetPostForm(c, "name")
+	params.GetPostForm(c, "password")
+	params.GetPostForm(c, "role")
+
+	name := params.Get("name")
+	password := params.Get("password")
+	role := common.GetInt(params.Get("role"))
+
+	err = service.AddAdmin(name, password, role)
+
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+	} else {
+		r := models.RecordAdminAction{
+			ActionModule: models.ActionAdminModuleSystem,
+			ActionID:     models.ActionAdminAddAdmin,
+			Content:      fmt.Sprintf("添加管理员:用户名:%s", name),
 			IP:           c.ClientIP(),
 			RecordAt:     common.GetTimeNowString(),
 			Success:      common.CodeOK,

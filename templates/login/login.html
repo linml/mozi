@@ -108,11 +108,11 @@
             url: "/login",
             data : obj,
             success: function(rs) {
-                if (rs.code == 0){
+                if (rs.code === 100){
                     bootbox.alert(rs.msg);
                     ref_img();
                 }
-                if (rs.code == 1){
+                if (rs.code === 0){
                     window.location.href="/index"
                 }
             }

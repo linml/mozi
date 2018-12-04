@@ -475,11 +475,11 @@
         var name = $('#add_name').val();
         var password = $('#add_password').val();
         var role = $('#add_role').val();
-
+        var params = {};
         params.name = name;
         params.password = password;
         params.role = role;
-        $.post('/member/add', params, function (rs) {
+        $.post('/admin/add', params, function (rs) {
             if (rs.code===0) {
                 bootbox.alert(rs.msg|| "添加成功");
             }else{

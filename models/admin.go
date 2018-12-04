@@ -48,6 +48,15 @@ func CreateAdminUserTx(tx *sql.Tx, u *AdminUser) (sql.Result, error) {
 	return rs, nil
 }
 
+func CreateAdminUser(u *AdminUser) (sql.Result, error) {
+	createSql := "INSERT INTO " + u.TableName() + " SET name = ?, password = ?, google_secret = ?, google_secret_status = ?, role = ?, status = ?, created_at = ?"
+	rs, err := common.BaseDb.Exec(createSql, &u.Name, &u.Password, &u.GoogleSecret, &u.GoogleSecretStatus, &u.Role, &u.Status, &u.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return rs, nil
+}
+
 func GetAdminUserByID(uid int) (*AdminUser, error) {
 	o := xorm.Orm{}
 	u := AdminUser{}

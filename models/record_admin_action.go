@@ -17,6 +17,8 @@ const (
 	ActionAdminSetRoleMenu    = 4 // 设置角色菜单
 	ActionAdminSetAdminRole   = 5 // 修改管理员角色
 	ActionAdminSetAdminStatus = 6 // 修改管理员状态
+	ActionAdminAddAdmin       = 7 // 添加管理员
+	ActionAdminAddMember      = 8 // 添加用户
 )
 
 type RecordAdminAction struct {

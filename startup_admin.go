@@ -71,7 +71,7 @@ func main() {
 		appAuthV1.POST("/role_menu/set", admin.UpdateRoleMenu)
 		appAuthV1.POST("/admin/role/set", admin.SetAdminRole)
 		appAuthV1.POST("/admin/status/set", admin.SetAdminStatus)
-		appAuthV1.POST("/admin/add", admin.SetAdminStatus)
+		appAuthV1.POST("/admin/add", admin.CreateAdmin)
 
 	}
 	app.Run(":9980")

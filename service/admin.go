@@ -91,3 +91,20 @@ func SetAdminRole(uid int, roleID int) error {
 func SetAdminStatus(uid int, status int) error {
 	return models.SetAdminInfo(uid, "status", status)
 }
+
+func AddAdmin(name string, password string, role int) error {
+	hashPassword, err := common.HashPassword(password)
+	if err != nil {
+		return err
+	}
+	u := models.AdminUser{
+		Name:               name,
+		Password:           hashPassword,
+		Role:               role,
+		Status:             1,
+		CreatedAt:          common.GetTimeNowString(),
+		GoogleSecretStatus: 0,
+	}
+	_, err = models.CreateAdminUser(&u)
+	return err
+}
