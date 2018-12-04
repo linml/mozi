@@ -2,25 +2,6 @@ package models
 
 import "github.com/xiuos/mozi/common"
 
-const (
-	ActionAdminModuleUser     = 1 // 用户模块
-	ActionAdminModuleMoney    = 2 // 资金模块
-	ActionAdminModuleActivity = 3 // 活动模块
-	ActionAdminModuleSystem   = 4 // 系统模块
-)
-
-const (
-	ActionAdminAddRole     = 1 // 添加角色
-	ActionAdminDeleteRole  = 2 // 删除角色
-	ActionAdminUpdateeRole = 3 // 设置角色
-
-	ActionAdminSetRoleMenu    = 4 // 设置角色菜单
-	ActionAdminSetAdminRole   = 5 // 修改管理员角色
-	ActionAdminSetAdminStatus = 6 // 修改管理员状态
-	ActionAdminAddAdmin       = 7 // 添加管理员
-	ActionAdminAddMember      = 8 // 添加用户
-)
-
 type RecordAdminAction struct {
 	ID           int
 	UserID       int

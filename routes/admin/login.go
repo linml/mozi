@@ -99,3 +99,7 @@ func TmplUserBank(c *gin.Context) {
 func TmplcodeBank(c *gin.Context) {
 	c.HTML(http.StatusOK, "code_bank.html", gin.H{})
 }
+
+func TmplRecordAdminAction(c *gin.Context) {
+	c.HTML(http.StatusOK, "record_admin_action.html", gin.H{})
+}

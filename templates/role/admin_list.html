@@ -210,6 +210,7 @@
 <!-- page script -->
 <script src="/static/laydate/laydate.js"></script>
 <script src="/static/js/utils.js"></script>
+<script src="/static/js/sys_def.js"></script>
 <script src="/static/js/bootbox.min.js"></script>
 <script>
     $(function () {
@@ -238,7 +239,7 @@
             data: {},
             dataType: 'json',
             success: function(rsp) {
-                if(rsp.code===0){
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
                     var data = [];
                     for(var i=0;i<rsp.data.length;i++) {
                         data.push({id: rsp.data[i].id, text: rsp.data[i].name});
@@ -443,7 +444,7 @@
             data: {user_id: user_id,role_id:role_id},
             dataType: 'json',
             success: function(rsp) {
-                if(rsp.code===0){
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
                     bootbox.alert("修改成功")
                 }else{
                     bootbox.alert(rsp.msg)
@@ -462,7 +463,7 @@
             data: {user_id: user_id,status:status},
             dataType: 'json',
             success: function(rsp) {
-                if(rsp.code===0){
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
                     bootbox.alert(rsp.msg|| "修改成功");
                 }else{
                     bootbox.alert(rsp.msg)
@@ -480,7 +481,7 @@
         params.password = password;
         params.role = role;
         $.post('/admin/add', params, function (rs) {
-            if (rs.code===0) {
+            if (rs.code === SYS_DEF.CODE.SUCCESS ) {
                 bootbox.alert(rs.msg|| "添加成功");
             }else{
                 bootbox.alert(rs.msg)

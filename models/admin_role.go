@@ -42,7 +42,8 @@ func GetAdminRole(role int) (*AdminRole, error) {
 
 func FindAdminRole(param map[string]string) (*[]AdminRole, error) {
 	arl := []AdminRole{}
-	querySql := "SELECT id, name FROM admin_role WHERE 1=1"
+	t := AdminRole{}
+	querySql := fmt.Sprintf("SELECT id, name FROM %s WHERE 1=1", t.TableName())
 	sqlWhere, args := "", []interface{}{}
 	if v, ok := param["id"]; ok {
 		sqlWhere += " AND id = ?"

@@ -199,7 +199,7 @@
             data: {},
             dataType: 'json',
             success: function(rsp) {
-                if(rsp.code==1){
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
                     var data = [];
                     for(var i=0;i<rsp.data.length;i++) {
                         data.push({id: rsp.data[i].id, text: rsp.data[i].name});

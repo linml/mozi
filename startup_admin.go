@@ -53,6 +53,7 @@ func main() {
 		appAuthV1.GET("/html/member/record_login", admin.TmplRecordLogin)
 		appAuthV1.GET("/html/member/user_bank", admin.TmplUserBank)
 		appAuthV1.GET("/html/bank/code_bank", admin.TmplcodeBank)
+		appAuthV1.GET("/html/record/admin_action", admin.TmplRecordAdminAction)
 
 		appAuthV1.GET("/pages/user/list", admin.PageFindUserList)
 		appAuthV1.GET("/pages/admin/list", admin.PageFindAdminList)
@@ -72,6 +73,10 @@ func main() {
 		appAuthV1.POST("/admin/role/set", admin.SetAdminRole)
 		appAuthV1.POST("/admin/status/set", admin.SetAdminStatus)
 		appAuthV1.POST("/admin/add", admin.CreateAdmin)
+
+		appAuthV1.GET("/action/action_module/list", admin.FindCodeActionAdminModuleList)
+		appAuthV1.GET("/action/action_id/list", admin.FindCodeActionAdminList)
+		appAuthV1.GET("/action/action_id/map", admin.CreateAdmin)
 
 	}
 	app.Run(":9980")

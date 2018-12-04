@@ -76,6 +76,7 @@
 <!-- iCheck -->
 <script src="/static/plugins/iCheck/icheck.min.js"></script>
 <script src="/static/js/bootbox.min.js"></script>
+<script src="/static/js/sys_def.js"></script>
 <!--<script src="js/app.js"></script>-->
 
 <script>
@@ -108,11 +109,11 @@
             url: "/login",
             data : obj,
             success: function(rs) {
-                if (rs.code === 100){
+                if (rs.code === SYS_DEF.CODE.FAIL){
                     bootbox.alert(rs.msg);
                     ref_img();
                 }
-                if (rs.code === 0){
+                if (rs.code === SYS_DEF.CODE.SUCCESS){
                     window.location.href="/index"
                 }
             }

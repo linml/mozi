@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>用户银行</title>
+    <title>管理员操作记录</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -37,23 +37,60 @@
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>账户</label>
+                                <label>管理员</label>
                                 <input type="text" class="form-control" id="name">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>真实名</label>
-                                <input type="text" class="form-control" id="real_name">
+                                <label>账户名</label>
+                                <input type="text" class="form-control" id="name">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>卡号</label>
-                                <input type="text" class="form-control" id="card_no">
+                                <label>模块</label>
+                                <label class=" pull-right"><input type="checkbox" id="use_action_module">选择</label>
+                                <input type="text" class="form-control" id="action_module">
                             </div>
                         </div>
-
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>活动</label>
+                                <label class=" pull-right"><input type="checkbox" id="use_action">选择</label>
+                                <input type="text" class="form-control" id="action_id">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>IP</label>
+                                <input type="text" class="form-control" id="ip">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>起始时间</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="start_at">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>截止时间</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="end_at">
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>操作</label>
@@ -70,16 +107,15 @@
                 <div class="box-body">
                     <div class="row">
                         <div class="col-xs-12">
-                            <table id="user_bank" class="table table-bordered table-hover  table_style">
+                            <table id="login" class="table table-bordered table-hover  table_style">
                                 <thead>
                                 <tr>
                                     <th class="text-center">账户名</th>
-                                    <th class="text-center">开户名</th>
-                                    <th class="text-center">银行</th>
-                                    <th class="text-center">卡号</th>
                                     <th class="text-center">地址</th>
-                                    <th class="text-center">添加时间</th>
-                                    <th class="text-center">更新时间</th>
+                                    <th class="text-center">浏览器</th>
+                                    <th class="text-center">IP</th>
+                                    <th class="text-center">登录时间</th>
+                                    <th class="text-center">设备类型</th>
                                 </tr>
                                 </thead>
                                 <tbody id="login_data" class="text-center"></tbody>
@@ -127,8 +163,20 @@
 {{/*<script type="text/javascript" src="/js/app.js"></script>*/}}
 <script src="/static/js/bootbox.min.js"></script>
 <script>
+    var code_action_list = [];
     $(function () {
         $('.select2').select2();
+        refresh_code_action_module();
+        refresh_code_action();
+        $('#use_action_module').iCheck('check');
+        $('#use_action').iCheck('check');
+
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        });
+
         laydate.render({
             elem: '#start_at' //指定元素
             ,type: 'datetime'
@@ -153,13 +201,93 @@
             ,theme: '#393D49'
             ,value: get_current_day_end_time()
         });
-        // CKEDITOR.replace('notice_editor');
-        // CKEDITOR.replace('update_notice_editor');
-    })
+        // $('#use_action_module').on('ifChecked ifUnchecked', function(event){
+        //     if (event.type === 'ifChecked'){
+        //         $("#action_module").prop("disabled", false);
+        //     }else{
+        //         $("#action_module").prop("disabled", true);
+        //         $("#action_id").prop("disabled", true);
+        //         $('#use_action').iCheck('uncheck')
+        //     }
+        // });
+        $("#action_module").on("select2:select",function(){
+            var module_id = $(this).val();
+            var data = [{id:-1,text:"全部"}];
+            for(var i=0;i<code_action_list.length;i++) {
+                if (code_action_list[i].module_id === Number(module_id)){
+                    data.push({id: code_action_list[i].id, text: code_action_list[i].name});
+                }
+            }
+            var $select = $('#action_id');
+            var instance;
+            instance = $select.data('select2');
+            if(instance){
+                $select.select2('destroy').empty();
+            }
+            $('#action_id').select2({
+                dropdownAutoWidth: true,
+                multiple: false,
+                data: data,
+            });
+        });
+
+
+    });
+    function refresh_code_action_module() {
+        $.ajax({
+            type: "GET",
+            url: "/action/action_module/list",
+            data: {},
+            dataType: 'json',
+            success: function(rsp) {
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                    var data = [{id:-1,text:"全部"}];
+                    for(var i=0;i<rsp.data.length;i++) {
+                        data.push({id: rsp.data[i].id, text: rsp.data[i].name});
+                    }
+                    var $select = $('#action_module');
+                    var instance;
+                    instance = $select.data('select2');
+                    if(instance){
+                        $select.select2('destroy').empty();
+                    }
+                    $('#action_module').select2({
+                        dropdownAutoWidth: true,
+                        multiple: false,
+                        data: data,
+                    });
+
+                }
+            }
+        });
+    }
+    function refresh_code_action() {
+        $.ajax({
+            type: "GET",
+            url: "/action/action_id/list",
+            data: {},
+            dataType: 'json',
+            success: function(rsp) {
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                    code_action_list = rsp.data;
+                    var $select = $('#action_id');
+                    var instance;
+                    instance = $select.data('select2');
+                    if(instance){
+                        $select.select2('destroy').empty();
+                    }
+                    $('#action_id').select2({
+                        dropdownAutoWidth: true,
+                        multiple: false,
+                    });
+                }
+            }
+        });
+    }
 </script>
 <script>
     var myTable;
-    myTable = $("#user_bank").DataTable({
+    myTable = $("#login").DataTable({
         language: datatable_lang,  //提示信息
         autoWidth: false,  //禁用自动调整列宽
         stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
@@ -172,24 +300,41 @@
         order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
         columns: [
             {"data": "name"},
-            {"data": "real_name"},
-            {"data": "bank_name"},
-            {"data": "card_no"},
-            {"data": "address"},
-            {"data": "create_at"},
-            {"data": "update_at"},
+            {"data": "url"},
+            {"data": "user_agent"},
+            {"data": "ip"},
+            {"data": "record_at"},
+            {"data": "device_type"},
         ],
         columnDefs: [
             {
                 "render": function(data, type, row, meta) {
-                    return format_time(row.create_at);
+                    return format_time(row.record_at);
                 },
-                "targets": 5
+                "targets": 4
             },{
                 "render": function(data, type, row, meta) {
-                    return format_time(row.update_at);
+                    x = "";
+                    switch (row.device_type) {
+                        case 0:
+                            x = "其他";
+                            break;
+                        case 1:
+                            x = "网页";
+                            break;
+                        case 2:
+                            x = "手机";
+                            break;
+                        case 3:
+                            x = "API";
+                            break;
+                        default:
+                            x = "暂定";
+                            break;
+                    }
+                    return x;
                 },
-                "targets": 6
+                "targets": 5
             }
         ],
         ajax:function(data, callback, settings){
@@ -201,23 +346,24 @@
             param.draw = data.draw+1;//当前页码
 
             var name = $('#name').val();
-            var real_name = $('#real_name').val();
-            var card_no = $('#card_no').val();
+            var url = $('#url').val();
+            var ip = $('#ip').val();
 
 
             if (name !== ""){
                 param.name = name
             }
-
-            if (card_no !== ""){
-                param.card_no = card_no
+            if (url !== ""){
+                param.url = url
+            }
+            if (ip !== ""){
+                param.ip = ip
             }
 
-            if (real_name !== ""){
-                param.real_name = real_name
-            }
+            param.start_at = format_time_1($('#start_at').val());
+            param.end_at = format_time_1($('#end_at').val());
 
-            var url = "/pages/user/bank/list";
+            var url = "/pages/user/record_login";
 
             $.ajax({
                 type: "GET",
@@ -229,7 +375,7 @@
                     setTimeout(function(){
                         //异常判断与处理
                         if (result.code !== SYS_DEF.CODE.SUCCESS) {
-                            bootbox.alert("查询失败。错误码："+result.code);
+                            $.dialog.alert("查询失败。错误码："+result.code);
                             return;
                         }
                         $("#login_data tr").remove();
@@ -254,7 +400,7 @@
                     },200);
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    bootbox.alert("查询失败");
+                    $.dialog.alert("查询失败");
                 }
             });
         },

@@ -378,6 +378,7 @@
 <!-- page script -->
 <script src="/static/laydate/laydate.js"></script>
 <script src="/static/js/utils.js"></script>
+<script src="/static/js/sys_def.js"></script>
 <script src="/static/js/bootbox.min.js"></script>
 <script>
     $(function () {
@@ -407,7 +408,7 @@
             var params = {};
             params.user_id = user_id;
             $.get('/member/infos', params, function (rs) {
-                if (rs.code === 0) {
+                if (rs.code === SYS_DEF.CODE.SUCCESS) {
                     var modal = $(this);
                     $('#detail_user_id').val(rs.data.user_id);
                     $('#detail_name').val(rs.data.name);
@@ -418,7 +419,7 @@
                 }
             });
             $.get('/member/profile', params, function (rs) {
-                if (rs.code === 0) {
+                if (rs.code === SYS_DEF.CODE.SUCCESS) {
                     var modal = $(this);
                     $('#detail_qq').val(rs.data.qq);
                     $('#detail_mobile').val(rs.data.mobile);
@@ -431,7 +432,7 @@
                 }
             });
             $.get('/member/relation', params, function (rs) {
-                if (rs.code === 0) {
+                if (rs.code === SYS_DEF.CODE.SUCCESS) {
                     var modal = $(this);
                     $('#detail_parent_id').val(rs.data.parent_id);
                     $('#detail_type').val(rs.data.user_type).trigger("change");
@@ -441,7 +442,7 @@
                 }
             });
             $.get('/member/power', params, function (rs) {
-                if (rs.code === 0) {
+                if (rs.code === SYS_DEF.CODE.SUCCESS) {
                     var modal = $(this);
                     if (rs.data.power_bet === 1){
                         $('#power_bet').iCheck("check");
@@ -586,7 +587,7 @@
                     //setTimeout仅为测试延迟效果
                     setTimeout(function(){
                         //异常判断与处理
-                        if (result.code !== 0) {
+                        if (result.code !== SYS_DEF.CODE.SUCCESS) {
                             bootbox.alert("查询失败。错误码："+result.code);
                             return;
                         }
@@ -661,7 +662,7 @@
         params.name = $('#add_name').val();
         params.password = $('#add_password').val();
         $.post('/member/add', params, function (rs) {
-            if (rs.code === 0) {
+            if (rs.code === SYS_DEF.CODE.SUCCESS) {
                 bootbox.alert(rs.msg|| "添加成功");
             }else{
                 bootbox.alert(rs.msg)

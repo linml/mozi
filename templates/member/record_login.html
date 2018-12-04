@@ -143,6 +143,7 @@
 <!-- page script -->
 <script src="/static/laydate/laydate.js"></script>
 <script src="/static/js/utils.js"></script>
+<script src="/static/js/sys_def.js"></script>
 {{/*<script type="text/javascript" src="/js/app.js"></script>*/}}
 <script src="/static/js/bootbox.min.js"></script>
 <script>
@@ -265,7 +266,7 @@
                     //setTimeout仅为测试延迟效果
                     setTimeout(function(){
                         //异常判断与处理
-                        if (result.code !== 1) {
+                        if (result.code !== SYS_DEF.CODE.SUCCESS) {
                             $.dialog.alert("查询失败。错误码："+result.code);
                             return;
                         }
