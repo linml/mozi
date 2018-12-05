@@ -106,16 +106,17 @@
                 <!-- Main content -->
                 <div class="box-body">
                     <div class="row">
-                        <div class="col-xs-12">
                             <table id="login" class="table table-bordered table-hover  table_style">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">账户名</th>
-                                    <th class="text-center">地址</th>
-                                    <th class="text-center">浏览器</th>
+                                    <th class="text-center">时间</th>
+                                    <th class="text-center">管理员</th>
+                                    <th class="text-center">用户</th>
+                                    <th class="text-center">模块</th>
+                                    <th class="text-center">类型</th>
+                                    <th class="text-center">内容</th>
+                                    <th class="text-center">结果</th>
                                     <th class="text-center">IP</th>
-                                    <th class="text-center">登录时间</th>
-                                    <th class="text-center">设备类型</th>
                                 </tr>
                                 </thead>
                                 <tbody id="login_data" class="text-center"></tbody>
@@ -163,6 +164,7 @@
 {{/*<script type="text/javascript" src="/js/app.js"></script>*/}}
 <script src="/static/js/bootbox.min.js"></script>
 <script>
+    var code_action_module_list = [];
     var code_action_list = [];
     $(function () {
         $('.select2').select2();
@@ -245,6 +247,7 @@
                     for(var i=0;i<rsp.data.length;i++) {
                         data.push({id: rsp.data[i].id, text: rsp.data[i].name});
                     }
+                    code_action_module_list = rsp.data;
                     var $select = $('#action_module');
                     var instance;
                     instance = $select.data('select2');
@@ -290,6 +293,7 @@
     myTable = $("#login").DataTable({
         language: datatable_lang,  //提示信息
         autoWidth: false,  //禁用自动调整列宽
+        bSort: false,
         stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
         // processing: true,  //隐藏加载提示,自行处理
         serverSide: true,  //启用服务器端分页，即开启后端分页
@@ -299,42 +303,56 @@
         ordering: false,
         order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
         columns: [
-            {"data": "name"},
-            {"data": "url"},
-            {"data": "user_agent"},
-            {"data": "ip"},
-            {"data": "record_at"},
-            {"data": "device_type"},
+            {"data": "record_at", "width": "100px"},
+            {"data": "operator_name", "width": "100px"},
+            {"data": "name", "width": "100px"},
+            {"data": "action_module", "width": "100px"},
+            {"data": "action_id", "width": "110px"},
+            {"data": "content", "width": "600px", "word-wrap":"break-all"},
+            {"data": "success", "width": "100px"},
+            {"data": "ip", "width": "100px"},
         ],
         columnDefs: [
             {
                 "render": function(data, type, row, meta) {
                     return format_time(row.record_at);
                 },
-                "targets": 4
+                "targets": 0
             },{
                 "render": function(data, type, row, meta) {
-                    x = "";
-                    switch (row.device_type) {
-                        case 0:
-                            x = "其他";
-                            break;
-                        case 1:
-                            x = "网页";
-                            break;
-                        case 2:
-                            x = "手机";
-                            break;
-                        case 3:
-                            x = "API";
-                            break;
-                        default:
-                            x = "暂定";
-                            break;
+                    for(var i=0;i<code_action_module_list.length;i++) {
+                        if (code_action_module_list[i].id === row.action_module){
+                            return code_action_module_list[i].name
+                        }
                     }
-                    return x;
+                    return row.action_module;
+                },
+                "targets": 3
+            },{
+                "render": function(data, type, row, meta) {
+                    for(var i=0;i<code_action_list.length;i++) {
+                        if (code_action_list[i].id === row.action_id){
+                            return code_action_list[i].name
+                        }
+                    }
+                    return row.action_module;
+                },
+                "targets": 4
+            }, {
+                "render": function(data, type, row, meta) {
+
+                    return "<div style=\"width:600px;word-wrap:break-word;\">"+row.content+"</div>";
                 },
                 "targets": 5
+            }, {
+                "render": function(data, type, row, meta) {
+                    if (row.success === SYS_DEF.CODE.SUCCESS){
+                        return "成功"
+                    }else{
+                        return "失败"
+                    }
+                },
+                "targets": 6
             }
         ],
         ajax:function(data, callback, settings){
@@ -363,7 +381,7 @@
             param.start_at = format_time_1($('#start_at').val());
             param.end_at = format_time_1($('#end_at').val());
 
-            var url = "/pages/user/record_login";
+            var url = "/pages/action/record/list";
 
             $.ajax({
                 type: "GET",
@@ -375,7 +393,7 @@
                     setTimeout(function(){
                         //异常判断与处理
                         if (result.code !== SYS_DEF.CODE.SUCCESS) {
-                            $.dialog.alert("查询失败。错误码："+result.code);
+                            bootbox.alert("查询失败。错误码："+result.code + ";内容:" + result.msg);
                             return;
                         }
                         $("#login_data tr").remove();
@@ -400,7 +418,7 @@
                     },200);
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    $.dialog.alert("查询失败");
+                    bootbox.alert("查询失败");
                 }
             });
         },

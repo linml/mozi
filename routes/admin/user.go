@@ -69,7 +69,7 @@ func PageFindAdminList(c *gin.Context) {
 func PageFindUserRecordLogin(c *gin.Context) {
 	params := routes.ParamHelper{}
 	params.GetQuery(c, "draw")
-	params.GetQuery(c, "username")
+	params.GetQuery(c, "name")
 	params.GetQuery(c, "ip")
 	params.GetQuery(c, "status")
 	params.GetQuery(c, "start_at")
@@ -128,6 +128,7 @@ func AddMember(c *gin.Context) {
 	}
 	err = service.RegisterUser(params.Get("name"), params.Get("password"), param, models.OperatorTypeAdmin)
 
+	au, _ := models.GetAdminUserByID(uid)
 	r := models.RecordAdminAction{
 		ActionModule: models.ActionAdminModuleUser,
 		ActionID:     models.ActionAdminAddMember,
@@ -135,6 +136,7 @@ func AddMember(c *gin.Context) {
 		IP:           c.ClientIP(),
 		RecordAt:     common.GetTimeNowString(),
 		OperatorID:   uid,
+		OperatorName: au.Name,
 		OperatorType: models.OperatorTypeAdminSelf,
 	}
 
@@ -228,6 +230,7 @@ func SetAdminRole(c *gin.Context) {
 	if err != nil {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
 	} else {
+		au, _ := models.GetAdminUserByID(uid)
 		r := models.RecordAdminAction{
 			ActionModule: models.ActionAdminModuleSystem,
 			ActionID:     models.ActionAdminSetAdminRole,
@@ -237,6 +240,7 @@ func SetAdminRole(c *gin.Context) {
 			Success:      common.CodeOK,
 			Message:      "操作成功",
 			OperatorID:   uid,
+			OperatorName: au.Name,
 			OperatorType: models.OperatorTypeAdminSelf,
 		}
 		models.LogRecordAdminAction(&r)
@@ -268,6 +272,7 @@ func SetAdminStatus(c *gin.Context) {
 	if err != nil {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
 	} else {
+		au, _ := models.GetAdminUserByID(uid)
 		r := models.RecordAdminAction{
 			ActionModule: models.ActionAdminModuleSystem,
 			ActionID:     models.ActionAdminSetAdminStatus,
@@ -277,6 +282,7 @@ func SetAdminStatus(c *gin.Context) {
 			Success:      common.CodeOK,
 			Message:      "操作成功",
 			OperatorID:   uid,
+			OperatorName: au.Name,
 			OperatorType: models.OperatorTypeAdminSelf,
 		}
 		models.LogRecordAdminAction(&r)
@@ -304,6 +310,7 @@ func CreateAdmin(c *gin.Context) {
 	if err != nil {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
 	} else {
+		au, _ := models.GetAdminUserByID(uid)
 		r := models.RecordAdminAction{
 			ActionModule: models.ActionAdminModuleSystem,
 			ActionID:     models.ActionAdminAddAdmin,
@@ -313,6 +320,7 @@ func CreateAdmin(c *gin.Context) {
 			Success:      common.CodeOK,
 			Message:      "操作成功",
 			OperatorID:   uid,
+			OperatorName: au.Name,
 			OperatorType: models.OperatorTypeAdminSelf,
 		}
 		models.LogRecordAdminAction(&r)

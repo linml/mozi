@@ -90,6 +90,7 @@ func AddAdminRole(c *gin.Context) {
 	if err != nil {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
 	} else {
+		au, _ := models.GetAdminUserByID(uid)
 		r := models.RecordAdminAction{
 			ActionModule: models.ActionAdminModuleSystem,
 			ActionID:     models.ActionAdminAddRole,
@@ -99,6 +100,7 @@ func AddAdminRole(c *gin.Context) {
 			Success:      common.CodeOK,
 			Message:      "添加成功",
 			OperatorID:   uid,
+			OperatorName: au.Name,
 			OperatorType: models.OperatorTypeAdminSelf,
 		}
 		models.LogRecordAdminAction(&r)
@@ -124,6 +126,7 @@ func UpdateRoleMenu(c *gin.Context) {
 	if err != nil {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
 	} else {
+		au, _ := models.GetAdminUserByID(uid)
 		r := models.RecordAdminAction{
 			ActionModule: models.ActionAdminModuleSystem,
 			ActionID:     models.ActionAdminSetRoleMenu,
@@ -133,6 +136,7 @@ func UpdateRoleMenu(c *gin.Context) {
 			Success:      common.CodeOK,
 			Message:      "添加成功",
 			OperatorID:   uid,
+			OperatorName: au.Name,
 			OperatorType: models.OperatorTypeAdminSelf,
 		}
 		models.LogRecordAdminAction(&r)

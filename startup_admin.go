@@ -77,6 +77,7 @@ func main() {
 		appAuthV1.GET("/action/action_module/list", admin.FindCodeActionAdminModuleList)
 		appAuthV1.GET("/action/action_id/list", admin.FindCodeActionAdminList)
 		appAuthV1.GET("/action/action_id/map", admin.CreateAdmin)
+		appAuthV1.GET("/pages/action/record/list", admin.PageFindLogRecordAdminActionList)
 
 	}
 	app.Run(":9980")

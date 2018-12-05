@@ -57,6 +57,14 @@ func CreateAdminUser(u *AdminUser) (sql.Result, error) {
 	return rs, nil
 }
 
+func SetAdminInfo(uid int, filed string, val interface{}) error {
+	u := AdminUser{}
+	updateSql := fmt.Sprintf("UPDATE %s SET %s=? WHERE user_id=?", u.TableName(), filed)
+	_, err := common.BaseDb.Exec(updateSql, val, uid)
+	return err
+
+}
+
 func GetAdminUserByID(uid int) (*AdminUser, error) {
 	o := xorm.Orm{}
 	u := AdminUser{}
@@ -66,14 +74,6 @@ func GetAdminUserByID(uid int) (*AdminUser, error) {
 	}
 	err = common.BaseDb.QueryRow(querySql, o.Args()...).Scan(u.FieldItem()...)
 	return &u, err
-}
-
-func SetAdminInfo(uid int, filed string, val interface{}) error {
-	u := AdminUser{}
-	updateSql := fmt.Sprintf("UPDATE %s SET %s=? WHERE user_id=?", u.TableName(), filed)
-	_, err := common.BaseDb.Exec(updateSql, val, uid)
-	return err
-
 }
 
 func GetAdminUserByName(name string) (*AdminUser, error) {
