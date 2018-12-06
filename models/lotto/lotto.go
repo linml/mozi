@@ -15,6 +15,7 @@ type CodeLotto struct {
 	GameType     int    `json:"game_type"`
 	Status       int    `json:"status"`
 	SortIndex    int    `json:"sort_index"`
+	IsShow       int    `json:"is_show"`
 	Introduction string `json:"introduction"`
 }
 
@@ -23,11 +24,11 @@ func (l *CodeLotto) TableName() string {
 }
 
 func (l *CodeLotto) Field() []string {
-	return []string{"lotto_id", "name", "lotto_type", "game_kind", "game_type", "status", "sort_index", "introduction"}
+	return []string{"lotto_id", "name", "lotto_type", "game_kind", "game_type", "status", "sort_index", "is_show", "introduction"}
 }
 
 func (l *CodeLotto) FieldItem() []interface{} {
-	return []interface{}{&l.LottoID, &l.Name, &l.LottoType, &l.GameKind, &l.GameType, &l.Status, &l.SortIndex, &l.Introduction}
+	return []interface{}{&l.LottoID, &l.Name, &l.LottoType, &l.GameKind, &l.GameType, &l.Status, &l.SortIndex, &l.IsShow, &l.Introduction}
 }
 
 func GetLotto(lid int) (*CodeLotto, error) {
@@ -69,6 +70,10 @@ func PageFindCodeLottoList(pageParam common.PageParams) (*common.PageResult, *[]
 	}
 	if v, ok := pageParam.Params["status"]; ok {
 		sqlWhere += " AND status = ?"
+		args = append(args, v)
+	}
+	if v, ok := pageParam.Params["is_show"]; ok {
+		sqlWhere += " AND is_show = ?"
 		args = append(args, v)
 	}
 
@@ -135,6 +140,11 @@ func FindCodeLottoList(param map[string]string) (*[]CodeLotto, error) {
 		sqlWhere += " AND status = ?"
 		args = append(args, v)
 	}
+	if v, ok := param["is_show"]; ok {
+		sqlWhere += " AND is_show = ?"
+		args = append(args, v)
+	}
+
 	querySql += sqlWhere
 	rows, err := common.BaseDb.Query(querySql, args...)
 	if err != nil {

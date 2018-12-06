@@ -63,7 +63,7 @@
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
-            <table id="code_lotto" class="table table-bordered table-hover  table_style">
+            <table id="code_lotto" class="table table-bordered table-hover  table_style table-striped">
                 <thead>
                 <tr>
                     <th class="text-center">编号</th>
@@ -195,18 +195,18 @@
             },{
                 "render": function(data, type, row, meta) {
                     if (row.status === 1){
-                        return '开启';
+                        return '<span class="label label-success">启用</span>';
                     }
-                    return '<p class="text-red">禁用</p>';
+                    return '<span class="label label-danger">禁用</span>';
 
                 },
                 "targets": 5
             },{
                 "render": function(data, type, row, meta) {
                     if (row.is_show === 1){
-                        return '显示';
+                        return '<span class="label label-success">是</span>';
                     }
-                    return '<p class="text-red">隐藏</p>';
+                    return '<span class="label label-danger">否</span>';
 
                 },
                 "targets": 6
