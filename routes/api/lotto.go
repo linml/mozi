@@ -6,9 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/shopspring/decimal"
 	"github.com/xiuos/mozi/common"
+	"github.com/xiuos/mozi/models/lotto"
 	"github.com/xiuos/mozi/routes"
 	"github.com/xiuos/mozi/service"
-	"github.com/xiuos/mozi/models"
 )
 
 type BetContent struct {
@@ -31,18 +31,18 @@ func Bet(c *gin.Context) {
 
 	var betList []BetContent
 	err = json.Unmarshal([]byte(bets), &betList)
-	if 	err!=nil{
+	if err != nil {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, "下注格式错误"))
 		return
 	}
-	for i,_ := range betList{
-		err = service.Bet(&models.Order{
-			UserID:uid,
-			LottoID: lottoID,
-			Issue: issue,
+	for i, _ := range betList {
+		err = service.Bet(&lotto.Order{
+			UserID:     uid,
+			LottoID:    lottoID,
+			Issue:      issue,
 			MethodCode: betList[i].MethodCode,
-			Content:betList[i].BetContent,
-			Amount:betList[i].Amount,
+			Content:    betList[i].BetContent,
+			Amount:     betList[i].Amount,
 		})
 		if err != nil {
 			c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("下注失败：%s", err)))

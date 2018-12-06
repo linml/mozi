@@ -40,7 +40,7 @@ type UserBank4Admin struct {
 	UpdateAt string `json:"update_at"`
 }
 
-func PageFindUserBank4AdminList(pageParam PageParams) (*PageResult, *[]UserBank4Admin, error) {
+func PageFindUserBank4AdminList(pageParam common.PageParams) (*common.PageResult, *[]UserBank4Admin, error) {
 	conditionSql := " FROM user_bank a LEFT JOIN users b ON a.user_id=b.user_id LEFT JOIN user_profile c ON a.user_id=c.user_id LEFT JOIN code_bank d ON a.bank_code=d.bank_code  WHERE 1=1 "
 	countSql := "SELECT COUNT(*) AS count " + conditionSql
 	querySql := "SELECT a.id,a.user_id,b.name,c.real_name,a.bank_code,d.bank_name,a.address,a.card_no,a.create_at,a.update_at " + conditionSql
@@ -61,7 +61,7 @@ func PageFindUserBank4AdminList(pageParam PageParams) (*PageResult, *[]UserBank4
 		sqlWhere += " AND a.card_no = ?"
 		args = append(args, v)
 	}
-	var pg PageResult
+	var pg common.PageResult
 	var data []UserBank4Admin
 	var err error
 	countSql += sqlWhere

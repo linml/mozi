@@ -87,7 +87,7 @@ func GetAdminUserByName(name string) (*AdminUser, error) {
 	return &u, err
 }
 
-func PageFindAdmin(pageParam PageParams) (*PageResult, *[]AdminUser4Admin, error) {
+func PageFindAdmin(pageParam common.PageParams) (*common.PageResult, *[]AdminUser4Admin, error) {
 	conditionSql := " FROM admin WHERE 1=1 "
 	countSql := "SELECT COUNT(*) AS count " + conditionSql
 	querySql := "SELECT user_id,name,google_secret_status,role,status,created_at " + conditionSql
@@ -116,7 +116,7 @@ func PageFindAdmin(pageParam PageParams) (*PageResult, *[]AdminUser4Admin, error
 		sqlWhere += " AND record_at <= ?"
 		args = append(args, v)
 	}
-	var pg PageResult
+	var pg common.PageResult
 	var data []AdminUser4Admin
 	var err error
 	countSql += sqlWhere

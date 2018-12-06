@@ -39,7 +39,7 @@ func LogRecordAdminAction(r *RecordAdminAction) error {
 	return err
 }
 
-func PageFindLogRecordAdminActionList(pageParam PageParams) (*PageResult, *[]RecordAdminAction, error) {
+func PageFindLogRecordAdminActionList(pageParam common.PageParams) (*common.PageResult, *[]RecordAdminAction, error) {
 	r := RecordAdminAction{}
 	conditionSql := fmt.Sprintf(" FROM %s WHERE 1=1 ", r.TableName())
 	countSql := "SELECT COUNT(*) AS count " + conditionSql
@@ -91,7 +91,7 @@ func PageFindLogRecordAdminActionList(pageParam PageParams) (*PageResult, *[]Rec
 	}
 	sqlWhere += " ORDER BY record_at DESC "
 
-	var pg PageResult
+	var pg common.PageResult
 	var data []RecordAdminAction
 	var err error
 	countSql += sqlWhere

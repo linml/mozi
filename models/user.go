@@ -111,7 +111,7 @@ func SetPassword(uid int, password string) error {
 	return err
 }
 
-func PageFindUserList(pageParam PageParams) (*PageResult, *[]User4Admin, error) {
+func PageFindUserList(pageParam common.PageParams) (*common.PageResult, *[]User4Admin, error) {
 	conditionSql := " FROM users a LEFT JOIN user_wallet b ON a.user_id=b.user_id LEFT JOIN user_profile c ON a.user_id=c.user_id LEFT JOIN user_relation d ON a.user_id=d.user_id WHERE 1=1 "
 	countSql := "SELECT COUNT(*) AS count " + conditionSql
 	querySql := "SELECT a.user_id,a.name,a.status,b.balance,c.registered,c.last_login_at,c.last_login_ip,d.user_type " + conditionSql
@@ -132,7 +132,7 @@ func PageFindUserList(pageParam PageParams) (*PageResult, *[]User4Admin, error) 
 		sqlWhere += " AND d.parent_id = ?"
 		args = append(args, v)
 	}
-	var pg PageResult
+	var pg common.PageResult
 	var data []User4Admin
 	var err error
 	countSql += sqlWhere

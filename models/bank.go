@@ -36,7 +36,7 @@ func CreatebankTx(tx *sql.Tx, b *Bank) (sql.Result, error) {
 	return rs, nil
 }
 
-func PageFindCodeBankList(pageParam PageParams) (*PageResult, *[]Bank, error) {
+func PageFindCodeBankList(pageParam common.PageParams) (*common.PageResult, *[]Bank, error) {
 	conditionSql := " FROM code_bank WHERE 1=1 "
 	countSql := "SELECT COUNT(*) AS count " + conditionSql
 	querySql := "SELECT id, bank_code, bank_name, sort_index, group_type, status " + conditionSql
@@ -62,7 +62,7 @@ func PageFindCodeBankList(pageParam PageParams) (*PageResult, *[]Bank, error) {
 		args = append(args, v)
 	}
 
-	var pg PageResult
+	var pg common.PageResult
 	var data []Bank
 	var err error
 	countSql += sqlWhere

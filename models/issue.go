@@ -1,13 +1,10 @@
 package models
 
 import (
+	"fmt"
 	"github.com/xiuos/lotto"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/xorm"
-)
-
-const (
-	TableLottoResult = "lotto_result"
 )
 
 type IssueInfo = lotto.IssueInfo
@@ -23,8 +20,8 @@ type LottoResult struct {
 	DrawTime   string `json:"draw_time"`
 }
 
-func (l *LottoResult) TableName() string {
-	return "lotto_result"
+func (l *LottoResult) TableName(id int) string {
+	return fmt.Sprintf("lotto_result_%d", id)
 }
 
 func (l *LottoResult) Field() []string {
@@ -38,7 +35,7 @@ func (l *LottoResult) FieldItem() []interface{} {
 func GetLottoResult(lid int, issue string) (*LottoResult, error) {
 	o := xorm.Orm{}
 	l := LottoResult{}
-	querySql, err := o.Table(l.TableName()).Query().Where("lotto_id = ? AND issue = ?", lid, issue).Do(&l)
+	querySql, err := o.Table(l.TableName(lid)).Query().Where("lotto_id = ? AND issue = ?", lid, issue).Do(&l)
 	if err != nil {
 		return &l, err
 	}
@@ -46,7 +43,7 @@ func GetLottoResult(lid int, issue string) (*LottoResult, error) {
 	return &l, err
 }
 
-func GenIssueInfo(data *[]IssueInfo) error {
+func CreateIssueInfo(data *[]IssueInfo) error {
 	var vals []interface{}
 	sql := "INSERT IGNORE INTO lotto_result (lotto_id, issue, draw_number, status, start_time, close_time, end_time, draw_time) VALUES "
 	for i, _ := range *data {

@@ -1,8 +1,8 @@
 package models
 
-import "github.com/xiuos/lotto"
+import "github.com/xiuos/mozi/models/lotto"
 
-func MethodCheckBetLegal(method string, o *Order) error {
+func MethodCheckBetLegal(method string, o *lotto.Order) error {
 	engine, err := lotto.GetMethodEngine(method)
 	if err != nil {
 		return err
@@ -11,7 +11,7 @@ func MethodCheckBetLegal(method string, o *Order) error {
 	return err
 }
 
-func MethodBetCount(method string, o *Order) (int, error) {
+func MethodBetCount(method string, o *lotto.Order) (int, error) {
 	engine, err := lotto.GetMethodEngine(method)
 	if err != nil {
 		return 0, err
@@ -19,8 +19,7 @@ func MethodBetCount(method string, o *Order) (int, error) {
 	return engine.GetBetCount(o)
 }
 
-
-func MethodFindWin(method string, o *Order, drawNumber []string) (*[]lotto.WinInfo, error) {
+func MethodFindWin(method string, o *lotto.Order, drawNumber []string) (*[]lotto.WinInfo, error) {
 	engine, err := lotto.GetMethodEngine(method)
 	if err != nil {
 		return nil, err

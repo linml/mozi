@@ -6,11 +6,12 @@ import (
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
 	"github.com/xiuos/mozi/models/errors"
+	"github.com/xiuos/mozi/models/lotto"
 	"time"
 )
 
 // 下单
-func Bet(o *models.Order) error {
+func Bet(o *lotto.Order) error {
 	/*
 		检查用户
 		检查彩票
@@ -31,7 +32,7 @@ func Bet(o *models.Order) error {
 		return errors.UserDisableErr{}
 	}
 
-	li, err := models.GetLotto(o.LottoID)
+	li, err := lotto.GetLotto(o.LottoID)
 	if err != nil {
 		fmt.Println(err)
 		return errors.New("彩票编号错误")
@@ -70,11 +71,11 @@ func Bet(o *models.Order) error {
 		return errors.New("该玩法已停售")
 	}
 
-	if pInfo.BetMin.GreaterThan(o.Amount){
+	if pInfo.BetMin.GreaterThan(o.Amount) {
 		return errors.New("投注金额过低")
 	}
 
-	if pInfo.BetMax.LessThan(o.Amount){
+	if pInfo.BetMax.LessThan(o.Amount) {
 		return errors.New("投注金额过高")
 	}
 
@@ -82,8 +83,6 @@ func Bet(o *models.Order) error {
 	if err != nil {
 		return err
 	}
-
-
 
 	if o.Amount.GreaterThan(uw.Balance) {
 		return errors.New("账户余额不足")
@@ -131,7 +130,7 @@ func Bet(o *models.Order) error {
 	if err != nil {
 		return errors.New(fmt.Sprintf("事务开始失败: %s", err))
 	}
-	err = models.CreateRecordLottoOrderTx(tx, o)
+	err = lotto.CreateRecordLottoOrderTx(tx, o)
 	if err != nil {
 		tx.Rollback()
 		return errors.New(fmt.Sprintf("下单异常.%s", err))
@@ -180,7 +179,7 @@ func CreateIssueCorn() {
 				fmt.Println(err)
 				continue
 			}
-			models.GenIssueInfo(issueInfoList)
+			models.CreateIssueInfo(issueInfoList)
 			day = day.Add(d)
 		}
 	}

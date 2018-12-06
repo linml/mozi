@@ -50,7 +50,7 @@ func LogRecordAdminUserLogin(r *RecordAdminUserLogin) error {
 	return err
 }
 
-func PageFindUserRecordLogin4Admin(pageParam PageParams) (*PageResult, *[]RecordUserLogin, error) {
+func PageFindUserRecordLogin4Admin(pageParam common.PageParams) (*common.PageResult, *[]RecordUserLogin, error) {
 	conditionSql := " FROM record_user_login WHERE 1=1 "
 	countSql := "SELECT COUNT(*) AS count " + conditionSql
 	querySql := "SELECT id,user_id,name,device_type,ip,user_agent,url,record_at,status,remark " + conditionSql
@@ -87,7 +87,7 @@ func PageFindUserRecordLogin4Admin(pageParam PageParams) (*PageResult, *[]Record
 		sqlWhere += " AND record_at <= ?"
 		args = append(args, v)
 	}
-	var pg PageResult
+	var pg common.PageResult
 	var data []RecordUserLogin
 	var err error
 	countSql += sqlWhere

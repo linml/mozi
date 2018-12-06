@@ -58,13 +58,13 @@ func PageFindLogRecordAdminActionList(c *gin.Context) {
 	pageRow := common.GetInt(params.Get("page_row"))
 
 	if currPage < 1 {
-		currPage = models.PageDefaultPage
+		currPage = common.PageDefaultPage
 	}
 
 	if pageRow < 1 {
-		pageRow = models.PageDefaultRow
+		pageRow = common.PageDefaultRow
 	}
-	pp := models.PageParams{CurrentPage: currPage, PageRow: pageRow, Params: params}
+	pp := common.PageParams{CurrentPage: currPage, PageRow: pageRow, Params: params}
 	pr, _, err := models.PageFindLogRecordAdminActionList(pp)
 	if err != nil {
 		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
