@@ -26,18 +26,87 @@
 
 </head>
 
+<div class="modal fade" id="set_lotto">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">编辑</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="row">
+                        <input type="hidden" id="u_lotto_id" name="extra" value="">
+                        <div class="col-sm-3">
+                            <label>名称</label>
+                            <input type="text" id="u_lotto_name" class="form-control" disabled>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>状态</label>
+                            <div class="input-group">
+                                <select id="u_status" class="form-control select2" style="width: 100%;">
+                                    <option value=0>禁用</option>
+                                    <option value=1>启用</option>
+                                </select>
+                                <span class="input-group-btn">
+                                  <button type="button" onclick="update_lotto_status()" class="btn btn-primary btn-flat">保存</button>
+                            </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>是否显示</label>
+                            <div class="input-group">
+                                <select id="u_is_show" class="form-control select2" style="width: 100%;">
+                                    <option value=0>否</option>
+                                    <option value=1>是</option>
+                                </select>
+                                <span class="input-group-btn">
+                                  <button type="button" onclick="update_lotto_is_show()" class="btn btn-primary btn-flat">保存</button>
+                            </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>排序</label>
+                            <div class="input-group">
+                                <input type="text" id="u_sort_index" class="form-control">
+                                <span class="input-group-btn">
+                                      <button type="button" onclick="update_lotto_sort_index()" class="btn btn-primary btn-flat">保存</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
 <body class="hold-transition skin-blue sidebar-mini">
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="form-group">
                 <label>名称</label>
                 <select id="lotto_id" class="form-control select2" style="width: 100%;"></select>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>类型</label>
+                <select id="lotto_type" class="form-control select2" style="width: 100%;"></select>
+            </div>
+        </div>
+        <div class="col-md-1">
             <div class="form-group">
                 <label>状态</label>
                 <select id="status" class="form-control select2" style="width: 100%;">
@@ -51,7 +120,7 @@
             <div class="form-group">
                 <label>操作</label>
                 <div>
-                    <button onclick="query_code_bank()" type="button" class="btn btn-primary ">查询</button>
+                    <button onclick="table_reload()" type="button" class="btn btn-primary ">查询</button>
                 </div>
             </div>
         </div>
@@ -69,8 +138,6 @@
                     <th class="text-center">编号</th>
                     <th class="text-center">名称</th>
                     <th class="text-center">彩票类型</th>
-                    <th class="text-center">游戏归类</th>
-                    <th class="text-center">游戏类型</th>
                     <th class="text-center">状态</th>
                     <th class="text-center">是否显示</th>
                     <th class="text-center">排序</th>
@@ -116,11 +183,36 @@
 <script type="text/javascript" src="/static/js/sys_def.js"></script>
 <script type="text/javascript" src="/static/js/bootbox.min.js"></script>
 <script type="text/javascript">
-    var GAME_KIND_MAP = {};
-    var GAME_TYPE_MAP = {};
+    var LOTTO_TYPE = [];
     $(function () {
         $('.select2').select2();
         refresh_code_lotto();
+        refresh_code_lotto_type();
+
+        $('#set_lotto').on('show.bs.modal', function (event) {
+
+            var data = $(event.relatedTarget); // Button that triggered the modal
+            var lotto_id = data.data('lotto_id');
+
+            $.ajax({
+                type: "GET",
+                url: "/lotto/code_lotto",
+                data: {lotto_id: lotto_id},
+                dataType: 'json',
+                success: function(rsp) {
+                    if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                        $('#u_lotto_name').val(rsp.data.name);
+                        $('#u_lotto_id').val(rsp.data.lotto_id);
+                        $('#u_sort_index').val(rsp.data.sort_index);
+
+                        $('#u_status').val(rsp.data.status).trigger("change");
+                        $('#u_status').change();
+                        $('#u_is_show').val(rsp.data.is_show).trigger("change");
+                        $('#u_is_show').change();
+                    }
+                }
+            });
+        });
 
 
         $('#modal_update_bank').on('show.bs.modal', function (event) {
@@ -166,8 +258,6 @@
             {"data": "lotto_id"},
             {"data": "name"},
             {"data": "lotto_type"},
-            {"data": "game_kind"},
-            {"data": "game_type"},
             {"data": "status"},
             {"data": "is_show"},
             {"data": "sort_index"},
@@ -176,22 +266,15 @@
         columnDefs: [
             {
                 "render": function(data, type, row, meta) {
-                    try {
-                        return GAME_KIND_MAP[row.game_kind].name;
-                    }catch(err) {
-                        return row.game_kind
+                    for(var i=0;i<LOTTO_TYPE.length;i++) {
+                        if (row.lotto_type === LOTTO_TYPE[i].id){
+                            return LOTTO_TYPE[i].name
+                        }
                     }
+                    return row.lotto_type
+
                 },
-                "targets": 3
-            },{
-                "render": function(data, type, row, meta) {
-                    try {
-                        return GAME_TYPE_MAP[row.game_kind][row.game_type].name;
-                    }catch(err) {
-                        return row.game_type
-                    }
-                },
-                "targets": 4
+                "targets": 2
             },{
                 "render": function(data, type, row, meta) {
                     if (row.status === 1){
@@ -200,7 +283,7 @@
                     return '<span class="label label-danger">禁用</span>';
 
                 },
-                "targets": 5
+                "targets": 3
             },{
                 "render": function(data, type, row, meta) {
                     if (row.is_show === 1){
@@ -209,16 +292,13 @@
                     return '<span class="label label-danger">否</span>';
 
                 },
-                "targets": 6
+                "targets": 4
             },{
                 "render": function(data, type, row, meta) {
-                    var html_str = '<div class="btn-group">' +
-                            '<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#member_detail" data-user_id="'+row.user_id +'">编辑</i></button>';
-                    '</div>';
-                    return html_str
+                    return '<div class="btn-group"><button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#set_lotto" data-lotto_id="'+row.lotto_id +'">编辑</i></button></div>';
 
                 },
-                "targets": 8
+                "targets": 6
             }
         ],
         ajax:function(data, callback, settings){
@@ -230,6 +310,7 @@
             param.draw = data.draw+1;//当前页码
             var status = $('#status').val();
             var lotto_id = $('#lotto_id').val();
+            var lotto_type = $('#lotto_type').val();
             var bank_type = $('#bank_type').val();
 
             if (status !== ""){
@@ -240,6 +321,9 @@
             }
             if (lotto_id > ""){
                 param.lotto_id = lotto_id
+            }
+            if (lotto_type > ""){
+                param.lotto_type = lotto_type
             }
 
             var url = "/pages/code_lotto/list";
@@ -285,7 +369,7 @@
         },
     });
 
-    function query_code_bank() {
+    function table_reload() {
         myTable.ajax.reload();
     }
 
@@ -318,6 +402,92 @@
         });
     }
 
+    function refresh_code_lotto_type() {
+        $.ajax({
+            type: "GET",
+            url: "/lotto/code_lotto_type/list",
+            data: {},
+            dataType: 'json',
+            success: function(rsp) {
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                    LOTTO_TYPE = rsp.data;
+
+                    var data = [{id: "", text: "全部"}];
+                    for(var i=0;i<rsp.data.length;i++) {
+                        data.push({id: rsp.data[i].id, text: rsp.data[i].name});
+                    }
+                    var $select = $('#lotto_type');
+                    var instance;
+                    instance = $select.data('select2');
+                    if(instance){
+                        $select.select2('destroy').empty();
+                    }
+                    $('#lotto_type').select2({
+                        dropdownAutoWidth: true,
+                        multiple: false,
+                        data: data
+                    });
+                }
+            }
+        });
+    }
+
+    function update_lotto_status() {
+        var lotto_id = $('#u_lotto_id').val();
+        var status = $('#u_status').val();
+        $.ajax({
+            type: "POST",
+            url: "/lotto/code_lotto/status",
+            data: {lotto_id:lotto_id, status:status},
+            dataType: 'json',
+            success: function(rsp) {
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                   bootbox.alert(rsp.msg || "操作成功")
+                }else {
+                    bootbox.alert(rsp.msg || "操作失败")
+                }
+            }
+        });
+        table_reload();
+    }
+
+    function update_lotto_is_show() {
+        var lotto_id = $('#u_lotto_id').val();
+        var is_show = $('#u_is_show').val();
+        $.ajax({
+            type: "POST",
+            url: "/lotto/code_lotto/is_show",
+            data: {lotto_id:lotto_id, is_show:is_show},
+            dataType: 'json',
+            success: function(rsp) {
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                    bootbox.alert(rsp.msg || "操作成功")
+                }else {
+                    bootbox.alert(rsp.msg || "操作失败")
+                }
+            }
+        });
+        table_reload();
+    }
+
+    function update_lotto_sort_index() {
+        var lotto_id = $('#u_lotto_id').val();
+        var sort_index = $('#u_sort_index').val();
+        $.ajax({
+            type: "POST",
+            url: "/lotto/code_lotto/sort_index",
+            data: {lotto_id:lotto_id, sort_index:sort_index},
+            dataType: 'json',
+            success: function(rsp) {
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                    bootbox.alert(rsp.msg || "操作成功")
+                }else {
+                    bootbox.alert(rsp.msg || "操作失败")
+                }
+            }
+        });
+        table_reload();
+    }
 </script>
 
 </body>

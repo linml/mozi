@@ -184,3 +184,15 @@ func CreateIssueCorn() {
 		}
 	}
 }
+
+func SetCodeLottoStatus(lid int, status int) error {
+	return lotto.SetCodeLottoInfo(lid, "status", status)
+}
+
+func SetCodeLottoSortIndex(lid int, sortIndex int) error {
+	return lotto.SetCodeLottoInfo(lid, "sort_index", sortIndex)
+}
+
+func SetCodeLottoIsShow(lid int, isShow int) error {
+	return lotto.SetCodeLottoInfo(lid, "is_show", isShow)
+}

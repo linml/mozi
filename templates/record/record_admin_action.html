@@ -106,7 +106,7 @@
                 <!-- Main content -->
                 <div class="box-body">
                     <div class="row">
-                            <table id="login" class="table table-bordered table-hover  table_style">
+                            <table id="login" class="table table-bordered table-hover  table_style table-striped">
                                 <thead>
                                 <tr>
                                     <th class="text-center">时间</th>
@@ -347,9 +347,10 @@
             }, {
                 "render": function(data, type, row, meta) {
                     if (row.success === SYS_DEF.CODE.SUCCESS){
-                        return "成功"
+
+                        return '<span class="label label-success">成功</span>';
                     }else{
-                        return "失败"
+                        return '<span class="label label-danger">失败</span>';
                     }
                 },
                 "targets": 6

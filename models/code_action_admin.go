@@ -6,14 +6,17 @@ import (
 )
 
 const (
-	ActionAdminAddRole        = 1 // 添加角色
-	ActionAdminDeleteRole     = 2 // 删除角色
-	ActionAdminUpdateRole     = 3 // 设置角色
-	ActionAdminSetRoleMenu    = 4 // 设置角色菜单
-	ActionAdminSetAdminRole   = 5 // 修改管理员角色
-	ActionAdminSetAdminStatus = 6 // 修改管理员状态
-	ActionAdminAddAdmin       = 7 // 添加管理员
-	ActionAdminAddMember      = 8 // 添加用户
+	ActionAdminAddRole               = 1  // 添加角色
+	ActionAdminDeleteRole            = 2  // 删除角色
+	ActionAdminUpdateRole            = 3  // 设置角色
+	ActionAdminSetRoleMenu           = 4  // 设置角色菜单
+	ActionAdminSetAdminRole          = 5  // 修改管理员角色
+	ActionAdminSetAdminStatus        = 6  // 修改管理员状态
+	ActionAdminAddAdmin              = 7  // 添加管理员
+	ActionAdminAddMember             = 8  // 添加用户
+	ActionAdminSetCodeLottoStatus    = 9  // 设置彩票当前状态
+	ActionAdminSetCodeLottoSortIndex = 10 // 设置彩票排序
+	ActionAdminSetCodeLottoIsShow    = 11 // 设置彩票显示
 )
 
 type CodeActionAdmin struct {

@@ -42,6 +42,14 @@ func GetLotto(lid int) (*CodeLotto, error) {
 	return &l, err
 }
 
+func SetCodeLottoInfo(lid int, filed string, val interface{}) error {
+	u := CodeLotto{}
+	updateSql := fmt.Sprintf("UPDATE %s SET %s=? WHERE lotto_id=?", u.TableName(), filed)
+	_, err := common.BaseDb.Exec(updateSql, val, lid)
+	return err
+
+}
+
 func PageFindCodeLottoList(pageParam common.PageParams) (*common.PageResult, *[]CodeLotto, error) {
 	c := CodeLotto{}
 	conditionSql := fmt.Sprintf(" FROM %s WHERE 1=1 ", c.TableName())
