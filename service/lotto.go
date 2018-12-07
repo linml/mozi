@@ -190,6 +190,58 @@ func CreateIssueCorn() {
 	}
 }
 
+// 	赔率生成
+func CheckAndCreateOdds() {
+	lottoInfoList, err := lotto.FindCodeLottoList(map[string]string{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	lottoMethodTmpList, err := lotto.FindLottoMethodTemplateList(map[string]string{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	lottoOddTmpList, err := lotto.FindLottoOddsTemplateList(map[string]string{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for i := range *lottoInfoList {
+		for j := range *lottoMethodTmpList {
+			if (*lottoInfoList)[i].LottoType != (*lottoMethodTmpList)[j].LottoType {
+				continue
+			}
+			for k := range *lottoOddTmpList {
+				if (*lottoMethodTmpList)[j].MethodCode == (*lottoOddTmpList)[k].MethodCode {
+					lo := lotto.LottoOdds{
+						LottoID:    (*lottoInfoList)[i].LottoID,
+						MethodCode: (*lottoMethodTmpList)[j].MethodCode,
+						PlayCode:   (*lottoOddTmpList)[k].PlayCode,
+						MethodName: (*lottoOddTmpList)[k].MethodName,
+						PlayName:   (*lottoOddTmpList)[k].PlayName,
+						BaseOdds:   (*lottoOddTmpList)[k].BaseOdds,
+						Odds:       (*lottoOddTmpList)[k].Odds,
+						OddsMin:    (*lottoOddTmpList)[k].OddsMin,
+						OddsMax:    (*lottoOddTmpList)[k].OddsMax,
+						BetMin:     (*lottoOddTmpList)[k].BetMin,
+						BetMax:     (*lottoOddTmpList)[k].BetMax,
+						Status:     (*lottoOddTmpList)[k].Status,
+						IsShow:     (*lottoOddTmpList)[k].IsShow,
+					}
+					err := lotto.CreateLottoOdds(lo)
+					if err != nil {
+						fmt.Println(err)
+					}
+				}
+			}
+		}
+	}
+}
+
+// 设置彩票状态
 func SetCodeLottoStatus(lid int, status int) error {
 	return lotto.SetCodeLottoInfo(lid, "status", status)
 }
