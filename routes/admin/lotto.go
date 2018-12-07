@@ -228,3 +228,52 @@ func FindCodeLottoTypeList(c *gin.Context) {
 		c.JSON(200, routes.ApiResult(common.CodeOK, "", data))
 	}
 }
+
+func PageFindLottoResultList(c *gin.Context) {
+	params := routes.ParamHelper{}
+	params.GetQuery(c, "draw")
+	params.GetQuery(c, "curr_page")
+	params.GetQuery(c, "page_row")
+
+	params.GetQuery(c, "lotto_id")
+	params.GetQuery(c, "issue")
+	params.GetQuery(c, "draw_number")
+	params.GetQuery(c, "status")
+	params.GetQuery(c, "game_type")
+	params.GetQuery(c, "status")
+	params.GetQuery(c, "issue_date")
+	params.GetQuery(c, "start_time_from")
+	params.GetQuery(c, "start_time_to")
+	params.GetQuery(c, "stop_time_from")
+	params.GetQuery(c, "stop_time_to")
+	params.GetQuery(c, "result_time_from")
+	params.GetQuery(c, "result_time_to")
+	params.GetQuery(c, "issue_date_from")
+	params.GetQuery(c, "issue_date_to")
+	params.GetQuery(c, "update_time_from")
+	params.GetQuery(c, "update_time_to")
+	params.GetQuery(c, "sort_type")
+
+	currPage := common.GetInt(params.Get("curr_page"))
+	pageRow := common.GetInt(params.Get("page_row"))
+
+	if currPage < 1 {
+		currPage = common.PageDefaultPage
+	}
+
+	if pageRow < 1 {
+		pageRow = common.PageDefaultRow
+	}
+	if params.Exist("lotto_id") == false {
+		c.JSON(200, routes.ApiResult(common.CodeFail, "彩票编号不能为空", map[string]string{}))
+		return
+	}
+	lottoID := common.GetInt(params.Get("lotto_id"))
+	pp := common.PageParams{CurrentPage: currPage, PageRow: pageRow, Params: params}
+	pr, _, err := lotto.PageFindLottoResultList(lottoID, pp)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", pr))
+	}
+}

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>开奖结果</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="/static/css/ionicons.min.css">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="/static/plugins/iCheck/all.css">
+    <!-- Bootstrap Color Picker -->
+    <link rel="stylesheet" href="/static/css/bootstrap-colorpicker.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="/static/select2/dist/css/select2.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/static/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="/static/css/skins/_all-skins.min.css">
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>名称</label>
+                <select id="query_lotto_id" class="form-control select2" style="width: 100%;">
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>期号</label>
+                <input type="text" class="form-control " id="issue" placeholder="">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>起始时间</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="start_at">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>截止时间</label>
+                <div class="input-group date">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="end_at">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="form-group">
+                <label>状态</label>
+                <select id="status" class="form-control select2" style="width: 100%;">
+                    <option value="">全部</option>
+                    <option value=1>已开奖</option>
+                    <option value=0>未开奖</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="form-group">
+                <label>操作</label>
+                <div class="row">
+                    <button onclick="query_result()" type="button" class="btn btn-primary  btn-sm" style="width: 100%;">查询</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>名称</label>
+                <select id="cancel_lotto_id" class="form-control select2" style="width: 100%;">
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>起始期号</label>
+                <input type="text" class="form-control " id="cancel_start_issue" placeholder="">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>截止期号</label>
+                <input type="text" class="form-control " id="cancel_end_issue" placeholder="">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>操作</label>
+                <div class="row">
+                    <button onclick="batch_cancel_issue()" type="button" class="btn btn-primary  btn-sm" >批量退单</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>名称</label>
+                <select id="calc_lotto_id" class="form-control select2" style="width: 100%;">
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>起始期号</label>
+                <input type="text" class="form-control " id="calc_start_issue" placeholder="">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>截止期号</label>
+                <input type="text" class="form-control " id="calc_end_issue" placeholder="">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label>操作</label>
+                <div class="row">
+                    <button onclick="batch_calc_issue()" type="button" class="btn btn-primary  btn-sm" >批量补奖</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <table id="result" class="table table-bordered table-hover  table_style table-striped">
+                <thead>
+                <tr>
+                    <th class="text-center">名称</th>
+                    <th class="text-center">期号</th>
+                    <th class="text-center">状态</th>
+                    <th class="text-center">起始时间</th>
+                    <th class="text-center">封单时间</th>
+                    <th class="text-center">开奖时间</th>
+                    <th class="text-center">实际开奖时间</th>
+                    <th class="text-center">开奖号码</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+                <tbody id="result_data" class="text-center"></tbody>
+            </table>
+        </div>
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
+
+<!-- ./wrapper -->
+
+
+<!-- jQuery 3 -->
+<script src="/static/js/jquery.min.js"></script>
+<!--<script src="/js/jquery-3.2.1.js"></script>-->
+<!-- Bootstrap 3.3.7 -->
+<script src="/static/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+<script src="/static/datatables.net/js/jquery.dataTables.js"></script>
+<script src="/static/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+<!-- Select2 -->
+<script src="/static/select2/dist/js/select2.full.min.js"></script>
+<!-- SlimScroll -->
+<script src="/static/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="/static/plugins/iCheck/icheck.min.js"></script>
+<!-- FastClick -->
+<script src="/static/fastclick/lib/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/js/adminlte.min.js"></script>
+<script src="/static/ckeditor/ckeditor.js"></script>
+
+<!-- page script -->
+<script type="text/javascript" src="/static/laydate/laydate.js"></script>
+<script type="text/javascript" src="/static/js/utils.js"></script>
+<script type="text/javascript" src="/static/js/sys_def.js"></script>
+<script type="text/javascript" src="/static/js/bootbox.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.select2').select2();
+        refresh_code_lotto();
+
+        laydate.render({
+            elem: '#start_at' //指定元素
+            ,type: 'datetime'
+            ,theme: '#393D49'
+            ,value: get_current_day_begin_time()
+        });
+        laydate.render({
+            elem: '#end_at' //指定元素
+            ,type: 'datetime'
+            ,theme: '#393D49'
+            ,value: get_current_day_end_time()
+        });
+        laydate.render({
+            elem: '#add_start_at' //指定元素
+            ,type: 'datetime'
+            ,theme: '#393D49'
+            ,value: get_current_day_begin_time()
+        });
+        laydate.render({
+            elem: '#add_end_at' //指定元素
+            ,type: 'datetime'
+            ,theme: '#393D49'
+            ,value: get_current_day_end_time()
+        });
+    })
+</script>
+<script>
+    var myTable;
+    myTable = $("#result").DataTable({
+        language: datatable_lang,  //提示信息
+        autoWidth: false,  //禁用自动调整列宽
+        bSort: false,
+        stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
+        // processing: true,  //隐藏加载提示,自行处理
+        serverSide: true,  //启用服务器端分页，即开启后端分页
+        searching: false,  //禁用原生搜索
+        lengthChange: false,
+        // destroy: true,
+        ordering: false,
+        order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
+        columns: [
+            {"data": null, "width": "120px"},
+            {"data": "issue", "width": "120px"},
+            {"data": "status", "width": "120px"},
+            {"data": "start_time", "width": "120px"},
+            {"data": "stop_time", "width": "120px"},
+            {"data": "result_time", "width": "120px"},
+            {"data": "update_time", "width": "120px"},
+            {"data": "draw_number", "width": "120px", "word-wrap":"break-all"},
+            {"data": null, "width": "200px"}
+        ],
+        columnDefs: [
+            {
+                "render": function(data, type, row, meta) {
+
+                    return $('#query_lotto_id').find("option:selected").text();
+                },
+                "targets": 0
+            },{
+                "render": function(data, type, row, meta) {
+                    if (row.status === 1){
+                        return '<span class="label label-success">已开奖</span>'
+                    }
+                    return '<span class="label label-default">未开奖</span>'
+                },
+                "targets": 2
+            }, {
+                "render": function(data, type, row, meta) {
+                    return format_time(row.start_time);
+                },
+                "targets": 3
+            },{
+                "render": function(data, type, row, meta) {
+                    return format_time(row.stop_time);
+                },
+                "targets": 4
+            },{
+                "render": function(data, type, row, meta) {
+                    return format_time(row.result_time);
+                },
+                "targets": 5
+            },{
+                "render": function(data, type, row, meta) {
+                    return format_time(row.update_time);
+                },
+                "targets": 6
+            },{
+                "render": function(data, type, row, meta) {
+                    return '<div class="btn-group"><button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_update_notice" data-id="'+row.id +'">更正</i></button>' +
+                            '<button onclick="del_notice('+ row.id+')" class="btn btn-danger btn-xs">退单</i></button>' +
+                            '<button onclick="del_notice('+ row.id+')" class="btn btn-danger btn-xs">补奖</i></button></div>';
+
+                },
+                "targets": 8
+            }
+        ],
+        ajax:function(data, callback, settings){
+            var param = {};
+            //其他的参数
+            param.page_row = data.length;//页面显示记录条数，在页面显示每页显示多少项的时候
+            // param.start = data.start;//开始的记录序号
+            param.curr_page = (data.start / data.length)+1;//当前页码
+            param.draw = data.draw+1;//当前页码
+            var status = $('#status').val();
+            var issue = $('#issue').val();
+
+            if (status !== ""){
+                param.status = status
+            }
+            if (issue !== ""){
+                param.issue = issue
+            }
+
+            if ($('#query_lotto_id').val() === "" || $('#query_lotto_id').val() === null){
+                return
+            }
+            param.lotto_id = $('#query_lotto_id').val();
+            param.start_time_from = format_time_1($('#start_at').val());
+            param.start_time_to = format_time_1($('#end_at').val());
+            param.sort_type = "DESC";
+
+            var url = "/pages/lotto/result/list";
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: param,    //传入已封装的参数
+                dataType: "json",
+                success: function(result) {
+                    //setTimeout仅为测试延迟效果
+                    setTimeout(function(){
+                        //异常判断与处理
+                        if (result.code !== SYS_DEF.CODE.SUCCESS) {
+                            bootbox.alert("查询失败。错误码："+result.code+"内容:"+result.msg);
+                            return;
+                        }
+                        $("#result_data tr").remove();
+
+                        //封装返回数据，这里仅演示了修改属性名
+                        var returnData = {};
+                        returnData.draw = result.data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                        returnData.recordsTotal = result.data.total_count;
+                        returnData.recordsFiltered = result.data.total_count;//后台不实现过滤功能，每次查询均视作全部结果
+                        if (result.data.record_data === null){
+                            returnData.data = []
+                        }else {
+                            returnData.data = result.data.record_data;
+                        }
+
+                        if (result.data.total_count > 0){
+                            callback(returnData);
+                        }else {
+                            TableDataIsNull('result_data');
+                        }
+
+                    },200);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    bootbox.alert("查询失败");
+                }
+            });
+        },
+    });
+
+    function query_result() {
+        myTable.ajax.reload();
+    }
+
+    function refresh_code_lotto() {
+        $.ajax({
+            type: "GET",
+            url: "/lotto/code_lotto/list",
+            data: {},
+            dataType: 'json',
+            success: function(rsp) {
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                    var data = [];
+                    for(var i=0;i<rsp.data.length;i++) {
+                        data.push({id: rsp.data[i].lotto_id, text: rsp.data[i].name});
+                    }
+
+
+                    var $select1 = $('#query_lotto_id');
+                    var $select2 = $('#cancel_lotto_id');
+                    var $select3 = $('#calc_lotto_id');
+                    var instance1;
+                    var instance2;
+                    var instance3;
+
+
+                    instance1 = $select1.data('select2');
+                    if(instance1){
+                        $select1.select2('destroy').empty();
+                    }
+                    $('#query_lotto_id').select2({
+                        dropdownAutoWidth: true,
+                        multiple: false,
+                        data: data
+                    });
+
+                    instance2 = $select2.data('select2');
+                    if(instance2){
+                        $select2.select2('destroy').empty();
+                    }
+                    $('#cancel_lotto_id').select2({
+                        dropdownAutoWidth: true,
+                        multiple: false,
+                        data: data
+                    });
+                    instance3 = $select3.data('select2');
+                    if(instance3){
+                        $select3.select2('destroy').empty();
+                    }
+                    $('#calc_lotto_id').select2({
+                        dropdownAutoWidth: true,
+                        multiple: false,
+                        data: data
+                    });
+
+                }
+            }
+        });
+    }
+
+</script>
+
+</body>
+</html>

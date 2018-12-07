@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 07/12/2018 12:26:58
+ Date: 07/12/2018 22:16:15
 */
 
 SET NAMES utf8mb4;
@@ -82,7 +82,7 @@ INSERT INTO `admin_menu` VALUES (131, 2, 3, 0, '滚动公告', 'fa fa-edit', 'pa
 INSERT INTO `admin_menu` VALUES (160, 1, 4, 0, '账户列表', 'fa fa-user', 'html/member/list', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (161, 2, 4, 0, '登入记录', 'fa fa-list-alt', 'html/member/record_login', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (162, 3, 4, 0, '账号银行卡', 'fa fa-list-alt', 'html/member/user_bank', 'iframe-tab', 1);
-INSERT INTO `admin_menu` VALUES (200, 1, 5, 0, '彩票开奖', 'fa fa-life-bouy', 'pages/lotto/result.html', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (200, 1, 5, 0, '彩票开奖', 'fa fa-life-bouy', 'html/lotto/result_lotto', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (221, 1, 5, 0, '彩票订单', 'fa fa-life-bouy', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (231, 2, 5, 0, '赔率设置', 'fa fa-toggle-on', 'game/lottoOdds', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (232, 3, 5, 0, '实时操盘', 'fa fa-hand-pointer-o', '', 'iframe-tab', 1);
@@ -1875,17 +1875,22 @@ COMMIT;
 DROP TABLE IF EXISTS `lotto_result`;
 CREATE TABLE `lotto_result` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `lotto_id` int(11) NOT NULL DEFAULT '0',
-  `issue` varchar(32) NOT NULL DEFAULT '',
-  `draw_number` varchar(128) NOT NULL DEFAULT '',
+  `lotto_id` int(11) NOT NULL DEFAULT '0' COMMENT '彩票编号',
+  `issue` varchar(32) NOT NULL DEFAULT '' COMMENT '期号',
+  `draw_number` varchar(128) NOT NULL DEFAULT '' COMMENT '开奖号码',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未开奖, 1:已开奖, 2:停止购买',
   `start_time` varchar(14) NOT NULL DEFAULT '' COMMENT '开售时间',
-  `close_time` varchar(14) NOT NULL DEFAULT '' COMMENT '封单时间',
-  `end_time` varchar(14) NOT NULL DEFAULT '' COMMENT '开奖时间',
-  `draw_time` varchar(14) NOT NULL DEFAULT '' COMMENT '实际开奖时间',
+  `stop_time` varchar(14) NOT NULL DEFAULT '' COMMENT '封单时间',
+  `result_time` varchar(14) NOT NULL DEFAULT '' COMMENT '开奖时间',
+  `issue_date` varchar(8) NOT NULL COMMENT '开奖日期',
+  `update_time` varchar(14) NOT NULL DEFAULT '' COMMENT '实际开奖时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `lotto_id` (`lotto_id`,`issue`),
-  KEY `lotto_id_2` (`lotto_id`,`issue`,`status`)
+  KEY `status` (`status`),
+  KEY `issue` (`issue`),
+  KEY `issue_start` (`issue`,`start_time`) USING BTREE,
+  KEY `issue_stop` (`issue`,`stop_time`) USING BTREE,
+  KEY `issue_result` (`issue`,`result_time`) USING BTREE,
+  KEY `issue_date_issue` (`issue_date`,`issue`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='彩票开奖结果';
 
 -- ----------------------------
@@ -2186,5 +2191,38 @@ CREATE TABLE `users` (
 BEGIN;
 INSERT INTO `users` VALUES (1, 'admin', '', 1);
 COMMIT;
+
+-- ----------------------------
+-- Procedure structure for CreateLottoIssueTable
+-- ----------------------------
+DROP PROCEDURE IF EXISTS `CreateLottoIssueTable`;
+delimiter ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateLottoIssueTable`(lottoID INT)
+BEGIN
+set @sql_create_table = concat("CREATE TABLE IF NOT EXISTS lotto_result_", lottoID,
+"(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `lotto_id` int(11) NOT NULL DEFAULT '0' COMMENT '彩票编号',
+  `issue` varchar(32) NOT NULL DEFAULT '' COMMENT '期号',
+  `draw_number` varchar(128) NOT NULL DEFAULT '' COMMENT '开奖号码',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未开奖, 1:已开奖, 2:停止购买',
+  `start_time` varchar(14) NOT NULL DEFAULT '' COMMENT '开售时间',
+  `stop_time` varchar(14) NOT NULL DEFAULT '' COMMENT '封单时间',
+  `result_time` varchar(14) NOT NULL DEFAULT '' COMMENT '开奖时间',
+  `issue_date` varchar(8) NOT NULL COMMENT '开奖日期',
+  `update_time` varchar(14) NOT NULL DEFAULT '' COMMENT '实际开奖时间',
+  PRIMARY KEY (`id`),
+	UNIQUE KEY `issue` (`issue`) USING BTREE,
+  KEY `status` (`status`),
+  KEY `issue_date_issue` (`issue_date`,`issue`) USING BTREE,
+  KEY `issue_start` (`issue`,`start_time`) USING BTREE,
+  KEY `issue_stop` (`issue`,`stop_time`) USING BTREE,
+  KEY `issue_result` (`issue`,`result_time`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='彩票开奖结果';");
+PREPARE sql_create_table FROM @sql_create_table;
+EXECUTE sql_create_table;
+END;
+;;
+delimiter ;
 
 SET FOREIGN_KEY_CHECKS = 1;

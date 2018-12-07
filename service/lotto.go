@@ -42,11 +42,11 @@ func Bet(o *lotto.Order) error {
 		return errors.New("该彩种暂未开放")
 	}
 
-	lr, err := models.GetLottoResult(o.LottoID, o.Issue)
+	lr, err := lotto.GetLottoResult(o.LottoID, o.Issue)
 	if err != nil {
 		return errors.New("期号异常")
 	}
-	if lr.CloseTime < common.GetTimeNowString() {
+	if lr.StopTime < common.GetTimeNowString() {
 		return errors.New("当期已停止投注,请投注下一期")
 	}
 
@@ -157,7 +157,7 @@ func Bet(o *lotto.Order) error {
 // 期号生成
 func CreateIssueCorn() {
 
-	facList, err := models.FindIssueFactory(map[string]string{})
+	facList, err := lotto.FindIssueFactory(map[string]string{})
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -170,6 +170,11 @@ func CreateIssueCorn() {
 			continue
 		}
 
+		_, err := common.BaseDb.Exec("CALL CreateLottoIssueTable(?)", f.LottoID)
+		if err != nil {
+			fmt.Println(err)
+		}
+
 		day := time.Now()
 
 		for i := 0; i < 3; i++ {
@@ -179,7 +184,7 @@ func CreateIssueCorn() {
 				fmt.Println(err)
 				continue
 			}
-			models.CreateIssueInfo(issueInfoList)
+			lotto.CreateIssueInfo(f.LottoID, issueInfoList)
 			day = day.Add(d)
 		}
 	}

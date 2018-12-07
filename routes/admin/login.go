@@ -107,3 +107,7 @@ func TmplRecordAdminAction(c *gin.Context) {
 func TmplLottoCodeLotto(c *gin.Context) {
 	c.HTML(http.StatusOK, "code_lotto.html", gin.H{})
 }
+
+func TmplLottoResultotto(c *gin.Context) {
+	c.HTML(http.StatusOK, "lotto_result.html", gin.H{})
+}
