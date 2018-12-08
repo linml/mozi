@@ -108,3 +108,47 @@ func PageFindLottoOddsList(pageParam common.PageParams) (*common.PageResult, *[]
 	pg.PageCount = len(data)
 	return &pg, &data, err
 }
+
+func FindLottoOddsList(params map[string]string) (*[]LottoOdds, error) {
+	c := LottoOdds{}
+	querySql := fmt.Sprintf("SELECT %s FROM %s WHERE 1=1 ", strings.Join(c.Field(), ","), c.TableName())
+	sqlWhere, args := "", []interface{}{}
+	if v, ok := params["lotto_id"]; ok {
+		sqlWhere += " AND lotto_id = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["method_code"]; ok {
+		sqlWhere += " AND method_code = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["play_code"]; ok {
+		sqlWhere += " AND play_code = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["status"]; ok {
+		sqlWhere += " AND status = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["is_show"]; ok {
+		sqlWhere += " AND is_show = ?"
+		args = append(args, v)
+	}
+
+	var data []LottoOdds
+	var err error
+
+	querySql += sqlWhere
+	rows, err := common.BaseDb.Query(querySql, args...)
+	if err != nil {
+		return &data, err
+	}
+	for rows.Next() {
+		d := LottoOdds{}
+		err = rows.Scan(d.FieldItem()...)
+		if err != nil {
+			return &data, err
+		}
+		data = append(data, d)
+	}
+	return &data, err
+}

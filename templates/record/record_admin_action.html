@@ -203,15 +203,7 @@
             ,theme: '#393D49'
             ,value: get_current_day_end_time()
         });
-        // $('#use_action_module').on('ifChecked ifUnchecked', function(event){
-        //     if (event.type === 'ifChecked'){
-        //         $("#action_module").prop("disabled", false);
-        //     }else{
-        //         $("#action_module").prop("disabled", true);
-        //         $("#action_id").prop("disabled", true);
-        //         $('#use_action').iCheck('uncheck')
-        //     }
-        // });
+
         $("#action_module").on("select2:select",function(){
             var module_id = $(this).val();
             var data = [{id:-1,text:"全部"}];
