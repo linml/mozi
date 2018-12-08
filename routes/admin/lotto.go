@@ -501,7 +501,7 @@ func SetLottOddsInfo(c *gin.Context) {
 		}
 	}
 	if params.Exist("is_show") == true {
-		isShow := common.GetInt(params.Get("status"))
+		isShow := common.GetInt(params.Get("is_show"))
 		err = service.SetLottoOddsIsShow(lid, mCode, pCode, isShow)
 		if err != nil {
 			content += fmt.Sprintf("设置显示失败:%s", err)
