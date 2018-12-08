@@ -17,6 +17,7 @@ const (
 	ActionAdminSetCodeLottoStatus    = 9  // 设置彩票当前状态
 	ActionAdminSetCodeLottoSortIndex = 10 // 设置彩票排序
 	ActionAdminSetCodeLottoIsShow    = 11 // 设置彩票显示
+	ActionAdminSetLottoOddsInfo      = 12 // 设置彩票赔率信息
 )
 
 type CodeActionAdmin struct {

@@ -3,6 +3,7 @@ package admin
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/shopspring/decimal"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
 	"github.com/xiuos/mozi/models/lotto"
@@ -338,4 +339,195 @@ func PageFindLottOddsList(c *gin.Context) {
 	} else {
 		c.JSON(200, routes.ApiResult(common.CodeOK, "", pr))
 	}
+}
+
+func GetLottOdds(c *gin.Context) {
+	params := routes.ParamHelper{}
+
+	params.GetQueryNotEmpty(c, "lotto_id")
+	params.GetQueryNotEmpty(c, "method_code")
+	params.GetQueryNotEmpty(c, "play_code")
+
+	if params.Exist("lotto_id") == false {
+		c.JSON(200, routes.ApiResult(common.CodeFail, "彩票编号不能为空", map[string]string{}))
+		return
+	}
+	if params.Exist("method_code") == false {
+		c.JSON(200, routes.ApiResult(common.CodeFail, "玩法不能为空", map[string]string{}))
+		return
+	}
+	if params.Exist("play_code") == false {
+		c.JSON(200, routes.ApiResult(common.CodeFail, "玩法项不能为空", map[string]string{}))
+		return
+	}
+	lid := common.GetInt(params.Get("lotto_id"))
+	mCode := params.Get("method_code")
+	pCode := params.Get("play_code")
+
+	data, err := lotto.GetOdds(lid, mCode, pCode)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", data))
+	}
+}
+
+func SetLottOddsInfo(c *gin.Context) {
+	uid, err := routes.GetAdminLoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+		return
+	}
+	params := routes.ParamHelper{}
+
+	params.GetPostFormNotEmpty(c, "lotto_id")
+	params.GetPostFormNotEmpty(c, "method_code")
+	params.GetPostFormNotEmpty(c, "play_code")
+
+	params.GetPostForm(c, "odds")
+	params.GetPostForm(c, "odds_min")
+	params.GetPostForm(c, "odds_max")
+	params.GetPostForm(c, "bet_min")
+	params.GetPostForm(c, "bet_max")
+	params.GetPostForm(c, "status")
+	params.GetPostForm(c, "is_show")
+
+	if params.Exist("lotto_id") == false {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "彩票编号不能为空"))
+		return
+	}
+	if params.Exist("method_code") == false {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "玩法不能为空"))
+		return
+	}
+	if params.Exist("play_code") == false {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "玩法项不能为空"))
+		return
+	}
+
+	lid := common.GetInt(params.Get("lotto_id"))
+	mCode := params.Get("method_code")
+	pCode := params.Get("play_code")
+	beforeInfo, err := lotto.GetOdds(lid, mCode, pCode)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("找不到该玩法%s", err)))
+		return
+	}
+
+	lottoInfo, err := lotto.GetLotto(lid)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("找不到该彩票%s", err)))
+		return
+	}
+	content := fmt.Sprintf("修改赔率信息:彩票:%s;玩法:%s;玩法项:%s;", lottoInfo.Name, beforeInfo.MethodName, beforeInfo.PlayName)
+
+	if params.Exist("odds") == true {
+		odds, err := decimal.NewFromString(params.Get("odds"))
+		if err != nil {
+			c.JSON(200, routes.ApiShowResult(common.CodeFail, "请填入规范数字"))
+			return
+		}
+		err = service.SetLottoOdds(lid, mCode, pCode, odds)
+		if err != nil {
+			content += fmt.Sprintf("设置赔率失败:%s", err)
+		} else {
+			content += fmt.Sprintf("设置赔率成功:原赔率%s,现赔率:%s", beforeInfo.Odds, odds)
+		}
+	}
+
+	if params.Exist("odds_min") == true {
+		oddsMin, err := decimal.NewFromString(params.Get("odds_min"))
+		if err != nil {
+			c.JSON(200, routes.ApiShowResult(common.CodeFail, "请填入规范数字"))
+			return
+		}
+		err = service.SetLottoOddsMin(lid, mCode, pCode, oddsMin)
+		if err != nil {
+			content += fmt.Sprintf("设置最小赔率失败:%s", err)
+		} else {
+			content += fmt.Sprintf("设置最小赔率成功:原最小赔率%s,现最小赔率:%s", beforeInfo.OddsMin, oddsMin)
+		}
+	}
+
+	if params.Exist("odds_max") == true {
+		oddsMax, err := decimal.NewFromString(params.Get("odds_max"))
+		if err != nil {
+			c.JSON(200, routes.ApiShowResult(common.CodeFail, "请填入规范数字"))
+			return
+		}
+		err = service.SetLottoOddsMax(lid, mCode, pCode, oddsMax)
+		if err != nil {
+			content += fmt.Sprintf("设置最大赔率失败:%s", err)
+		} else {
+			content += fmt.Sprintf("设置最大赔率成功:原最大赔率%s,现最大赔率:%s", beforeInfo.OddsMin, oddsMax)
+		}
+	}
+
+	if params.Exist("bet_min") == true {
+		betMin, err := decimal.NewFromString(params.Get("bet_min"))
+		if err != nil {
+			c.JSON(200, routes.ApiShowResult(common.CodeFail, "请填入规范数字"))
+			return
+		}
+		err = service.SetLottoOddsBetMin(lid, mCode, pCode, betMin)
+		if err != nil {
+			content += fmt.Sprintf("设置最小额度失败:%s", err)
+		} else {
+			content += fmt.Sprintf("设置最小额度成功:原最小额度%s,现最小额度:%s", beforeInfo.BetMin, betMin)
+		}
+	}
+
+	if params.Exist("bet_max") == true {
+		betMax, err := decimal.NewFromString(params.Get("bet_max"))
+		if err != nil {
+			c.JSON(200, routes.ApiShowResult(common.CodeFail, "请填入规范数字"))
+			return
+		}
+		err = service.SetLottoOddsBetMax(lid, mCode, pCode, betMax)
+		if err != nil {
+			content += fmt.Sprintf("设置最大额度失败:%s", err)
+		} else {
+			content += fmt.Sprintf("设置最大额度成功:原最大额度%s,现最大额度:%s", beforeInfo.BetMax, betMax)
+		}
+	}
+
+	if params.Exist("status") == true {
+		status := common.GetInt(params.Get("status"))
+		err = service.SetLottoOddsStatus(lid, mCode, pCode, status)
+		if err != nil {
+			content += fmt.Sprintf("设置状态:%s", err)
+		} else {
+			content += fmt.Sprintf("设置状态成功:原状态%d,现状态:%d", beforeInfo.Status, status)
+		}
+	}
+	if params.Exist("is_show") == true {
+		isShow := common.GetInt(params.Get("status"))
+		err = service.SetLottoOddsIsShow(lid, mCode, pCode, isShow)
+		if err != nil {
+			content += fmt.Sprintf("设置显示失败:%s", err)
+		} else {
+			content += fmt.Sprintf("设置显示成功:原显示%d,现显示:%d", beforeInfo.IsShow, isShow)
+		}
+	}
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+	} else {
+		c.JSON(200, routes.ApiShowResult(common.CodeOK, ""))
+	}
+
+	au, _ := models.GetAdminUserByID(uid)
+	r := models.RecordAdminAction{
+		ActionModule: models.ActionAdminModuleSystem,
+		ActionID:     models.ActionAdminSetLottoOddsInfo,
+		Content:      content,
+		IP:           c.ClientIP(),
+		RecordAt:     common.GetTimeNowString(),
+		Success:      common.CodeOK,
+		Message:      "操作成功",
+		OperatorID:   uid,
+		OperatorName: au.Name,
+		OperatorType: models.OperatorTypeAdminSelf,
+	}
+	models.LogRecordAdminAction(&r)
+
 }

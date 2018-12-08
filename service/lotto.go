@@ -246,10 +246,47 @@ func SetCodeLottoStatus(lid int, status int) error {
 	return lotto.SetCodeLottoInfo(lid, "status", status)
 }
 
+// 设置彩票排序
 func SetCodeLottoSortIndex(lid int, sortIndex int) error {
 	return lotto.SetCodeLottoInfo(lid, "sort_index", sortIndex)
 }
 
+// 设置彩票是否显示
 func SetCodeLottoIsShow(lid int, isShow int) error {
 	return lotto.SetCodeLottoInfo(lid, "is_show", isShow)
+}
+
+// 设置彩票赔率赔率
+func SetLottoOdds(lid int, mCode string, pCode string, odds decimal.Decimal) error {
+	return lotto.SetLottoOddsInfo(lid, mCode, pCode, "odds", odds)
+}
+
+// 设置彩票赔率最小赔率
+func SetLottoOddsMin(lid int, mCode string, pCode string, oddsMin decimal.Decimal) error {
+	return lotto.SetLottoOddsInfo(lid, mCode, pCode, "odds_min", oddsMin)
+}
+
+// 设置彩票赔率最大赔率
+func SetLottoOddsMax(lid int, mCode string, pCode string, oddsMax decimal.Decimal) error {
+	return lotto.SetLottoOddsInfo(lid, mCode, pCode, "odds_max", oddsMax)
+}
+
+// 设置彩票赔率最小额度
+func SetLottoOddsBetMin(lid int, mCode string, pCode string, betMin decimal.Decimal) error {
+	return lotto.SetLottoOddsInfo(lid, mCode, pCode, "bet_min", betMin)
+}
+
+// 设置彩票赔率最大额度
+func SetLottoOddsBetMax(lid int, mCode string, pCode string, betMax decimal.Decimal) error {
+	return lotto.SetLottoOddsInfo(lid, mCode, pCode, "bet_max", betMax)
+}
+
+// 设置彩票赔率玩法项状态
+func SetLottoOddsStatus(lid int, mCode string, pCode string, status int) error {
+	return lotto.SetLottoOddsInfo(lid, mCode, pCode, "status", status)
+}
+
+// 设置彩票赔率玩法项是否显示
+func SetLottoOddsIsShow(lid int, mCode string, pCode string, isShow int) error {
+	return lotto.SetLottoOddsInfo(lid, mCode, pCode, "is_show", isShow)
 }

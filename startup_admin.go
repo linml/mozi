@@ -74,6 +74,10 @@ func main() {
 		appAuthV1.GET("/lotto/method_template/list", admin.FindLottoMethodTemplateList)
 		appAuthV1.GET("/lotto/odds/list", admin.FindLottOddsList)
 		appAuthV1.GET("/pages/lotto/odds/list", admin.PageFindLottOddsList)
+		appAuthV1.GET("/lotto/odds", admin.GetLottOdds)
+
+		appAuthV1.POST("/lotto/odds/set", admin.SetLottOddsInfo)
+
 		appAuthV1.GET("/member/infos", admin.GetMemberInfos)
 		appAuthV1.POST("/member/add", admin.AddMember)
 		appAuthV1.GET("/member/profile", admin.GetMemberProfile)

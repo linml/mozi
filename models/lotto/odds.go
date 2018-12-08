@@ -152,3 +152,11 @@ func FindLottoOddsList(params map[string]string) (*[]LottoOdds, error) {
 	}
 	return &data, err
 }
+
+func SetLottoOddsInfo(lid int, mCode string, pCode string, filed string, val interface{}) error {
+	u := LottoOdds{}
+	updateSql := fmt.Sprintf("UPDATE %s SET %s=? WHERE lotto_id=? AND method_code=? AND play_code=?", u.TableName(), filed)
+	_, err := common.BaseDb.Exec(updateSql, val, lid, mCode, pCode)
+	return err
+
+}

@@ -26,6 +26,134 @@
 
 </head>
 
+<div class="modal fade" id="set_odds_info">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">修改赔率信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="row">
+                        <input type="hidden" id="u_lotto_id" name="extra" value="">
+                        <input type="hidden" id="u_method_code" name="extra" value="">
+                        <input type="hidden" id="u_play_code" name="extra" value="">
+                        <div class="col-sm-3">
+                            <label>彩票</label>
+                            <input type="text" id="u_lotto_name" class="form-control" disabled>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>玩法</label>
+                            <input type="text" id="u_method_code_name" class="form-control" disabled>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>玩法项</label>
+                            <input type="text" id="u_play_code_name" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>赔率</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="u_odds">
+                                    <span class="input-group-btn">
+                                  <button type="button" onclick="save_odds()" class="btn btn-primary btn-flat">保存</button>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>最低赔率</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="u_odds_min">
+                                    <span class="input-group-btn">
+                                  <button type="button" onclick="save_odds_min()" class="btn btn-primary btn-flat">保存</button>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>最高赔率</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="u_odds_max">
+                                    <span class="input-group-btn">
+                                  <button type="button" onclick="save_odds_max()" class="btn btn-primary btn-flat">保存</button>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>最低额度</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="u_bet_min">
+                                    <span class="input-group-btn">
+                                  <button type="button" onclick="save_bet_min()" class="btn btn-primary btn-flat">保存</button>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>最高额度</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="u_bet_max">
+                                    <span class="input-group-btn">
+                                  <button type="button" onclick="save_bet_max()" class="btn btn-primary btn-flat">保存</button>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label>状态</label>
+                            <div class="input-group">
+                                <select id="u_status" class="form-control select2" style="width: 100%;">
+                                    <option value=0>禁用</option>
+                                    <option value=1>启用</option>
+                                </select>
+                                <span class="input-group-btn">
+                                  <button type="button" onclick="save_status()" class="btn btn-primary btn-flat">保存</button>
+                            </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label>显示</label>
+                            <div class="input-group">
+                                <select id="u_is_show" class="form-control select2" style="width: 100%;">
+                                    <option value=0>否</option>
+                                    <option value=1>是</option>
+                                </select>
+                                <span class="input-group-btn">
+                                  <button type="button" onclick="save_is_show()" class="btn btn-primary btn-flat">保存</button>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
 <body class="hold-transition skin-blue sidebar-mini">
 
 <!-- Content Header (Page header) -->
@@ -179,6 +307,55 @@
                 data: data
             });
         });
+
+        $('#set_odds_info').on('show.bs.modal', function (event) {
+
+            var modal_data = $(event.relatedTarget); // Button that triggered the modal
+            var lotto_id = modal_data.data('lotto_id');
+            var method_code = modal_data.data('method_code');
+            var play_code = modal_data.data('play_code');
+            var param = {};
+            param.lotto_id = lotto_id;
+            param.method_code = method_code;
+            param.play_code = play_code;
+
+            $.ajax({
+                type: "GET",
+                url: "/lotto/odds",
+                data: param,
+                dataType: 'json',
+                success: function(rsp) {
+                    if(rsp.code === SYS_DEF.CODE.SUCCESS){
+
+                        $('#u_lotto_id').val(rsp.data.lotto_id);
+                        $('#u_method_code').val(rsp.data.method_code);
+                        $('#u_play_code').val(rsp.data.play_code);
+                        $('#u_method_code_name').val(rsp.data.method_name);
+                        $('#u_play_code_name').val(rsp.data.play_name);
+                        $('#u_odds').val(rsp.data.odds);
+                        $('#u_odds_min').val(rsp.data.odds_min);
+                        $('#u_odds_max').val(rsp.data.odds_max);
+                        $('#u_bet_min').val(rsp.data.bet_min);
+                        $('#u_bet_max').val(rsp.data.bet_max);
+
+                        var lotto_name = "";
+
+                        for(var i=0;i<CODE_LOTTO_LIST.length;i++) {
+                            if (CODE_LOTTO_LIST[i].lotto_id === rsp.data.lotto_id){
+                                lotto_name = CODE_LOTTO_LIST[i].name;
+                            }
+                        }
+                        $('#u_lotto_name').val(lotto_name);
+                        $('#u_status').val(rsp.data.status).trigger("change");
+                        $('#u_status').change();
+                        $('#u_is_show').val(rsp.data.is_show).trigger("change");
+                        $('#u_is_show').change();
+                    }
+                }
+            });
+
+        });
+
     })
 </script>
 <script>
@@ -293,7 +470,7 @@
                 "targets": 10
             }, {
                 "render": function(data, type, row, meta) {
-                    var html_str = '<div class="btn-group"><button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#set_admin_role" data-cur_status="'+row.status +'" data-cur_is_show="'+row.is_show +'" data-cur_play_code="'+row.play_code +'" data-lotto_id="'+row.lotto_id +'" data-method_code="'+row.method_code +'">编辑</i></button></div>';
+                    var html_str = '<div class="btn-group"><button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#set_odds_info" data-play_code="'+row.play_code +'" data-lotto_id="'+row.lotto_id +'" data-method_code="'+row.method_code +'">编辑</i></button></div>';
                     return html_str
                 },
                 "targets": 11
@@ -432,6 +609,287 @@
 
     function query_odds() {
         myTable.ajax.reload();
+    }
+
+    function save_odds() {
+        var lotto_id = $('#u_lotto_id').val();
+        var method_code = $('#u_method_code').val();
+        var play_code = $('#u_play_code').val();
+        var param = {};
+        param.lotto_id = lotto_id;
+        param.method_code = method_code;
+        param.play_code = play_code;
+
+        param.odds = $('#u_odds').val();
+
+
+        if (lotto_id <= ""){
+            bootbox.alert("彩票编号不能为空");
+            return;
+        }
+        if (method_code <= ""){
+            bootbox.alert("玩法不能为空");
+            return;
+        }
+        if (play_code <= ""){
+            bootbox.alert("玩法项不能为空");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/lotto/odds/set",
+            data: param,
+            dataType: 'json',
+            success: function(rsp) {
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                    bootbox.alert(rsp.msg || "操作成功")
+                }else {
+                    bootbox.alert(rsp.msg||"操作失败")
+                }
+            }
+        });
+
+    }
+    function save_odds_min() {
+        var lotto_id = $('#u_lotto_id').val();
+        var method_code = $('#u_method_code').val();
+        var play_code = $('#u_play_code').val();
+        var param = {};
+        param.lotto_id = lotto_id;
+        param.method_code = method_code;
+        param.play_code = play_code;
+
+        param.odds_min = $('#u_odds_min').val();
+
+
+        if (lotto_id <= ""){
+            bootbox.alert("彩票编号不能为空");
+            return;
+        }
+        if (method_code <= ""){
+            bootbox.alert("玩法不能为空");
+            return;
+        }
+        if (play_code <= ""){
+            bootbox.alert("玩法项不能为空");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/lotto/odds/set",
+            data: param,
+            dataType: 'json',
+            success: function(rsp) {
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                    bootbox.alert(rsp.msg || "操作成功")
+                }else {
+                    bootbox.alert(rsp.msg||"操作失败")
+                }
+            }
+        });
+
+    }
+    function save_odds_max() {
+        var lotto_id = $('#u_lotto_id').val();
+        var method_code = $('#u_method_code').val();
+        var play_code = $('#u_play_code').val();
+        var param = {};
+        param.lotto_id = lotto_id;
+        param.method_code = method_code;
+        param.play_code = play_code;
+
+        param.odds_max = $('#u_odds_max').val();
+
+
+        if (lotto_id <= ""){
+            bootbox.alert("彩票编号不能为空");
+            return;
+        }
+        if (method_code <= ""){
+            bootbox.alert("玩法不能为空");
+            return;
+        }
+        if (play_code <= ""){
+            bootbox.alert("玩法项不能为空");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/lotto/odds/set",
+            data: param,
+            dataType: 'json',
+            success: function(rsp) {
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                    bootbox.alert(rsp.msg || "操作成功")
+                }else {
+                    bootbox.alert(rsp.msg||"操作失败")
+                }
+            }
+        });
+
+    }
+    function save_bet_min() {
+        var lotto_id = $('#u_lotto_id').val();
+        var method_code = $('#u_method_code').val();
+        var play_code = $('#u_play_code').val();
+        var param = {};
+        param.lotto_id = lotto_id;
+        param.method_code = method_code;
+        param.play_code = play_code;
+
+        param.bet_min = $('#u_bet_min').val();
+
+
+        if (lotto_id <= ""){
+            bootbox.alert("彩票编号不能为空");
+            return;
+        }
+        if (method_code <= ""){
+            bootbox.alert("玩法不能为空");
+            return;
+        }
+        if (play_code <= ""){
+            bootbox.alert("玩法项不能为空");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/lotto/odds/set",
+            data: param,
+            dataType: 'json',
+            success: function(rsp) {
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                    bootbox.alert(rsp.msg || "操作成功")
+                }else {
+                    bootbox.alert(rsp.msg||"操作失败")
+                }
+            }
+        });
+
+    }
+    function save_bet_max() {
+        var lotto_id = $('#u_lotto_id').val();
+        var method_code = $('#u_method_code').val();
+        var play_code = $('#u_play_code').val();
+        var param = {};
+        param.lotto_id = lotto_id;
+        param.method_code = method_code;
+        param.play_code = play_code;
+
+        param.bet_max = $('#u_bet_max').val();
+
+
+        if (lotto_id <= ""){
+            bootbox.alert("彩票编号不能为空");
+            return;
+        }
+        if (method_code <= ""){
+            bootbox.alert("玩法不能为空");
+            return;
+        }
+        if (play_code <= ""){
+            bootbox.alert("玩法项不能为空");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/lotto/odds/set",
+            data: param,
+            dataType: 'json',
+            success: function(rsp) {
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                    bootbox.alert(rsp.msg || "操作成功")
+                }else {
+                    bootbox.alert(rsp.msg||"操作失败")
+                }
+            }
+        });
+
+    }
+    function save_status() {
+        var lotto_id = $('#u_lotto_id').val();
+        var method_code = $('#u_method_code').val();
+        var play_code = $('#u_play_code').val();
+        var param = {};
+        param.lotto_id = lotto_id;
+        param.method_code = method_code;
+        param.play_code = play_code;
+
+        param.status = $('#u_status').val();
+
+
+        if (lotto_id <= ""){
+            bootbox.alert("彩票编号不能为空");
+            return;
+        }
+        if (method_code <= ""){
+            bootbox.alert("玩法不能为空");
+            return;
+        }
+        if (play_code <= ""){
+            bootbox.alert("玩法项不能为空");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/lotto/odds/set",
+            data: param,
+            dataType: 'json',
+            success: function(rsp) {
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                    bootbox.alert(rsp.msg || "操作成功")
+                }else {
+                    bootbox.alert(rsp.msg||"操作失败")
+                }
+            }
+        });
+
+    }
+    function save_is_show() {
+        var lotto_id = $('#u_lotto_id').val();
+        var method_code = $('#u_method_code').val();
+        var play_code = $('#u_play_code').val();
+        var param = {};
+        param.lotto_id = lotto_id;
+        param.method_code = method_code;
+        param.play_code = play_code;
+
+        param.is_show = $('#u_is_show').val();
+
+
+        if (lotto_id <= ""){
+            bootbox.alert("彩票编号不能为空");
+            return;
+        }
+        if (method_code <= ""){
+            bootbox.alert("玩法不能为空");
+            return;
+        }
+        if (play_code <= ""){
+            bootbox.alert("玩法项不能为空");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/lotto/odds/set",
+            data: param,
+            dataType: 'json',
+            success: function(rsp) {
+                if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                    bootbox.alert(rsp.msg || "操作成功")
+                }else {
+                    bootbox.alert(rsp.msg||"操作失败")
+                }
+            }
+        });
+
     }
 
 </script>
