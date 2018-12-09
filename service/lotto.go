@@ -34,7 +34,6 @@ func Bet(o *lotto.Order) error {
 
 	li, err := lotto.GetLotto(o.LottoID)
 	if err != nil {
-		fmt.Println(err)
 		return errors.New("彩票编号错误")
 	}
 
@@ -63,9 +62,11 @@ func Bet(o *lotto.Order) error {
 		return err
 	}
 
-	pInfo, err := models.GetPlayInfo(o.LottoID, o.MethodCode, o.Content)
+	pInfo, err := models.GetPlayInfo(o.LottoID, o.MethodCode, o.PlayCode)
 	if err != nil {
-		return err
+		fmt.Println(err)
+		return errors.New("找不到该玩法")
+
 	}
 	if pInfo.Status != 1 {
 		return errors.New("该玩法已停售")
@@ -101,10 +102,11 @@ func Bet(o *lotto.Order) error {
 		return errors.New(fmt.Sprintf("单注最低金额不能低于%s", minS))
 	}
 
+	o.LottoType = li.LottoType
 	o.Odds = pInfo.Odds
-	o.Count = betCount
-	o.Username = u.Name
-	o.OrderNo = common.GetTimeNowString() + common.RandString(6)
+	o.BetCount = betCount
+	o.Name = u.Name
+	o.OrderID = common.GetTimeNowString() + common.RandString(6)
 	o.GameKind = li.GameKind
 	o.GameType = li.GameType
 	o.BetTime = common.GetTimeNowString()
@@ -136,7 +138,7 @@ func Bet(o *lotto.Order) error {
 		return errors.New(fmt.Sprintf("下单异常.%s", err))
 	}
 
-	err = models.ChangeMoneyTx(tx, o.UserID, o.Amount.Abs())
+	err = models.ChangeMoneyTx(tx, o.UserID, o.Amount.Abs().Neg())
 	if err != nil {
 		tx.Rollback()
 		return errors.New(fmt.Sprintf("扣款异常.%s", err))

@@ -171,3 +171,10 @@ func PageFindLottoResultList(lottoID int, pageParam common.PageParams) (*common.
 	pg.PageCount = len(data)
 	return &pg, &data, err
 }
+
+func GetCurIssue(lid int) (*LottoResult, error) {
+	l := LottoResult{}
+	querySql := fmt.Sprintf("SELECT %s FROM %s WHERE result_time > ? ORDER BY issue ASC LIMIT 1", strings.Join(l.Field(), ","), l.TableName(lid))
+	err := common.BaseDb.QueryRow(querySql, common.GetTimeNowString()).Scan(l.FieldItem()...)
+	return &l, err
+}

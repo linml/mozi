@@ -3,11 +3,43 @@ package main
 import (
 	"fmt"
 	"github.com/shopspring/decimal"
-	"github.com/xiuos/lotto"
+	"github.com/xiuos/mozi/common"
+	"github.com/xiuos/mozi/models/lotto"
+	"github.com/xiuos/mozi/service"
 )
 
+func bet() {
+	uid := 2
+	lottoID := 1
+	issueInfo, err := lotto.GetCurIssue(lottoID)
+	fmt.Println(issueInfo)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	oo := lotto.Order{
+		UserID:     uid,
+		LottoID:    lottoID,
+		Issue:      issueInfo.Issue,
+		MethodCode: "10006",
+		PlayCode:   "单",
+		BetContent: "单",
+		Amount:     decimal.NewFromFloat(1.1),
+		IP:         common.InetAton("127.0.0.1"),
+	}
+
+	err = service.Bet(&oo)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("下单成功")
+	}
+}
+
 func main() {
-	o := lotto.Order{Content: "1", Odds: decimal.NewFromFloat(9)}
+	bet()
+	o := lotto.Order{BetContent: "1", Odds: decimal.NewFromFloat(9)}
 	engine := lotto.PlayMethod[lotto.SscNumber1]
 	err := engine.CheckBetLegal(&o)
 	if err != nil {

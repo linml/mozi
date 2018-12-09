@@ -13,6 +13,7 @@ import (
 
 type BetContent struct {
 	MethodCode string          `json:"method_code"`
+	PlayCode   string          `json:"play_code"`
 	BetContent string          `json:"bet_content"`
 	Amount     decimal.Decimal `json:"amount"`
 }
@@ -24,10 +25,31 @@ func Bet(c *gin.Context) {
 	if err != nil {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, "登录校验失败"))
 	}
-	lottoID := common.GetInt(c.PostForm("lotto_id"))
-	issue := c.PostForm("issue")
-	//roomID := c.PostForm("room_id")
-	bets := c.PostForm("bets")
+
+	params := routes.ParamHelper{}
+
+	params.GetPostFormNotEmpty(c, "lotto_id")
+	params.GetPostFormNotEmpty(c, "issue")
+	params.GetPostFormNotEmpty(c, "bets")
+
+	if params.Exist("lotto_id") {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "彩票不能为空"))
+		return
+	}
+	if params.Exist("issue") {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "期号不能为空"))
+		return
+	}
+
+	if params.Exist("bets") {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "下注内容不能为空"))
+		return
+	}
+
+	lottoID := common.GetInt(params.Get("lotto_id"))
+	issue := params.Get("issue")
+	bets := params.Get("bets")
+	ip := common.InetAton(c.ClientIP())
 
 	var betList []BetContent
 	err = json.Unmarshal([]byte(bets), &betList)
@@ -35,14 +57,16 @@ func Bet(c *gin.Context) {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, "下注格式错误"))
 		return
 	}
-	for i, _ := range betList {
+	for i := range betList {
 		err = service.Bet(&lotto.Order{
 			UserID:     uid,
 			LottoID:    lottoID,
 			Issue:      issue,
 			MethodCode: betList[i].MethodCode,
-			Content:    betList[i].BetContent,
+			PlayCode:   betList[i].PlayCode,
+			BetContent: betList[i].BetContent,
 			Amount:     betList[i].Amount,
+			IP:         ip,
 		})
 		if err != nil {
 			c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("下注失败：%s", err)))

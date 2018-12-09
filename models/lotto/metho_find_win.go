@@ -17,8 +17,8 @@ var (
 func FindWinDig(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo, error) {
 	n := drawNumber[me.GetOpt().Bit[0]]
 	var w []WinInfo
-	if o.Content == n {
-		w = append(w, WinInfo{Info: o.Content, Odds: o.Odds, Count: 1})
+	if o.BetContent == n {
+		w = append(w, WinInfo{Info: o.BetContent, Odds: o.Odds, Count: 1})
 		return &w, nil
 	}
 	return &[]WinInfo{}, nil
@@ -29,11 +29,11 @@ func FindWinSscTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinIn
 	var w []WinInfo
 	num, _ := strconv.Atoi(drawNumber[me.GetOpt().Bit[0]])
 
-	switch o.Content {
+	switch o.BetContent {
 	case Big:
 		if num > 4 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -41,7 +41,7 @@ func FindWinSscTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinIn
 	case Small:
 		if num < 5 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -49,7 +49,7 @@ func FindWinSscTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinIn
 	case Odd:
 		if num%2 != 0 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -57,7 +57,7 @@ func FindWinSscTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinIn
 	case Even:
 		if num%2 == 0 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -74,11 +74,11 @@ func FindWinSscTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]Wi
 	var w []WinInfo
 	drawNumberIntList, _ := S2IList(drawNumber)
 	drawNumberSum := SumInt(drawNumberIntList)
-	switch o.Content {
+	switch o.BetContent {
 	case Big:
 		if drawNumberSum > 22 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -86,7 +86,7 @@ func FindWinSscTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]Wi
 	case Small:
 		if drawNumberSum <= 22 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -94,7 +94,7 @@ func FindWinSscTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]Wi
 	case Odd:
 		if drawNumberSum%2 != 0 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -102,7 +102,7 @@ func FindWinSscTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]Wi
 	case Even:
 		if drawNumberSum%2 == 0 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -110,7 +110,7 @@ func FindWinSscTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]Wi
 	case Dragon:
 		if drawNumberIntList[0] > drawNumberIntList[4] {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -118,7 +118,7 @@ func FindWinSscTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]Wi
 	case Tiger:
 		if drawNumberIntList[0] < drawNumberIntList[4] {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -126,7 +126,7 @@ func FindWinSscTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]Wi
 	case He:
 		if drawNumberIntList[0] == drawNumberIntList[4] {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -146,11 +146,11 @@ func FindWinSscExtra(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo
 	for _, v := range me.GetOpt().Bit {
 		num = append(num, drawNumberIntList[v])
 	}
-	switch o.Content {
+	switch o.BetContent {
 	case BaoZi:
 		if num[0] == num[1] && num[2] == num[1] {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -161,7 +161,7 @@ func FindWinSscExtra(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo
 		for k, _ := range SscNumberPoolJUNKO {
 			if SscNumberPoolJUNKO[k] == s {
 				w = append(w, WinInfo{
-					Info:  o.Content,
+					Info:  o.BetContent,
 					Odds:  o.Odds,
 					Count: 1,
 				})
@@ -170,7 +170,7 @@ func FindWinSscExtra(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo
 	case DuiZi:
 		if (num[0] == num[1] && num[0] != num[2]) || (num[0] == num[2] && num[0] != num[1]) || (num[1] == num[2] && num[1] != num[0]) {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -181,7 +181,7 @@ func FindWinSscExtra(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo
 			for j, _ := range num {
 				if _v == num[j] {
 					w = append(w, WinInfo{
-						Info:  o.Content,
+						Info:  o.BetContent,
 						Odds:  o.Odds,
 						Count: 1,
 					})
@@ -214,7 +214,7 @@ func FindWinSscExtra(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo
 
 		if flag == 0 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -235,16 +235,16 @@ func FindWinSyxwTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 
 	if num == 11 {
 		w = append(w, WinInfo{
-			Info:  o.Content,
+			Info:  o.BetContent,
 			Odds:  decimal.NewFromFloat(1),
 			Count: 1,
 		})
 	} else {
-		switch o.Content {
+		switch o.BetContent {
 		case Big:
 			if num > 5 {
 				w = append(w, WinInfo{
-					Info:  o.Content,
+					Info:  o.BetContent,
 					Odds:  o.Odds,
 					Count: 1,
 				})
@@ -252,7 +252,7 @@ func FindWinSyxwTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 		case Small:
 			if num < 6 {
 				w = append(w, WinInfo{
-					Info:  o.Content,
+					Info:  o.BetContent,
 					Odds:  o.Odds,
 					Count: 1,
 				})
@@ -260,7 +260,7 @@ func FindWinSyxwTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 		case Odd:
 			if num%2 != 0 {
 				w = append(w, WinInfo{
-					Info:  o.Content,
+					Info:  o.BetContent,
 					Odds:  o.Odds,
 					Count: 1,
 				})
@@ -268,7 +268,7 @@ func FindWinSyxwTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 		case Even:
 			if num%2 == 0 {
 				w = append(w, WinInfo{
-					Info:  o.Content,
+					Info:  o.BetContent,
 					Odds:  o.Odds,
 					Count: 1,
 				})
@@ -288,18 +288,18 @@ func FindWinSyxwTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]W
 	drawNumberIntList, _ := S2IList(drawNumber)
 	num := SumInt(drawNumberIntList)
 
-	switch o.Content {
+	switch o.BetContent {
 	case Big:
 		if num == 30 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  decimal.NewFromFloat(1),
 				Count: 1,
 			})
 		} else {
 			if num > 30 {
 				w = append(w, WinInfo{
-					Info:  o.Content,
+					Info:  o.BetContent,
 					Odds:  o.Odds,
 					Count: 1,
 				})
@@ -308,14 +308,14 @@ func FindWinSyxwTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]W
 	case Small:
 		if num == 30 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  decimal.NewFromFloat(1),
 				Count: 1,
 			})
 		} else {
 			if num < 30 {
 				w = append(w, WinInfo{
-					Info:  o.Content,
+					Info:  o.BetContent,
 					Odds:  o.Odds,
 					Count: 1,
 				})
@@ -324,7 +324,7 @@ func FindWinSyxwTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]W
 	case Odd:
 		if num%2 != 0 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -332,7 +332,7 @@ func FindWinSyxwTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]W
 	case Even:
 		if num%2 == 0 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -340,7 +340,7 @@ func FindWinSyxwTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]W
 	case WeiDa:
 		if num%10 > 4 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -348,7 +348,7 @@ func FindWinSyxwTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]W
 	case WeiXiao:
 		if num%10 < 5 {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -356,7 +356,7 @@ func FindWinSyxwTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]W
 	case Dragon:
 		if drawNumberIntList[0] > drawNumberIntList[4] {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -364,7 +364,7 @@ func FindWinSyxwTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]W
 	case Tiger:
 		if drawNumberIntList[0] < drawNumberIntList[4] {
 			w = append(w, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -379,7 +379,7 @@ func FindWinSyxwTwoSideSum(me MethodEngine, o *Order, drawNumber []string) (*[]W
 // 11选5 任选N中Y
 func FindWinSyxwOptionWin(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo, error) {
 	var w []WinInfo
-	betList := strings.Split(o.Content, ",")
+	betList := strings.Split(o.BetContent, ",")
 
 	//_N := mi.Option.OptionWin[0]
 	_Y := me.GetOpt().OptionWin[1]
@@ -395,7 +395,7 @@ func FindWinSyxwOptionWin(me MethodEngine, o *Order, drawNumber []string) (*[]Wi
 
 	if y == _Y {
 		w = append(w, WinInfo{
-			Info:  o.Content,
+			Info:  o.BetContent,
 			Odds:  o.Odds,
 			Count: 1,
 		})
@@ -407,7 +407,7 @@ func FindWinSyxwOptionWin(me MethodEngine, o *Order, drawNumber []string) (*[]Wi
 // 11选5 组选
 func FindWinSyxwGroupWin(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo, error) {
 	var w []WinInfo
-	betList := strings.Split(o.Content, ",")
+	betList := strings.Split(o.BetContent, ",")
 
 	num := []string{}
 	for _, v := range me.GetOpt().Bit {
@@ -428,7 +428,7 @@ func FindWinSyxwGroupWin(me MethodEngine, o *Order, drawNumber []string) (*[]Win
 
 	if y >= _Y {
 		w = append(w, WinInfo{
-			Info:  o.Content,
+			Info:  o.BetContent,
 			Odds:  o.Odds,
 			Count: 1,
 		})
@@ -440,7 +440,7 @@ func FindWinSyxwGroupWin(me MethodEngine, o *Order, drawNumber []string) (*[]Win
 // 11选5 直选
 func FindWinSyxwZhixuan(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo, error) {
 	var w []WinInfo
-	betList := strings.Split(o.Content, ",")
+	betList := strings.Split(o.BetContent, ",")
 
 	num := []string{}
 	for _, v := range me.GetOpt().Bit {
@@ -458,7 +458,7 @@ func FindWinSyxwZhixuan(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 
 	if flag {
 		w = append(w, WinInfo{
-			Info:  o.Content,
+			Info:  o.BetContent,
 			Odds:  o.Odds,
 			Count: 1,
 		})
@@ -472,11 +472,11 @@ func FindWinKuai3Sum(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo
 	var winInfoList []WinInfo
 	drawNumberIntList, _ := S2IList(drawNumber)
 	num := SumInt(drawNumberIntList)
-	betNum, err := strconv.Atoi(o.Content)
+	betNum, err := strconv.Atoi(o.BetContent)
 	if err == nil {
 		if num == betNum {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -490,9 +490,9 @@ func FindWinKuai3Sum(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo
 func FindWinKuai33Jun(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo, error) {
 	var winInfoList []WinInfo
 	for _, v := range drawNumber {
-		if v == o.Content {
+		if v == o.BetContent {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -512,11 +512,11 @@ func FindWinKuai3TwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]Win
 		return &winInfoList, nil
 	}
 
-	switch o.Content {
+	switch o.BetContent {
 	case Big:
 		if num >= 11 && num <= 17 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -524,7 +524,7 @@ func FindWinKuai3TwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]Win
 	case Small:
 		if num >= 4 && num <= 10 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -537,9 +537,9 @@ func FindWinKuai3TwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]Win
 // 快3 围骰
 func FindWinKuai3Weitou(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo, error) {
 	var winInfoList []WinInfo
-	if o.Content == strings.Join(drawNumber, "") {
+	if o.BetContent == strings.Join(drawNumber, "") {
 		winInfoList = append(winInfoList, WinInfo{
-			Info:  o.Content,
+			Info:  o.BetContent,
 			Odds:  o.Odds,
 			Count: 1,
 		})
@@ -553,7 +553,7 @@ func FindWinKuai3Quantou(me MethodEngine, o *Order, drawNumber []string) (*[]Win
 	var winInfoList []WinInfo
 	if drawNumber[0] == drawNumber[1] && drawNumber[1] == drawNumber[2] {
 		winInfoList = append(winInfoList, WinInfo{
-			Info:  o.Content,
+			Info:  o.BetContent,
 			Odds:  o.Odds,
 			Count: 1,
 		})
@@ -566,9 +566,9 @@ func FindWinKuai3Quantou(me MethodEngine, o *Order, drawNumber []string) (*[]Win
 func FindWinKuai3Chang(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo, error) {
 	var winInfoList []WinInfo
 
-	if CheckInStr(drawNumber, o.Content[0:1]) && CheckInStr(drawNumber, o.Content[1:2]) {
+	if CheckInStr(drawNumber, o.BetContent[0:1]) && CheckInStr(drawNumber, o.BetContent[1:2]) {
 		winInfoList = append(winInfoList, WinInfo{
-			Info:  o.Content,
+			Info:  o.BetContent,
 			Odds:  o.Odds,
 			Count: 1,
 		})
@@ -581,9 +581,9 @@ func FindWinKuai3Chang(me MethodEngine, o *Order, drawNumber []string) (*[]WinIn
 func FindWinKuai3Duan(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo, error) {
 	var winInfoList []WinInfo
 
-	if strings.Count(strings.Join(drawNumber, ""), o.Content) > 0 {
+	if strings.Count(strings.Join(drawNumber, ""), o.BetContent) > 0 {
 		winInfoList = append(winInfoList, WinInfo{
-			Info:  o.Content,
+			Info:  o.BetContent,
 			Odds:  o.Odds,
 			Count: 1,
 		})
@@ -598,11 +598,11 @@ func FindWinPK10TwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 	num, _ := strconv.Atoi(drawNumber[me.GetOpt().Bit[0]])
 	num1, _ := strconv.Atoi(drawNumber[9-me.GetOpt().Bit[0]])
 
-	switch o.Content {
+	switch o.BetContent {
 	case Big:
 		if num > 5 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -610,7 +610,7 @@ func FindWinPK10TwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 	case Small:
 		if num < 6 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -618,7 +618,7 @@ func FindWinPK10TwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 	case Odd:
 		if num%2 != 0 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -626,7 +626,7 @@ func FindWinPK10TwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 	case Even:
 		if num%2 == 0 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -634,7 +634,7 @@ func FindWinPK10TwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 	case Dragon:
 		if num > num1 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -642,7 +642,7 @@ func FindWinPK10TwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 	case Tiger:
 		if num < num1 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -661,11 +661,11 @@ func FindWinPK10GYTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]Wi
 	num1, _ := strconv.Atoi(drawNumber[9-me.GetOpt().Bit[1]])
 	num = num + num1
 
-	switch o.Content {
+	switch o.BetContent {
 	case Big:
 		if num > 11 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -673,7 +673,7 @@ func FindWinPK10GYTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]Wi
 	case Small:
 		if num < 12 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -681,7 +681,7 @@ func FindWinPK10GYTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]Wi
 	case Odd:
 		if num%2 != 0 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -689,7 +689,7 @@ func FindWinPK10GYTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]Wi
 	case Even:
 		if num%2 == 0 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -706,11 +706,11 @@ func FindWinPK10GY(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo, 
 	var winInfoList []WinInfo
 	num, _ := strconv.Atoi(drawNumber[me.GetOpt().Bit[0]])
 	num1, _ := strconv.Atoi(drawNumber[me.GetOpt().Bit[1]])
-	betNum, _ := strconv.Atoi(o.Content)
+	betNum, _ := strconv.Atoi(o.BetContent)
 	num = num + num1
 	if num == betNum {
 		winInfoList = append(winInfoList, WinInfo{
-			Info:  o.Content,
+			Info:  o.BetContent,
 			Odds:  o.Odds,
 			Count: 1,
 		})
@@ -721,7 +721,7 @@ func FindWinPK10GY(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo, 
 // pk10 组合
 func FindWinF3DCombo(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo, error) {
 	var winInfoList []WinInfo
-	betList := strings.Split(o.Content, "")
+	betList := strings.Split(o.BetContent, "")
 
 	num := []string{}
 	for _, v := range me.GetOpt().Bit {
@@ -744,7 +744,7 @@ func FindWinF3DCombo(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo
 
 	if y >= _Y {
 		winInfoList = append(winInfoList, WinInfo{
-			Info:  o.Content,
+			Info:  o.BetContent,
 			Odds:  o.Odds,
 			Count: 1,
 		})
@@ -761,7 +761,7 @@ func FindWinF3DNumberMultiple(me MethodEngine, o *Order, drawNumber []string) (*
 		num = append(num, drawNumber[v])
 	}
 
-	betNum := strings.Split(o.Content, "")
+	betNum := strings.Split(o.BetContent, "")
 
 	flag := true
 
@@ -775,7 +775,7 @@ func FindWinF3DNumberMultiple(me MethodEngine, o *Order, drawNumber []string) (*
 
 	if flag {
 		winInfoList = append(winInfoList, WinInfo{
-			Info:  o.Content,
+			Info:  o.BetContent,
 			Odds:  o.Odds,
 			Count: 1,
 		})
@@ -796,12 +796,12 @@ func FindWinF3DSum(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo, 
 
 	num := SumInt(numList)
 
-	betNum, err := strconv.Atoi(o.Content)
+	betNum, err := strconv.Atoi(o.BetContent)
 
 	if err == nil {
 		if betNum == num {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -823,12 +823,12 @@ func FindWinF3DSumWei(me MethodEngine, o *Order, drawNumber []string) (*[]WinInf
 
 	num := SumInt(numList) % 10
 
-	betNum, err := strconv.Atoi(o.Content)
+	betNum, err := strconv.Atoi(o.BetContent)
 
 	if err == nil {
 		if betNum == num {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -850,12 +850,12 @@ func FindWinF3DKuaidu(me MethodEngine, o *Order, drawNumber []string) (*[]WinInf
 
 	num := MaxVal(numList) - MinVal(numList)
 
-	betNum, err := strconv.Atoi(o.Content)
+	betNum, err := strconv.Atoi(o.BetContent)
 
 	if err == nil {
 		if betNum == num {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -871,11 +871,11 @@ func FindWinF3DTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinIn
 	drawNumberIntList, _ := S2IList(drawNumber)
 	num := drawNumberIntList[me.GetOpt().Bit[0]]
 
-	switch o.Content {
+	switch o.BetContent {
 	case Big:
 		if num > 4 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -883,7 +883,7 @@ func FindWinF3DTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinIn
 	case Small:
 		if num < 5 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -891,7 +891,7 @@ func FindWinF3DTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinIn
 	case Odd:
 		if num%2 != 0 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -899,7 +899,7 @@ func FindWinF3DTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinIn
 	case Even:
 		if num%2 == 0 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -907,7 +907,7 @@ func FindWinF3DTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinIn
 	case ZhiShu:
 		if CheckInInt([]int{1, 2, 3, 5, 7}, num) {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -915,7 +915,7 @@ func FindWinF3DTwoSide(me MethodEngine, o *Order, drawNumber []string) (*[]WinIn
 	case HeShu:
 		if CheckInInt([]int{0, 4, 6, 8, 9}, num) {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -937,11 +937,11 @@ func FindWinF3DTwoSide1(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 	}
 	num := SumInt(numList)
 
-	switch o.Content {
+	switch o.BetContent {
 	case Odd:
 		if num%2 != 0 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -949,7 +949,7 @@ func FindWinF3DTwoSide1(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 	case Even:
 		if num%2 == 0 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -971,11 +971,11 @@ func FindWinF3DTwoSide2(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 	}
 	num := SumInt(numList)
 
-	switch o.Content {
+	switch o.BetContent {
 	case Big:
 		if num > 13 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -983,7 +983,7 @@ func FindWinF3DTwoSide2(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 	case Small:
 		if num < 14 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -991,7 +991,7 @@ func FindWinF3DTwoSide2(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 	case Odd:
 		if num%2 != 0 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})
@@ -999,7 +999,7 @@ func FindWinF3DTwoSide2(me MethodEngine, o *Order, drawNumber []string) (*[]WinI
 	case Even:
 		if num%2 == 0 {
 			winInfoList = append(winInfoList, WinInfo{
-				Info:  o.Content,
+				Info:  o.BetContent,
 				Odds:  o.Odds,
 				Count: 1,
 			})

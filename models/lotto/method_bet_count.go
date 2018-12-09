@@ -11,10 +11,10 @@ func GetCount(me MethodEngine, o *Order) (int, error) {
 }
 
 func GetCountNotRepeat(me MethodEngine, o *Order) (int, error) {
-	if ok, _ := regexp.MatchString(me.GetOpt().BetReg, o.Content); !ok {
+	if ok, _ := regexp.MatchString(me.GetOpt().BetReg, o.BetContent); !ok {
 		return 0, errors.New("号码格式错误")
 	}
-	orderList := strings.Split(o.Content, ",")
+	orderList := strings.Split(o.BetContent, ",")
 	oList := SliceRemoveDuplicates(orderList)
 	if len(orderList) != len(oList) {
 		return 0, errors.New("号码格式错误[1]")
@@ -24,10 +24,10 @@ func GetCountNotRepeat(me MethodEngine, o *Order) (int, error) {
 
 // 11选5任选
 func GetCountSyxwOptionWin(me MethodEngine, o *Order) (int, error) {
-	if ok, _ := regexp.MatchString(me.GetOpt().BetReg, o.Content); !ok {
+	if ok, _ := regexp.MatchString(me.GetOpt().BetReg, o.BetContent); !ok {
 		return 0, errors.New("号码格式错误")
 	}
-	orderList := strings.Split(o.Content, ",")
+	orderList := strings.Split(o.BetContent, ",")
 	oList := SliceRemoveDuplicates(orderList)
 	if len(orderList) != len(oList) {
 		return 0, errors.New("号码格式错误[1]")
@@ -38,10 +38,10 @@ func GetCountSyxwOptionWin(me MethodEngine, o *Order) (int, error) {
 
 // 11选5组选
 func GetCountSyxwGroup(me MethodEngine, o *Order) (int, error) {
-	if ok, _ := regexp.MatchString(me.GetOpt().BetReg, o.Content); !ok {
+	if ok, _ := regexp.MatchString(me.GetOpt().BetReg, o.BetContent); !ok {
 		return 0, errors.New("号码格式错误")
 	}
-	orderList := strings.Split(o.Content, ",")
+	orderList := strings.Split(o.BetContent, ",")
 	oList := SliceRemoveDuplicates(orderList)
 	if len(orderList) != len(oList) {
 		return 0, errors.New("号码格式错误[1]")
@@ -53,10 +53,10 @@ func GetCountSyxwGroup(me MethodEngine, o *Order) (int, error) {
 }
 
 func GetCountF3DCombo(me MethodEngine, o *Order) (int, error) {
-	if ok, _ := regexp.MatchString(me.GetOpt().BetReg, o.Content); !ok {
+	if ok, _ := regexp.MatchString(me.GetOpt().BetReg, o.BetContent); !ok {
 		return 0, errors.New("Number error")
 	}
-	l := strings.Split(o.Content, "")
+	l := strings.Split(o.BetContent, "")
 	il, _ := S2IList(l)
 	for _, i := range il {
 		for _, j := range il[1:] {
