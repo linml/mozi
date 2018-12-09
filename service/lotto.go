@@ -112,11 +112,12 @@ func Bet(o *lotto.Order) error {
 		return errors.New(fmt.Sprintf("单注最低金额不能低于%s", minS))
 	}
 
+	orderID := common.GetTimeNowString()[4:] + common.RandDigitString(8)
 	o.LottoType = li.LottoType
 	o.Odds = pInfo.Odds
 	o.BetCount = betCount
 	o.Name = u.Name
-	o.OrderID = common.GetTimeNowString()[4:] + common.RandDigitString(8)
+	o.OrderID = orderID
 	o.GameKind = li.GameKind
 	o.GameType = li.GameType
 	o.BetTime = common.GetTimeNowString()
@@ -125,7 +126,8 @@ func Bet(o *lotto.Order) error {
 
 	rc := models.RecordMoneyChange{
 		UserID:        u.UserID,
-		Username:      u.Name,
+		LinkID:        orderID,
+		Name:          u.Name,
 		GameKind:      li.GameKind,
 		GameType:      li.GameType,
 		ChangeKind:    models.ChangeKindLotto,

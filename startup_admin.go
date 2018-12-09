@@ -58,8 +58,10 @@ func main() {
 		appAuthV1.GET("/html/lotto/result_lotto", admin.TmplLottoResultotto)
 		appAuthV1.GET("/html/lotto/odds", admin.TmplLottoOdds)
 		appAuthV1.GET("/html/lotto/order", admin.TmplLottoOrder)
+		appAuthV1.GET("/html/user/money_change", admin.TmplUserMoneyChange)
 
 		appAuthV1.GET("/pages/user/list", admin.PageFindUserList)
+		appAuthV1.GET("/pages/user/money_change/list", admin.PageFindRecordMoneyList)
 		appAuthV1.GET("/pages/admin/list", admin.PageFindAdminList)
 		appAuthV1.GET("/pages/user/record_login", admin.PageFindUserRecordLogin)
 		appAuthV1.GET("/pages/user/bank/list", admin.PageFindUserBank)
