@@ -63,3 +63,10 @@ func FindLottoMethodTemplateList(param map[string]string) (*[]LottoMethodTemplat
 
 	return &data, err
 }
+
+func GEtLottoMethodTemplate(lottoType int, methodCode string) (*LottoMethodTemplate, error) {
+	c := LottoMethodTemplate{}
+	querySql := fmt.Sprintf("SELECT %s FROM %s WHERE lotto_type=? AND method_code=? ", strings.Join(c.Field(), ","), c.TableName())
+	err := common.BaseDb.QueryRow(querySql, lottoType, methodCode).Scan(c.FieldItem()...)
+	return &c, err
+}

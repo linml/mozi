@@ -115,3 +115,7 @@ func TmplLottoResultotto(c *gin.Context) {
 func TmplLottoOdds(c *gin.Context) {
 	c.HTML(http.StatusOK, "lotto_odds.html", gin.H{})
 }
+
+func TmplLottoOrder(c *gin.Context) {
+	c.HTML(http.StatusOK, "record_lotto_order.html", gin.H{})
+}

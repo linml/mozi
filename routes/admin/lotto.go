@@ -529,5 +529,63 @@ func SetLottOddsInfo(c *gin.Context) {
 		OperatorType: models.OperatorTypeAdminSelf,
 	}
 	models.LogRecordAdminAction(&r)
+}
 
+func PageFindLottOrderList(c *gin.Context) {
+	params := routes.ParamHelper{}
+	params.GetQuery(c, "draw")
+	params.GetQuery(c, "curr_page")
+	params.GetQuery(c, "page_row")
+
+	params.GetQuery(c, "id")
+	params.GetQuery(c, "user_id")
+	params.GetQuery(c, "name")
+	params.GetQuery(c, "lotto_id")
+	params.GetQuery(c, "lotto_type")
+	params.GetQuery(c, "game_kind")
+	params.GetQuery(c, "game_type")
+	params.GetQuery(c, "issue")
+	params.GetQuery(c, "method_code")
+	params.GetQuery(c, "play_code")
+	params.GetQuery(c, "status")
+	params.GetQuery(c, "flag")
+	params.GetQuery(c, "bet_date")
+	params.GetQuery(c, "calc_date")
+	params.GetQuery(c, "bet_time")
+	params.GetQuery(c, "update_time")
+	params.GetQuery(c, "ip")
+	params.GetQuery(c, "amount_min")
+	params.GetQuery(c, "amount_max")
+	params.GetQuery(c, "payout_min")
+	params.GetQuery(c, "payout_max")
+	params.GetQuery(c, "profit_min")
+	params.GetQuery(c, "profit_max")
+	params.GetQuery(c, "bet_date_from")
+	params.GetQuery(c, "bet_date_to")
+	params.GetQuery(c, "calc_date_from")
+	params.GetQuery(c, "calc_date_to")
+	params.GetQuery(c, "bet_time_from")
+	params.GetQuery(c, "bet_time_to")
+	params.GetQuery(c, "update_time_from")
+	params.GetQuery(c, "order_by")
+	params.GetQuery(c, "sort_type")
+
+	currPage := common.GetInt(params.Get("curr_page"))
+	pageRow := common.GetInt(params.Get("page_row"))
+
+	if currPage < 1 {
+		currPage = common.PageDefaultPage
+	}
+
+	if pageRow < 1 {
+		pageRow = common.PageDefaultRow
+	}
+
+	p := common.PageParams{CurrentPage: currPage, PageRow: pageRow, Params: params}
+	pr, _, err := lotto.PageFindLottoOrderList(p)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", pr))
+	}
 }

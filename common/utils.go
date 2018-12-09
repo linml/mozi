@@ -1,6 +1,7 @@
 package common
 
 import (
+	crand "crypto/rand"
 	"fmt"
 	"github.com/shopspring/decimal"
 	"io/ioutil"
@@ -48,6 +49,15 @@ func RandString(n int) string {
 		remain--
 	}
 
+	return string(b)
+}
+
+func RandDigitString(n int) string {
+	b := make([]byte, n)
+	for i := 0; i < n; i++ {
+		idx, _ := crand.Int(crand.Reader, big.NewInt(10))
+		b[i] = digits[int(idx.Int64())]
+	}
 	return string(b)
 }
 

@@ -22,9 +22,9 @@ func bet() {
 		UserID:     uid,
 		LottoID:    lottoID,
 		Issue:      issueInfo.Issue,
-		MethodCode: "10006",
-		PlayCode:   "单",
-		BetContent: "单",
+		MethodCode: "10001",
+		PlayCode:   "9",
+		BetContent: "9",
 		Amount:     decimal.NewFromFloat(1.1),
 		IP:         common.InetAton("127.0.0.1"),
 	}
@@ -38,7 +38,10 @@ func bet() {
 }
 
 func main() {
-	bet()
+	for i := 0; i < 20; i++ {
+		bet()
+	}
+
 	o := lotto.Order{BetContent: "1", Odds: decimal.NewFromFloat(9)}
 	engine := lotto.PlayMethod[lotto.SscNumber1]
 	err := engine.CheckBetLegal(&o)

@@ -62,12 +62,22 @@ func Bet(o *lotto.Order) error {
 		return err
 	}
 
-	pInfo, err := models.GetPlayInfo(o.LottoID, o.MethodCode, o.PlayCode)
+	pInfo, err := lotto.GetOdds(o.LottoID, o.MethodCode, o.PlayCode)
 	if err != nil {
 		fmt.Println(err)
 		return errors.New("找不到该玩法")
-
 	}
+
+	mInfo, err := lotto.GEtLottoMethodTemplate(li.LottoType, o.MethodCode)
+	if err != nil {
+		return errors.New("找不到该玩法[-1]")
+	}
+	if mInfo.OddsType == 1 {
+		if o.PlayCode != o.BetContent {
+			return errors.New("下注内容不匹配")
+		}
+	}
+
 	if pInfo.Status != 1 {
 		return errors.New("该玩法已停售")
 	}
@@ -106,10 +116,11 @@ func Bet(o *lotto.Order) error {
 	o.Odds = pInfo.Odds
 	o.BetCount = betCount
 	o.Name = u.Name
-	o.OrderID = common.GetTimeNowString() + common.RandString(6)
+	o.OrderID = common.GetTimeNowString()[4:] + common.RandDigitString(8)
 	o.GameKind = li.GameKind
 	o.GameType = li.GameType
 	o.BetTime = common.GetTimeNowString()
+	o.UpdateTime = common.GetTimeNowString()
 	o.BetDate = common.GetDateNowString()
 
 	rc := models.RecordMoneyChange{
