@@ -38,6 +38,28 @@ type Order struct {
 	IP         int64           `json:"ip"`
 }
 
+type LottoOrderCount struct {
+	UserID      int             `json:"user_id"`
+	Name        string          `json:"name"`
+	LottoID     int             `json:"lotto_id"`
+	LottoType   int             `json:"lotto_type"`
+	GameKind    int             `json:"game_kind"`
+	GameType    int             `json:"game_type"`
+	TotalCount  int             `json:"total_count"`
+	TotalBet    decimal.Decimal `json:"total_bet"`
+	TotalPayout decimal.Decimal `json:"total_payout"`
+	TotalProfit decimal.Decimal `json:"total_profit"`
+	CountDate   string          `json:"count_date"`
+}
+
+func (d *LottoOrderCount) Field() []string {
+	return []string{"user_id", "name", "lotto_id", "lotto_type", "game_kind", "game_type", "total_count", "total_bet", "total_payout", "total_profit", "count_date"}
+}
+
+func (d *LottoOrderCount) FieldItem() []interface{} {
+	return []interface{}{&d.UserID, &d.Name, &d.LottoID, &d.LottoType, &d.GameKind, &d.GameType, &d.TotalCount, &d.TotalBet, &d.TotalPayout, &d.TotalProfit, &d.CountDate}
+}
+
 func (d *Order) TableName() string {
 	return "record_lotto_order"
 }
@@ -247,4 +269,23 @@ func PageFindLottoOrderList(pageParam common.PageParams) (*common.PageResult, *[
 	pg.CurrentPage = pageParam.CurrentPage
 	pg.PageCount = len(data)
 	return &pg, &data, err
+}
+
+func FindLottoOrderDayCount(countDate string) (*[]LottoOrderCount, error) {
+	data := []LottoOrderCount{}
+	o := Order{}
+	totalSql := fmt.Sprintf("SELECT user_id,name,lotto_id,lotto_type,game_kind,game_type,COALESCE(SUM(bet_count), 0) AS total_count,COALESCE(SUM(amount), 0) AS total_bet,COALESCE(SUM(payout), 0) AS total_payout,COALESCE(SUM(profit), 0) AS total_profit,calc_date AS count_date FROM %s WHERE flag = 1 AND calc_date=? GROUP BY user_id", o.TableName())
+	rows, err := common.BaseDb.Query(totalSql, countDate)
+	if err != nil {
+		return &data, err
+	}
+	for rows.Next() {
+		d := LottoOrderCount{}
+		err = rows.Scan(d.FieldItem()...)
+		if err != nil {
+			return &data, err
+		}
+		data = append(data, d)
+	}
+	return &data, err
 }

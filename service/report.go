@@ -1,0 +1,41 @@
+package service
+
+import (
+	"fmt"
+	"github.com/xiuos/mozi/common"
+	"github.com/xiuos/mozi/models"
+	"github.com/xiuos/mozi/models/lotto"
+)
+
+func RefreshLottoDayCount(countDate string) error {
+
+	lottoDayCountList, err := lotto.FindLottoOrderDayCount(countDate)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+
+	for i := range *lottoDayCountList {
+		relationInfo, err := models.GetUserRelation((*lottoDayCountList)[i].UserID)
+		if err != nil {
+			fmt.Println(err)
+		}
+		rp := models.ReportLottoDayCount{
+			CountDate:   (*lottoDayCountList)[i].CountDate,
+			UserID:      (*lottoDayCountList)[i].UserID,
+			Name:        (*lottoDayCountList)[i].Name,
+			ParentID:    relationInfo.ParentID,
+			Parents:     relationInfo.Parents,
+			GameKind:    (*lottoDayCountList)[i].GameKind,
+			GameType:    (*lottoDayCountList)[i].GameType,
+			TotalCount:  (*lottoDayCountList)[i].TotalCount,
+			TotalBet:    (*lottoDayCountList)[i].TotalBet,
+			TotalPayout: (*lottoDayCountList)[i].TotalPayout,
+			TotalProfit: (*lottoDayCountList)[i].TotalProfit,
+			UpdateTime:  common.GetTimeNowString(),
+		}
+		models.ReplaceLottoDayCount(&rp)
+	}
+
+	return nil
+}

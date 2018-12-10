@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 08/12/2018 00:45:58
+ Date: 10/12/2018 15:07:23
 */
 
 SET NAMES utf8mb4;
@@ -32,7 +32,7 @@ CREATE TABLE `admin` (
   `created_at` varchar(14) NOT NULL DEFAULT '' COMMENT '创建时间',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员';
 
 -- ----------------------------
 -- Records of admin
@@ -81,13 +81,12 @@ INSERT INTO `admin_menu` VALUES (130, 1, 3, 0, '通用公告', 'fa fa-edit', 'pa
 INSERT INTO `admin_menu` VALUES (131, 2, 3, 0, '滚动公告', 'fa fa-edit', 'pages/notice/roll_notice.html', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (160, 1, 4, 0, '账户列表', 'fa fa-user', 'html/member/list', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (161, 2, 4, 0, '登入记录', 'fa fa-list-alt', 'html/member/record_login', 'iframe-tab', 1);
-INSERT INTO `admin_menu` VALUES (162, 3, 4, 0, '账号银行卡', 'fa fa-list-alt', 'html/member/user_bank', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (162, 3, 4, 0, '账户银行', 'fa fa-list-alt', 'html/member/user_bank', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (200, 1, 5, 0, '彩票开奖', 'fa fa-life-bouy', 'html/lotto/result_lotto', 'iframe-tab', 1);
-INSERT INTO `admin_menu` VALUES (221, 1, 5, 0, '彩票订单', 'fa fa-life-bouy', '', 'iframe-tab', 1);
-INSERT INTO `admin_menu` VALUES (231, 2, 5, 0, '赔率设置', 'fa fa-toggle-on', 'game/lottoOdds', 'iframe-tab', 1);
-INSERT INTO `admin_menu` VALUES (232, 3, 5, 0, '实时操盘', 'fa fa-hand-pointer-o', '', 'iframe-tab', 1);
-INSERT INTO `admin_menu` VALUES (233, 4, 5, 0, '实时统计', 'fa fa-bar-chart', '', 'iframe-tab', 1);
-INSERT INTO `admin_menu` VALUES (234, 5, 5, 0, '彩种设置', 'fa fa-hand-pointer-o', 'html/lotto/code_lotto', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (221, 1, 5, 0, '彩票订单', 'fa fa-life-bouy', 'html/lotto/order', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (231, 2, 5, 0, '赔率设置', 'fa fa-toggle-on', 'html/lotto/odds', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (233, 4, 5, 0, '彩种设置', 'fa fa-hand-pointer-o', 'html/lotto/code_lotto', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (234, 5, 5, 0, '游戏统计', 'fa fa-bar-chart', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (250, 0, 6, 0, '银行卡管理', 'fa fa-fw fa-bank', 'html/bank/code_bank', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (251, 1, 6, 0, '收款账户', '', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (252, 2, 6, 0, '第三方收款账户', '', '', 'iframe-tab', 1);
@@ -96,7 +95,7 @@ INSERT INTO `admin_menu` VALUES (254, 4, 6, 0, '会员收款单', '', '', '', 1)
 INSERT INTO `admin_menu` VALUES (255, 5, 6, 0, '手动入款', 'fa fa-fw fa-hand-o-right', 'pages/finance/manual_deposit.html', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (256, 6, 6, 0, '手动出款', 'fa fa-fw fa-hand-o-right', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (257, 7, 6, 0, '手动转点', '', '', '', 1);
-INSERT INTO `admin_menu` VALUES (258, 8, 6, 0, '流水查询', 'fa fa-fw fa-file-text', 'pages/finance/record_amount_change.html', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (258, 8, 6, 0, '流水查询', 'fa fa-fw fa-file-text', 'html/user/money_change', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (259, 9, 6, 0, '稽核分查询', 'fa fa-fw fa-file-text', 'pages/finance/record_audit_score.html', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (260, 10, 6, 0, '财务汇总', '', '', '', 1);
 INSERT INTO `admin_menu` VALUES (261, 0, 7, 0, '分红管理', '', '', '', 1);
@@ -121,7 +120,7 @@ CREATE TABLE `admin_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
   `name` varchar(64) NOT NULL DEFAULT '' COMMENT '管理员',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员角色';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员角色';
 
 -- ----------------------------
 -- Records of admin_role
@@ -167,7 +166,6 @@ INSERT INTO `admin_role_menu` VALUES (1, 162);
 INSERT INTO `admin_role_menu` VALUES (1, 200);
 INSERT INTO `admin_role_menu` VALUES (1, 221);
 INSERT INTO `admin_role_menu` VALUES (1, 231);
-INSERT INTO `admin_role_menu` VALUES (1, 232);
 INSERT INTO `admin_role_menu` VALUES (1, 233);
 INSERT INTO `admin_role_menu` VALUES (1, 234);
 INSERT INTO `admin_role_menu` VALUES (1, 250);
@@ -224,6 +222,7 @@ INSERT INTO `code_action_admin` VALUES (4, 8, '添加用户', 8, 1);
 INSERT INTO `code_action_admin` VALUES (4, 9, '设置彩票状态', 9, 1);
 INSERT INTO `code_action_admin` VALUES (4, 10, '设置彩票排序', 10, 1);
 INSERT INTO `code_action_admin` VALUES (4, 11, '设置彩票显示', 11, 1);
+INSERT INTO `code_action_admin` VALUES (4, 12, '设置彩票赔率', 12, 1);
 COMMIT;
 
 -- ----------------------------
@@ -491,6 +490,53 @@ INSERT INTO `code_method_template` VALUES (5, '14024', '双面盘合数之百十
 INSERT INTO `code_method_template` VALUES (5, '14025', '双面盘合数之百个', '', 1, 1);
 INSERT INTO `code_method_template` VALUES (5, '14026', '双面盘合数之十个', '', 1, 1);
 INSERT INTO `code_method_template` VALUES (5, '14027', '双面盘合数之百十个', '', 1, 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for code_money_change_kind
+-- ----------------------------
+DROP TABLE IF EXISTS `code_money_change_kind`;
+CREATE TABLE `code_money_change_kind` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8_bin NOT NULL,
+  `sort_index` int(11) NOT NULL DEFAULT '1',
+  `status` int(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of code_money_change_kind
+-- ----------------------------
+BEGIN;
+INSERT INTO `code_money_change_kind` VALUES (1, '彩票', 1, 1);
+INSERT INTO `code_money_change_kind` VALUES (2, '入款', 2, 1);
+INSERT INTO `code_money_change_kind` VALUES (3, '出款', 3, 1);
+INSERT INTO `code_money_change_kind` VALUES (4, '转账', 4, 1);
+INSERT INTO `code_money_change_kind` VALUES (5, '活动', 5, 1);
+INSERT INTO `code_money_change_kind` VALUES (6, '工资', 6, 1);
+INSERT INTO `code_money_change_kind` VALUES (7, '分红', 1, 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for code_money_change_type
+-- ----------------------------
+DROP TABLE IF EXISTS `code_money_change_type`;
+CREATE TABLE `code_money_change_type` (
+  `change_kind` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8_bin NOT NULL,
+  `sort_index` int(11) NOT NULL DEFAULT '1',
+  `status` int(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`change_kind`,`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of code_money_change_type
+-- ----------------------------
+BEGIN;
+INSERT INTO `code_money_change_type` VALUES (1, 101, '下注', 1, 1);
+INSERT INTO `code_money_change_type` VALUES (1, 102, '派彩', 2, 1);
+INSERT INTO `code_money_change_type` VALUES (1, 103, '撤单', 3, 1);
 COMMIT;
 
 -- ----------------------------
@@ -1995,7 +2041,7 @@ CREATE TABLE `record_log_admin_action` (
   KEY `user_id` (`user_id`,`action_module`,`action_id`,`record_at`),
   KEY `user_id_2` (`user_id`,`record_at`),
   KEY `action_module` (`action_module`,`action_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员操作日志';
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员操作日志';
 
 -- ----------------------------
 -- Table structure for record_log_user_action
@@ -2025,32 +2071,42 @@ CREATE TABLE `record_log_user_action` (
 DROP TABLE IF EXISTS `record_lotto_order`;
 CREATE TABLE `record_lotto_order` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `order_no` varchar(32) NOT NULL DEFAULT '' COMMENT '订单号',
+  `order_id` varchar(32) NOT NULL DEFAULT '' COMMENT '订单号',
   `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户编号',
-  `username` varchar(32) NOT NULL DEFAULT '' COMMENT '用户名',
+  `name` varchar(32) NOT NULL DEFAULT '' COMMENT '用户名',
+  `lotto_id` int(11) NOT NULL DEFAULT '0' COMMENT '彩票编号',
+  `lotto_type` int(11) NOT NULL COMMENT '彩票类型',
   `game_kind` int(11) NOT NULL DEFAULT '0',
   `game_type` int(11) NOT NULL DEFAULT '0',
-  `room_id` int(11) NOT NULL DEFAULT '0' COMMENT '房间编号',
-  `lotto_id` int(11) NOT NULL DEFAULT '0',
-  `issue` varchar(32) NOT NULL DEFAULT '',
-  `method_code` varchar(16) NOT NULL DEFAULT '',
-  `count` int(11) NOT NULL DEFAULT '0' COMMENT '下注注数',
-  `content` varchar(128) NOT NULL DEFAULT '' COMMENT '下注内容',
-  `win_content` varchar(128) NOT NULL DEFAULT '',
-  `win_count` int(11) NOT NULL DEFAULT '0',
+  `issue` varchar(32) NOT NULL DEFAULT '' COMMENT '期号',
+  `method_code` varchar(16) NOT NULL DEFAULT '' COMMENT '玩法',
+  `play_code` varchar(16) NOT NULL COMMENT '玩法项',
+  `bet_count` int(11) NOT NULL DEFAULT '0' COMMENT '下注注数',
+  `bet_content` text NOT NULL COMMENT '下注内容',
+  `win_count` int(11) NOT NULL DEFAULT '0' COMMENT '中奖注数',
+  `win_content` text NOT NULL COMMENT '中奖内容',
   `draw_number` varchar(64) NOT NULL DEFAULT '' COMMENT '开奖号码',
   `odds` decimal(11,3) NOT NULL DEFAULT '0.000' COMMENT '赔率',
   `amount` decimal(12,3) NOT NULL DEFAULT '0.000' COMMENT '下注金额',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单状态 0:未结算,1:中奖,2:未中奖,3:撤销,4:异常',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单状态 0:未结算;1:中奖;2:未中奖;3:撤销;4:异常',
+  `flag` tinyint(1) NOT NULL DEFAULT '1' COMMENT '订单标识 0:无效投注,1:有效投注(当Status 是1/2)',
   `payout` decimal(12,3) NOT NULL DEFAULT '0.000' COMMENT '派奖',
   `profit` decimal(12,3) NOT NULL DEFAULT '0.000' COMMENT '盈亏',
-  `flag` tinyint(1) NOT NULL DEFAULT '1' COMMENT '订单标识 0:无效投注,1:有效投注(当Status 是1/2)',
   `bet_date` varchar(8) NOT NULL DEFAULT '' COMMENT '下注日期',
   `calc_date` varchar(8) NOT NULL DEFAULT '' COMMENT '结算日期',
   `bet_time` varchar(14) NOT NULL DEFAULT '' COMMENT '下注时间',
-  `update_time` varchar(14) NOT NULL DEFAULT '' COMMENT '结算时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
+  `update_time` varchar(14) NOT NULL DEFAULT '' COMMENT '最后更新时间',
+  `ip` int(11) NOT NULL DEFAULT '0' COMMENT 'IP',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `order_id` (`order_id`) USING BTREE,
+  KEY `user_id` (`user_id`),
+  KEY `name` (`name`),
+  KEY `bet_time` (`bet_time`),
+  KEY `update_time` (`update_time`),
+  KEY `bet_date` (`bet_date`),
+  KEY `calc_date` (`calc_date`),
+  KEY `lotto_id` (`lotto_id`,`issue`)
+) ENGINE=InnoDB AUTO_INCREMENT=269 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
 
 -- ----------------------------
 -- Table structure for record_money_change
@@ -2058,9 +2114,9 @@ CREATE TABLE `record_lotto_order` (
 DROP TABLE IF EXISTS `record_money_change`;
 CREATE TABLE `record_money_change` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `link` varchar(64) NOT NULL DEFAULT '' COMMENT '关联编号',
+  `link_id` varchar(64) NOT NULL DEFAULT '' COMMENT '关联编号',
   `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户编号',
-  `username` varchar(36) NOT NULL DEFAULT '',
+  `name` varchar(36) NOT NULL DEFAULT '' COMMENT '账号',
   `game_kind` smallint(8) NOT NULL DEFAULT '0' COMMENT '游戏类型',
   `game_type` smallint(8) NOT NULL DEFAULT '0' COMMENT '游戏类型',
   `change_kind` smallint(8) NOT NULL DEFAULT '0' COMMENT '变化类型',
@@ -2072,12 +2128,13 @@ CREATE TABLE `record_money_change` (
   `record_at` varchar(14) NOT NULL DEFAULT '' COMMENT '纪录时间',
   `operate_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '操作类型(0:用户;1:系统)',
   `operator_id` int(11) NOT NULL DEFAULT '0' COMMENT '操作者编号',
+  `operator_name` varchar(36) NOT NULL DEFAULT '' COMMENT '操作者',
   `remark` varchar(128) NOT NULL DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`id`),
   KEY `user_id_r` (`user_id`,`record_at`),
   KEY `user_id_g_m` (`user_id`,`game_kind`,`change_kind`),
   KEY `game_id_m_r` (`game_kind`,`change_kind`,`record_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户资金变动记录';
+) ENGINE=InnoDB AUTO_INCREMENT=229 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户资金变动记录';
 
 -- ----------------------------
 -- Table structure for record_user_login
@@ -2100,7 +2157,30 @@ CREATE TABLE `record_user_login` (
   KEY `ip` (`ip`,`record_at`),
   KEY `url` (`url`,`record_at`),
   KEY `record_time` (`record_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
+
+-- ----------------------------
+-- Table structure for report_lotto_day_count
+-- ----------------------------
+DROP TABLE IF EXISTS `report_lotto_day_count`;
+CREATE TABLE `report_lotto_day_count` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `count_date` varchar(8) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '统计日期',
+  `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户编号',
+  `name` varchar(36) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '账户',
+  `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '上级编号',
+  `parents` text COLLATE utf8_bin NOT NULL COMMENT '上级列表',
+  `lotto_id` int(11) NOT NULL DEFAULT '0' COMMENT '彩票编号',
+  `game_kind` int(11) NOT NULL DEFAULT '0' COMMENT '游戏类型',
+  `game_type` int(11) NOT NULL DEFAULT '0' COMMENT '游戏种类',
+  `total_count` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '总下单数',
+  `total_bet` decimal(12,3) NOT NULL DEFAULT '0.000' COMMENT '总下注额',
+  `total_payout` decimal(12,3) NOT NULL DEFAULT '0.000' COMMENT '总获奖额',
+  `total_profit` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '0' COMMENT '总盈亏',
+  `update_time` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `count_date` (`count_date`,`user_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='彩票游戏日统计';
 
 -- ----------------------------
 -- Table structure for sys_settings
@@ -2263,7 +2343,7 @@ CREATE TABLE `users` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态(0:冻结,1:正常, 2:开户成功但部分功能未开通)',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 -- ----------------------------
 -- Records of users
