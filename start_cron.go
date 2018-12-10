@@ -36,7 +36,7 @@ func main() {
 	c := cron.New()
 	c.AddJob("0 0 3 * * *", CheckAndCreateOddsJob{})
 	c.AddJob("0 0 4 * * *", GenIssueJob{})
-	c.AddJob("0 */3 * * * *", LottoDayCountJob{})
+	c.AddJob("0 */1 * * * *", LottoDayCountJob{})
 	c.Start()
 	select {}
 }

@@ -32,16 +32,16 @@ func Bet(c *gin.Context) {
 	params.GetPostFormNotEmpty(c, "issue")
 	params.GetPostFormNotEmpty(c, "bets")
 
-	if params.Exist("lotto_id") {
+	if params.Exist("lotto_id") == false {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, "彩票不能为空"))
 		return
 	}
-	if params.Exist("issue") {
+	if params.Exist("issue") == false {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, "期号不能为空"))
 		return
 	}
 
-	if params.Exist("bets") {
+	if params.Exist("bets") == false {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, "下注内容不能为空"))
 		return
 	}

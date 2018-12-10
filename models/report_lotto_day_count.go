@@ -13,6 +13,7 @@ type ReportLottoDayCount struct {
 	Name        string          `json:"name"`
 	ParentID    int             `json:"parent_id"`
 	Parents     string          `json:"parents"`
+	LottoID     int             `json:"lotto_id"`
 	GameKind    int             `json:"game_kind"`
 	GameType    int             `json:"game_type"`
 	TotalCount  int             `json:"total_count"`
@@ -27,16 +28,16 @@ func (r *ReportLottoDayCount) TableName() string {
 }
 
 func (r *ReportLottoDayCount) Field() []string {
-	return []string{"id", "count_date", "user_id", "name", "parent_id", "parents", "game_kind", "game_type", "total_count", "total_bet", "total_payout", "total_profit", "update_time"}
+	return []string{"id", "count_date", "user_id", "name", "parent_id", "parents", "lotto_id", "game_kind", "game_type", "total_count", "total_bet", "total_payout", "total_profit", "update_time"}
 }
 
 func (r *ReportLottoDayCount) FieldItem() []interface{} {
-	return []interface{}{&r.ID, &r.CountDate, &r.UserID, &r.Name, &r.ParentID, &r.Parents, &r.GameKind, &r.GameType, &r.TotalCount, &r.TotalBet, &r.TotalPayout, &r.TotalProfit, &r.UpdateTime}
+	return []interface{}{&r.ID, &r.CountDate, &r.UserID, &r.Name, &r.ParentID, &r.Parents, &r.GameKind, &r.GameType, &r.LottoID, &r.TotalCount, &r.TotalBet, &r.TotalPayout, &r.TotalProfit, &r.UpdateTime}
 }
 
 func ReplaceLottoDayCount(r *ReportLottoDayCount) error {
-	replaceSql := fmt.Sprintf("INSERT INTO %s (count_date, user_id, name, parent_id, parents, game_kind, game_type, total_count, total_bet, total_payout, total_profit, update_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE name=VALUES(name),parent_id=VALUES(parent_id),parents=VALUES(parents),game_kind=VALUES(game_kind),game_type=VALUES(game_type),total_count=VALUES(total_count),total_bet=VALUES(total_bet),total_payout=VALUES(total_payout),total_profit=VALUES(total_profit),update_time=VALUES(update_time)", r.TableName())
-	_, err := common.BaseDb.Exec(replaceSql, &r.CountDate, &r.UserID, &r.Name, &r.ParentID, &r.Parents, &r.GameKind, &r.GameType, &r.TotalCount, &r.TotalBet, &r.TotalPayout, &r.TotalProfit, &r.UpdateTime)
+	replaceSql := fmt.Sprintf("INSERT INTO %s (count_date, user_id, name, parent_id, parents, game_kind, game_type, lotto_id, total_count, total_bet, total_payout, total_profit, update_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE name=VALUES(name),parent_id=VALUES(parent_id),parents=VALUES(parents),game_kind=VALUES(game_kind),game_type=VALUES(game_type),total_count=VALUES(total_count),total_bet=VALUES(total_bet),total_payout=VALUES(total_payout),total_profit=VALUES(total_profit),update_time=VALUES(update_time)", r.TableName())
+	_, err := common.BaseDb.Exec(replaceSql, &r.CountDate, &r.UserID, &r.Name, &r.ParentID, &r.Parents, &r.GameKind, &r.GameType, &r.LottoID, &r.TotalCount, &r.TotalBet, &r.TotalPayout, &r.TotalProfit, &r.UpdateTime)
 	return err
 }
 

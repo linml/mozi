@@ -7,6 +7,11 @@ import (
 	"strings"
 )
 
+const (
+	LottoResultOpen   = 0 // 未开奖
+	LottoResultOpened = 1 // 已开奖
+)
+
 type LottoResult struct {
 	ID         int    `json:"id"`
 	LottoID    int    `json:"lotto_id"`
@@ -177,4 +182,11 @@ func GetCurIssue(lid int) (*LottoResult, error) {
 	querySql := fmt.Sprintf("SELECT %s FROM %s WHERE result_time > ? ORDER BY issue ASC LIMIT 1", strings.Join(l.Field(), ","), l.TableName(lid))
 	err := common.BaseDb.QueryRow(querySql, common.GetTimeNowString()).Scan(l.FieldItem()...)
 	return &l, err
+}
+
+func SettleLottoResult(lid int, issue string, drawNumber string) error {
+	u := LottoResult{}
+	updateSql := fmt.Sprintf("UPDATE %s SET draw_number=?, status=?, update_time=? WHERE issue=?", u.TableName(lid))
+	_, err := common.BaseDb.Exec(updateSql, drawNumber, 1, common.GetTimeNowString(), issue)
+	return err
 }

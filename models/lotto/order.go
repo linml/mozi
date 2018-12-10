@@ -8,6 +8,14 @@ import (
 	"strings"
 )
 
+const (
+	OrderStatusUnsettle   = 0 // 订单未结算
+	OrderStatusWinning    = 1 // 订单中奖
+	OrderStatusNotWinning = 2 // 订单未中奖
+	OrderStatusCancel     = 3 // 撤单
+	OrderStatusAbnormal   = 4 // 异常
+)
+
 type Order struct {
 	ID         int             `json:"id"`
 	OrderID    string          `json:"order_id"`
@@ -76,6 +84,27 @@ func CreateRecordLottoOrderTx(tx *sql.Tx, o *Order) error {
 	createSql := fmt.Sprintf("INSERT INTO %s SET order_id=?, user_id=?, name=?, lotto_id=?, lotto_type=?, game_kind=?, game_type=?, issue=?, method_code=?, play_code=?, bet_count=?, bet_content=?, win_count=?, win_content=?, draw_number=?, odds=?, amount=?, status=?, flag=?, payout=?, profit=?, bet_date=?, calc_date=?, bet_time=?, update_time=?, ip=?", o.TableName())
 	_, err := tx.Exec(createSql, &o.OrderID, &o.UserID, &o.Name, &o.LottoID, &o.LottoType, &o.GameKind, &o.GameType, &o.Issue, &o.MethodCode, &o.PlayCode, &o.BetCount, &o.BetContent, &o.WinCount, &o.WinContent, &o.DrawNumber, &o.Odds, &o.Amount, &o.Status, &o.Flag, &o.Payout, &o.Profit, &o.BetDate, &o.CalcDate, &o.BetTime, &o.UpdateTime, &o.IP)
 	return err
+}
+
+func FindOrder4Settle(lastID int, lottoID int, issue string) (*[]Order, error) {
+	t := Order{}
+	querySql := fmt.Sprintf("SELECT %s FROM %s WHERE lotto_id=? AND issue=? AND id >? ORDER BY id ASC LIMIT 100", strings.Join(t.Field(), ","), t.TableName())
+
+	var data []Order
+
+	rows, err := common.BaseDb.Query(querySql, lottoID, issue, lastID)
+	if err != nil {
+		return &data, err
+	}
+	for rows.Next() {
+		d := Order{}
+		err = rows.Scan(d.FieldItem()...)
+		if err != nil {
+			return &data, err
+		}
+		data = append(data, d)
+	}
+	return &data, err
 }
 
 func PageFindLottoOrderList(pageParam common.PageParams) (*common.PageResult, *[]Order, error) {
@@ -274,7 +303,7 @@ func PageFindLottoOrderList(pageParam common.PageParams) (*common.PageResult, *[
 func FindLottoOrderDayCount(countDate string) (*[]LottoOrderCount, error) {
 	data := []LottoOrderCount{}
 	o := Order{}
-	totalSql := fmt.Sprintf("SELECT user_id,name,lotto_id,lotto_type,game_kind,game_type,COALESCE(SUM(bet_count), 0) AS total_count,COALESCE(SUM(amount), 0) AS total_bet,COALESCE(SUM(payout), 0) AS total_payout,COALESCE(SUM(profit), 0) AS total_profit,calc_date AS count_date FROM %s WHERE flag = 1 AND calc_date=? GROUP BY user_id", o.TableName())
+	totalSql := fmt.Sprintf("SELECT user_id,name,lotto_id,lotto_type,game_kind,game_type,COALESCE(SUM(bet_count), 0) AS total_count,COALESCE(SUM(amount), 0) AS total_bet,COALESCE(SUM(payout), 0) AS total_payout,COALESCE(SUM(profit), 0) AS total_profit,calc_date AS count_date FROM %s WHERE flag = 1 AND calc_date=? GROUP BY user_id,lotto_id", o.TableName())
 	rows, err := common.BaseDb.Query(totalSql, countDate)
 	if err != nil {
 		return &data, err
@@ -288,4 +317,17 @@ func FindLottoOrderDayCount(countDate string) (*[]LottoOrderCount, error) {
 		data = append(data, d)
 	}
 	return &data, err
+}
+
+func SetLottoOrderInfo(id int, filed string, val interface{}) error {
+	u := Order{}
+	updateSql := fmt.Sprintf("UPDATE %s SET %s=? WHERE id=?", u.TableName(), filed)
+	_, err := common.BaseDb.Exec(updateSql, val, id)
+	return err
+}
+
+func SettleUpdateLottoOrderTx(tx *sql.Tx, o *Order) error {
+	createSql := fmt.Sprintf("UPDATE %s SET order_id=?, user_id=?, name=?, lotto_id=?, lotto_type=?, game_kind=?, game_type=?, issue=?, method_code=?, play_code=?, bet_count=?, bet_content=?, win_count=?, win_content=?, draw_number=?, odds=?, amount=?, status=?, flag=?, payout=?, profit=?, bet_date=?, calc_date=?, bet_time=?, update_time=?, ip=? WHERE id=?", o.TableName())
+	_, err := tx.Exec(createSql, &o.OrderID, &o.UserID, &o.Name, &o.LottoID, &o.LottoType, &o.GameKind, &o.GameType, &o.Issue, &o.MethodCode, &o.PlayCode, &o.BetCount, &o.BetContent, &o.WinCount, &o.WinContent, &o.DrawNumber, &o.Odds, &o.Amount, &o.Status, &o.Flag, &o.Payout, &o.Profit, &o.BetDate, &o.CalcDate, &o.BetTime, &o.UpdateTime, &o.IP, &o.ID)
+	return err
 }

@@ -26,6 +26,7 @@ func RefreshLottoDayCount(countDate string) error {
 			Name:        (*lottoDayCountList)[i].Name,
 			ParentID:    relationInfo.ParentID,
 			Parents:     relationInfo.Parents,
+			LottoID:     (*lottoDayCountList)[i].LottoID,
 			GameKind:    (*lottoDayCountList)[i].GameKind,
 			GameType:    (*lottoDayCountList)[i].GameType,
 			TotalCount:  (*lottoDayCountList)[i].TotalCount,

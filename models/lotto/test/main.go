@@ -9,8 +9,8 @@ import (
 )
 
 func bet() {
-	uid := 2
-	lottoID := 1
+	uid := 3
+	lottoID := 2
 	issueInfo, err := lotto.GetCurIssue(lottoID)
 	fmt.Println(issueInfo)
 	if err != nil {
@@ -25,7 +25,7 @@ func bet() {
 		MethodCode: "10001",
 		PlayCode:   "9",
 		BetContent: "9",
-		Amount:     decimal.NewFromFloat(1.1),
+		Amount:     decimal.NewFromFloat(10),
 		IP:         common.InetAton("127.0.0.1"),
 	}
 

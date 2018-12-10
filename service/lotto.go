@@ -48,6 +48,9 @@ func Bet(o *lotto.Order) error {
 	if lr.StopTime < common.GetTimeNowString() {
 		return errors.New("当期已停止投注,请投注下一期")
 	}
+	if lr.Status != lotto.LottoResultOpen {
+		return errors.New("当期已开奖,请投注下一期")
+	}
 
 	uPower, err := models.GetUserPower(o.UserID)
 	if err != nil {
@@ -304,4 +307,24 @@ func SetLottoOddsStatus(lid int, mCode string, pCode string, status int) error {
 // 设置彩票赔率玩法项是否显示
 func SetLottoOddsIsShow(lid int, mCode string, pCode string, isShow int) error {
 	return lotto.SetLottoOddsInfo(lid, mCode, pCode, "is_show", isShow)
+}
+
+func CallDrawLotto(lottoID int, issue string, number string) error {
+	err := lotto.CheckDrawNumberLegal(lottoID, number)
+	if err != nil {
+		return err
+	}
+
+	issueInfo, err := lotto.GetLottoResult(lottoID, issue)
+	if err != nil {
+		return err
+	}
+
+	if issueInfo.Status == lotto.LottoResultOpened {
+		return errors.New("本期已开奖")
+	} else {
+		lotto.SettleLottoResult(lottoID, issue, number)
+	}
+	err = models.CalcIssue(lottoID, issue, number)
+	return err
 }
