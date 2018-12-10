@@ -56,3 +56,30 @@ func PageFindRecordMoneyList(c *gin.Context) {
 		c.JSON(200, routes.ApiResult(common.CodeOK, "", data))
 	}
 }
+
+func FindCodeChangeMoneyKindList(c *gin.Context) {
+	params := routes.ParamHelper{}
+
+	params.GetQuery(c, "id")
+
+	data, err := models.FindCodeChangeMoneyKindList(params)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", data))
+	}
+}
+
+func FindCodeChangeMoneyTypeList(c *gin.Context) {
+	params := routes.ParamHelper{}
+
+	params.GetQuery(c, "change_kind")
+	params.GetQuery(c, "id")
+
+	data, err := models.FindCodeChangeMoneyTypeList(params)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", data))
+	}
+}

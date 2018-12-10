@@ -50,15 +50,13 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>模块</label>
-                                <label class=" pull-right"><input type="checkbox" id="use_action_module">选择</label>
-                                <input type="text" class="form-control" id="action_module">
+                                <input type="text" class="form-control" id="change_kind">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>类型</label>
-                                <label class=" pull-right"><input type="checkbox" id="use_action">选择</label>
-                                <input type="text" class="form-control" id="action_id">
+                                <input type="text" class="form-control" id="change_type">
                             </div>
                         </div>
                     </div>
@@ -160,14 +158,12 @@
 {{/*<script type="text/javascript" src="/js/app.js"></script>*/}}
 <script src="/static/js/bootbox.min.js"></script>
 <script>
-    var code_action_module_list = [];
-    var code_action_list = [];
+    var code_money_change_kind = [];
+    var code_money_change_type = [];
     $(function () {
         $('.select2').select2();
-        refresh_code_action_module();
-        refresh_code_action();
-        $('#use_action_module').iCheck('check');
-        $('#use_action').iCheck('check');
+        refresh_code_money_kind();
+        refresh_code_money_change_type();
 
         $('input').iCheck({
             checkboxClass: 'icheckbox_square-blue',
@@ -200,21 +196,21 @@
             ,value: get_current_day_end_time()
         });
 
-        $("#action_module").on("select2:select",function(){
-            var module_id = $(this).val();
+        $("#change_kind").on("select2:select",function(){
+            var change_kind = $(this).val();
             var data = [{id:-1,text:"全部"}];
-            for(var i=0;i<code_action_list.length;i++) {
-                if (code_action_list[i].module_id === Number(module_id)){
-                    data.push({id: code_action_list[i].id, text: code_action_list[i].name});
+            for(var i=0;i<code_money_change_type.length;i++) {
+                if (code_money_change_type[i].change_kind === Number(change_kind)){
+                    data.push({id: code_money_change_type[i].id, text: code_money_change_type[i].name});
                 }
             }
-            var $select = $('#action_id');
+            var $select = $('#change_type');
             var instance;
             instance = $select.data('select2');
             if(instance){
                 $select.select2('destroy').empty();
             }
-            $('#action_id').select2({
+            $('#change_type').select2({
                 dropdownAutoWidth: true,
                 multiple: false,
                 data: data,
@@ -223,10 +219,10 @@
 
 
     });
-    function refresh_code_action_module() {
+    function refresh_code_money_kind() {
         $.ajax({
             type: "GET",
-            url: "/action/action_module/list",
+            url: "/money/code_change_kind/list",
             data: {},
             dataType: 'json',
             success: function(rsp) {
@@ -235,14 +231,14 @@
                     for(var i=0;i<rsp.data.length;i++) {
                         data.push({id: rsp.data[i].id, text: rsp.data[i].name});
                     }
-                    code_action_module_list = rsp.data;
-                    var $select = $('#action_module');
+                    code_money_change_kind = rsp.data;
+                    var $select = $('#change_kind');
                     var instance;
                     instance = $select.data('select2');
                     if(instance){
                         $select.select2('destroy').empty();
                     }
-                    $('#action_module').select2({
+                    $('#change_kind').select2({
                         dropdownAutoWidth: true,
                         multiple: false,
                         data: data,
@@ -252,22 +248,22 @@
             }
         });
     }
-    function refresh_code_action() {
+    function refresh_code_money_change_type() {
         $.ajax({
             type: "GET",
-            url: "/action/action_id/list",
+            url: "/money/code_change_type/list",
             data: {},
             dataType: 'json',
             success: function(rsp) {
                 if(rsp.code === SYS_DEF.CODE.SUCCESS){
-                    code_action_list = rsp.data;
-                    var $select = $('#action_id');
+                    code_money_change_type = rsp.data;
+                    var $select = $('#change_type');
                     var instance;
                     instance = $select.data('select2');
                     if(instance){
                         $select.select2('destroy').empty();
                     }
-                    $('#action_id').select2({
+                    $('#change_type').select2({
                         dropdownAutoWidth: true,
                         multiple: false,
                     });
@@ -305,14 +301,24 @@
         columnDefs: [
             {
                 "render": function(data, type, row, meta) {
+                    return '<strong>'+row.name+'</strong>';
+                },
+                "targets": 2
+            },{
+                "render": function(data, type, row, meta) {
+                    return '<strong>'+row.amount+'</strong>';
+                },
+                "targets": 5
+            },{
+                "render": function(data, type, row, meta) {
                     return format_time(row.record_at);
                 },
                 "targets": 7
             },{
                 "render": function(data, type, row, meta) {
-                    for(var i=0;i<code_action_module_list.length;i++) {
-                        if (code_action_module_list[i].id === row.action_module){
-                            return code_action_module_list[i].name
+                    for(var i=0;i<code_money_change_kind.length;i++) {
+                        if (code_money_change_kind[i].id === row.change_kind){
+                            return code_money_change_kind[i].name
                         }
                     }
                     return row.change_kind;
@@ -320,9 +326,9 @@
                 "targets": 3
             },{
                 "render": function(data, type, row, meta) {
-                    for(var i=0;i<code_action_list.length;i++) {
-                        if (code_action_list[i].id === row.action_id){
-                            return code_action_list[i].name
+                    for(var i=0;i<code_money_change_type.length;i++) {
+                        if (code_money_change_type[i].id === row.change_type){
+                            return code_money_change_type[i].name
                         }
                     }
                     return row.change_type;
@@ -340,6 +346,8 @@
 
             var name = $('#name').val();
             var link_id = $('#link_id').val();
+            var change_kind = $('#change_kind').val();
+            var change_type = $('#change_type').val();
 
 
             if (name !== ""){
@@ -347,6 +355,12 @@
             }
             if (link_id !== ""){
                 param.link_id = link_id
+            }
+            if (change_kind > ""){
+                param.change_kind = change_kind
+            }
+            if (change_type > ""){
+                param.change_type = change_type
             }
 
             param.start_at = format_time_1($('#start_at').val());

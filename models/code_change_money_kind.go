@@ -23,7 +23,7 @@ type CodeChangeMoneyKind struct {
 }
 
 func (b *CodeChangeMoneyKind) TableName() string {
-	return "code_change_money_kind"
+	return "code_money_change_kind"
 }
 
 func (b *CodeChangeMoneyKind) Field() []string {
