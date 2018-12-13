@@ -16,6 +16,7 @@ const (
 	IssueType4 = 4 // 每天期号在同一天, 时间间隔相同, 期号永久累计自增
 	IssueType5 = 5 // 每天一期, 春节不开奖
 	IssueType6 = 6 // 每天期号在同一天, 时间间隔不相同 重庆彩
+	IssueType7 = 7 // 每天期号在同一天, 时间间隔不相同 重庆幸运农场
 )
 
 type IssueFactory struct {
@@ -263,6 +264,47 @@ func (issFac *IssueFactory) GenIssue(t time.Time) (*[]LottoResult, error) {
 			} else {
 				d, _ = time.ParseDuration(fmt.Sprintf("-%ds", issFac.BlockSec))
 			}
+			LockTime = Index.Add(d)
+
+			iPre := "%s%0" + fmt.Sprintf("%d", issFac.IssBit) + "d"
+			issue := fmt.Sprintf(iPre, headIssue, i)
+			startTimeStr := StartTime.Format("20060102150405")
+			lockTimeStr := LockTime.Format("20060102150405")
+			endTimeStr := EndTime.Format("20060102150405")
+			issueDateStr := EndTime.Format("20060102")
+			lrl = append(lrl, LottoResult{
+				LottoID:    issFac.LottoID,
+				Issue:      issue,
+				StartTime:  startTimeStr,
+				StopTime:   lockTimeStr,
+				ResultTime: endTimeStr,
+				IssueDate:  issueDateStr,
+			})
+			StartTime = EndTime
+		}
+		return &lrl, nil
+	case IssueType7:
+		headIssue := t.Format("20060102")
+		d, _ := time.ParseDuration("-24h")
+		Index, _ := time.Parse("20060102150405", headIssue+issFac.EndTime)
+		Index = Index.Add(d)
+
+		StartTime, _ := time.Parse("20060102150405", headIssue+issFac.EndTime)
+		StartTime = StartTime.Add(d)
+		for i := 1; i < issFac.Count+1; i++ {
+			if i == 14 {
+				d, _ = time.ParseDuration(fmt.Sprintf("%ds", 28800))
+			} else {
+				d, _ = time.ParseDuration(fmt.Sprintf("%ds", 600))
+			}
+
+			Index = Index.Add(d)
+
+			EndTime := Index
+			LockTime := Index
+
+			d, _ = time.ParseDuration(fmt.Sprintf("-%ds", issFac.BlockSec))
+
 			LockTime = Index.Add(d)
 
 			iPre := "%s%0" + fmt.Sprintf("%d", issFac.IssBit) + "d"

@@ -24,7 +24,6 @@ func CalcIssue(lottoID int, issue string, number string) error {
 			fmt.Println(err)
 			break
 		}
-		fmt.Println(len(*orderList))
 
 		if len(*orderList) == 0 {
 			break

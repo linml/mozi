@@ -89,7 +89,7 @@ func CheckDrawNumberPK10(numbers string) error {
 		}
 	}
 
-	if m, _ := regexp.MatchString("^(([0-9]|10),){9}([0-9]|10)$", numbers); !m {
+	if m, _ := regexp.MatchString("^((0[0-9]|[0-9]|10),){9}(0[0-9]|[0-9]|10)$", numbers); !m {
 		return NumberErr
 	}
 
@@ -162,7 +162,7 @@ func CheckDrawNumberNongChang(numbers string) error {
 		}
 	}
 
-	if m, _ := regexp.MatchString("^(([1-9]|1[0-9]|20),){7}([1-9]|1[0-9]|20)$", numbers); !m {
+	if m, _ := regexp.MatchString("^(([1-9]|0[1-9]|1[0-9]|20),){7}([1-9]|0[1-9]|1[0-9]|20)$", numbers); !m {
 		return NumberErr
 	}
 	m := map[string]string{}

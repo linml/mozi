@@ -9,10 +9,9 @@ import (
 )
 
 func bet() {
-	uid := 3
-	lottoID := 2
+	uid := 4
+	lottoID := 1
 	issueInfo, err := lotto.GetCurIssue(lottoID)
-	fmt.Println(issueInfo)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -38,7 +37,7 @@ func bet() {
 }
 
 func main() {
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 5; i++ {
 		bet()
 	}
 
