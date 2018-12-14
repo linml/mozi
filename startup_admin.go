@@ -82,6 +82,7 @@ func main() {
 		appAuthV1.GET("/lotto/odds/list", admin.FindLottOddsList)
 		appAuthV1.GET("/pages/lotto/odds/list", admin.PageFindLottOddsList)
 		appAuthV1.GET("/pages/lotto/count_report/list", admin.PageFindAgentLottoReportList4Admin)
+		appAuthV1.GET("/pages/lotto/report_day_count/list", admin.PageFindReportLottoDayCountList)
 		appAuthV1.GET("/lotto/odds", admin.GetLottOdds)
 
 		appAuthV1.POST("/lotto/odds/set", admin.SetLottOddsInfo)

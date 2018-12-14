@@ -562,6 +562,15 @@
             var method_code = $('#method_code').val();
             var status = $('#status').val();
             var is_show = $('#is_show').val();
+            var name = $('#name').val();
+            var issue = $('#issue').val();
+
+            if (name > ""){
+                param.name = name
+            }
+            if (issue > ""){
+                param.issue = issue
+            }
 
             if (lotto_id > ""){
                 param.lotto_id = lotto_id

@@ -44,7 +44,7 @@ func (r *ReportLottoDayCount) Field() []string {
 }
 
 func (r *ReportLottoDayCount) FieldItem() []interface{} {
-	return []interface{}{&r.ID, &r.CountDate, &r.UserID, &r.Name, &r.ParentID, &r.Parents, &r.GameKind, &r.GameType, &r.LottoID, &r.TotalCount, &r.TotalBet, &r.TotalPayout, &r.TotalProfit, &r.UpdateTime}
+	return []interface{}{&r.ID, &r.CountDate, &r.UserID, &r.Name, &r.ParentID, &r.Parents, &r.LottoID, &r.GameKind, &r.GameType, &r.TotalCount, &r.TotalBet, &r.TotalPayout, &r.TotalProfit, &r.UpdateTime}
 }
 
 func ReplaceLottoDayCount(r *ReportLottoDayCount) error {
