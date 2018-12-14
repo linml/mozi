@@ -11,7 +11,6 @@ import (
 
 var (
 	SscNumberPoolJUNKO = []string{"012", "123", "234", "345", "456", "567", "678", "789", "089", "019"} // 时时彩 顺子
-
 )
 
 func FindWinDig(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo, error) {

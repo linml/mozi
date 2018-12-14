@@ -58,6 +58,7 @@ func main() {
 		appAuthV1.GET("/html/lotto/result_lotto", admin.TmplLottoResultotto)
 		appAuthV1.GET("/html/lotto/odds", admin.TmplLottoOdds)
 		appAuthV1.GET("/html/lotto/order", admin.TmplLottoOrder)
+		appAuthV1.GET("/html/lotto/report", admin.TmplLottoReport)
 		appAuthV1.GET("/html/user/money_change", admin.TmplUserMoneyChange)
 
 		appAuthV1.GET("/pages/user/list", admin.PageFindUserList)
@@ -80,6 +81,7 @@ func main() {
 		appAuthV1.GET("/money/code_change_type/list", admin.FindCodeChangeMoneyTypeList)
 		appAuthV1.GET("/lotto/odds/list", admin.FindLottOddsList)
 		appAuthV1.GET("/pages/lotto/odds/list", admin.PageFindLottOddsList)
+		appAuthV1.GET("/pages/lotto/count_report/list", admin.PageFindAgentLottoReportList4Admin)
 		appAuthV1.GET("/lotto/odds", admin.GetLottOdds)
 
 		appAuthV1.POST("/lotto/odds/set", admin.SetLottOddsInfo)

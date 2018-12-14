@@ -118,7 +118,7 @@ func CheckDrawNumberMarkSix(numbers string) error {
 		}
 	}
 
-	if m, _ := regexp.MatchString("^(([1-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]),){6}([1-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9])$", numbers); !m {
+	if m, _ := regexp.MatchString("^(([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]),){6}([1-9]|0[1-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9])$", numbers); !m {
 		return NumberErr
 	}
 

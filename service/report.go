@@ -40,3 +40,20 @@ func RefreshLottoDayCount(countDate string) error {
 
 	return nil
 }
+
+func PageFindAgentLottoReportList4Admin(params common.PageParams) (*common.PageResult, *[]models.AgentLottoReport, error) {
+	if v, ok := params.Params["parent_name"]; ok {
+		info, err := models.GetUserByName(v)
+		if err == nil {
+			params.Params["parent_id"] = fmt.Sprintf("%d", info.UserID)
+		}
+	}
+	if v, ok := params.Params["name"]; ok {
+		info, err := models.GetUserByName(v)
+		if err == nil {
+			params.Params["user_id"] = fmt.Sprintf("%d", info.UserID)
+		}
+	}
+
+	return models.PageFindAgentLottoReportList(params)
+}

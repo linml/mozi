@@ -434,6 +434,10 @@ function get_current_day_end_time(){
     return MZ_Utils.get_date_by_diff_days('', 0).format("yyyy-MM-dd 23:59:59");
 }
 
+function get_current_day_date(){
+    return MZ_Utils.get_date_by_diff_days('', 0).format("yyyy-MM-dd");
+}
+
 function getVal(val){
     val = val !== null && $.trim(val) !== "" ? val : "";
     return $.type(val) == "string" ? val.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\//g, "&#x2f;"): val;
