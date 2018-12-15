@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 10/12/2018 22:11:22
+ Date: 15/12/2018 16:51:48
 */
 
 SET NAMES utf8mb4;
@@ -86,7 +86,7 @@ INSERT INTO `admin_menu` VALUES (200, 1, 5, 0, '彩票开奖', 'fa fa-life-bouy'
 INSERT INTO `admin_menu` VALUES (221, 1, 5, 0, '彩票订单', 'fa fa-life-bouy', 'html/lotto/order', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (231, 2, 5, 0, '赔率设置', 'fa fa-toggle-on', 'html/lotto/odds', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (233, 4, 5, 0, '彩种设置', 'fa fa-hand-pointer-o', 'html/lotto/code_lotto', 'iframe-tab', 1);
-INSERT INTO `admin_menu` VALUES (234, 5, 5, 0, '游戏统计', 'fa fa-bar-chart', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (234, 5, 5, 0, '游戏统计', 'fa fa-bar-chart', 'html/lotto/report', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (250, 0, 6, 0, '银行卡管理', 'fa fa-fw fa-bank', 'html/bank/code_bank', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (251, 1, 6, 0, '收款账户', '', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (252, 2, 6, 0, '第三方收款账户', '', '', 'iframe-tab', 1);
@@ -590,7 +590,7 @@ INSERT INTO `issue_factory` VALUES (25, 1, 1, 85500, 3, 900, '203000', '203000',
 INSERT INTO `issue_factory` VALUES (26, 1, 1, 85500, 3, 900, '211500', '211500', 5, 0, ' ');
 INSERT INTO `issue_factory` VALUES (27, 1, 1, 85500, 3, 900, '211500', '211500', 5, 0, ' ');
 INSERT INTO `issue_factory` VALUES (28, 1, 84, 600, 2, 90, '090000', '230000', 1, 0, ' ');
-INSERT INTO `issue_factory` VALUES (29, 2, 97, 600, 2, 90, '', '', 6, 0, ' ');
+INSERT INTO `issue_factory` VALUES (29, 1, 97, 600, 3, 90, '235200', '235200', 7, 0, ' ');
 INSERT INTO `issue_factory` VALUES (30, 1, 84, 600, 3, 90, '085500', '225500', 1, 0, ' ');
 COMMIT;
 
@@ -2041,7 +2041,7 @@ CREATE TABLE `record_log_admin_action` (
   KEY `user_id` (`user_id`,`action_module`,`action_id`,`record_at`),
   KEY `user_id_2` (`user_id`,`record_at`),
   KEY `action_module` (`action_module`,`action_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员操作日志';
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员操作日志';
 
 -- ----------------------------
 -- Table structure for record_log_user_action
@@ -2106,7 +2106,7 @@ CREATE TABLE `record_lotto_order` (
   KEY `bet_date` (`bet_date`),
   KEY `calc_date` (`calc_date`),
   KEY `lotto_id` (`lotto_id`,`issue`)
-) ENGINE=InnoDB AUTO_INCREMENT=409 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
+) ENGINE=InnoDB AUTO_INCREMENT=639 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
 
 -- ----------------------------
 -- Table structure for record_money_change
@@ -2134,7 +2134,7 @@ CREATE TABLE `record_money_change` (
   KEY `user_id_r` (`user_id`,`record_at`),
   KEY `user_id_g_m` (`user_id`,`game_kind`,`change_kind`),
   KEY `game_id_m_r` (`game_kind`,`change_kind`,`record_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=549 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户资金变动记录';
+) ENGINE=InnoDB AUTO_INCREMENT=789 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户资金变动记录';
 
 -- ----------------------------
 -- Table structure for record_user_login
@@ -2173,14 +2173,14 @@ CREATE TABLE `report_lotto_day_count` (
   `lotto_id` int(11) NOT NULL DEFAULT '0' COMMENT '彩票编号',
   `game_kind` int(11) NOT NULL DEFAULT '0' COMMENT '游戏类型',
   `game_type` int(11) NOT NULL DEFAULT '0' COMMENT '游戏种类',
-  `total_count` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '总下单数',
+  `total_count` int(11) NOT NULL DEFAULT '0' COMMENT '总下单数',
   `total_bet` decimal(12,3) NOT NULL DEFAULT '0.000' COMMENT '总下注额',
   `total_payout` decimal(12,3) NOT NULL DEFAULT '0.000' COMMENT '总获奖额',
-  `total_profit` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '0' COMMENT '总盈亏',
+  `total_profit` decimal(12,3) NOT NULL DEFAULT '0.000' COMMENT '总盈亏',
   `update_time` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `count_date` (`count_date`,`user_id`,`lotto_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='彩票游戏日统计';
+) ENGINE=InnoDB AUTO_INCREMENT=2415 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='彩票游戏日统计';
 
 -- ----------------------------
 -- Table structure for sys_settings
@@ -2291,7 +2291,7 @@ CREATE TABLE `user_relation` (
 -- Records of user_relation
 -- ----------------------------
 BEGIN;
-INSERT INTO `user_relation` VALUES (1, 0, '1', 0);
+INSERT INTO `user_relation` VALUES (1, 0, '0,1', 0);
 COMMIT;
 
 -- ----------------------------
@@ -2343,7 +2343,7 @@ CREATE TABLE `users` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态(0:冻结,1:正常, 2:开户成功但部分功能未开通)',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 -- ----------------------------
 -- Records of users
