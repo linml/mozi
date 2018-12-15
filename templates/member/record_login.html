@@ -53,6 +53,19 @@
                                 <input type="text" class="form-control" id="ip">
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="text-center">快捷选时</label>
+                                <div class="input-group btn-group">
+                                    <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_time('today', 'start_at', 'end_at')">今天</button>
+                                    <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_time('yesterday', 'start_at', 'end_at')">昨天</button>
+                                    <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_time('this_month', 'start_at', 'end_at')">本月</button>
+                                    <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_time('last_month', 'start_at', 'end_at')">上月</button>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>起始时间</label>
@@ -79,7 +92,7 @@
                             <div class="form-group">
                                 <label>操作</label>
                                 <div class="row">
-                                    <button onclick="query_login_history()" type="button" class="btn btn-primary " style="width: 100%;">查询</button>
+                                    <button onclick="query_login_history()" type="button" class="btn btn-primary ">点击查询</button>
                                 </div>
                             </div>
                         </div>

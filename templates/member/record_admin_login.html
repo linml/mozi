@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>管理员操作记录</title>
+    <title>管理员登录记录</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -37,28 +37,14 @@
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>管理员</label>
-                                <input type="text" class="form-control" id="admin_name">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
                                 <label>账户名</label>
                                 <input type="text" class="form-control" id="name">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>模块</label>
-                                <label class=" pull-right"><input type="checkbox" id="use_action_module">选择</label>
-                                <input type="text" class="form-control" id="action_module">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label>活动</label>
-                                <label class=" pull-right"><input type="checkbox" id="use_action">选择</label>
-                                <input type="text" class="form-control" id="action_id">
+                                <label>地址</label>
+                                <input type="text" class="form-control" id="url">
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -117,17 +103,16 @@
                 <!-- Main content -->
                 <div class="box-body">
                     <div class="row">
-                            <table id="login" class="table table-bordered table-hover  table_style table-striped">
+                        <div class="col-xs-12">
+                            <table id="login" class="table table-bordered table-hover  table_style">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">时间</th>
-                                    <th class="text-center">管理员</th>
-                                    <th class="text-center">用户</th>
-                                    <th class="text-center">模块</th>
-                                    <th class="text-center">类型</th>
-                                    <th class="text-center">内容</th>
-                                    <th class="text-center">结果</th>
+                                    <th class="text-center">账户名</th>
+                                    <th class="text-center">地址</th>
+                                    <th class="text-center">浏览器</th>
                                     <th class="text-center">IP</th>
+                                    <th class="text-center">登录时间</th>
+                                    <th class="text-center">设备类型</th>
                                 </tr>
                                 </thead>
                                 <tbody id="login_data" class="text-center"></tbody>
@@ -175,21 +160,8 @@
 {{/*<script type="text/javascript" src="/js/app.js"></script>*/}}
 <script src="/static/js/bootbox.min.js"></script>
 <script>
-    var code_action_module_list = [];
-    var code_action_list = [];
     $(function () {
         $('.select2').select2();
-        refresh_code_action_module();
-        refresh_code_action();
-        $('#use_action_module').iCheck('check');
-        $('#use_action').iCheck('check');
-
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue',
-            increaseArea: '20%' // optional
-        });
-
         laydate.render({
             elem: '#start_at' //指定元素
             ,type: 'datetime'
@@ -214,89 +186,15 @@
             ,theme: '#393D49'
             ,value: get_current_day_end_time()
         });
-
-        $("#action_module").on("select2:select",function(){
-            var module_id = $(this).val();
-            var data = [{id:-1,text:"全部"}];
-            for(var i=0;i<code_action_list.length;i++) {
-                if (code_action_list[i].module_id === Number(module_id)){
-                    data.push({id: code_action_list[i].id, text: code_action_list[i].name});
-                }
-            }
-            var $select = $('#action_id');
-            var instance;
-            instance = $select.data('select2');
-            if(instance){
-                $select.select2('destroy').empty();
-            }
-            $('#action_id').select2({
-                dropdownAutoWidth: true,
-                multiple: false,
-                data: data,
-            });
-        });
-
-
-    });
-    function refresh_code_action_module() {
-        $.ajax({
-            type: "GET",
-            url: "/action/action_module/list",
-            data: {},
-            dataType: 'json',
-            success: function(rsp) {
-                if(rsp.code === SYS_DEF.CODE.SUCCESS){
-                    var data = [{id:-1,text:"全部"}];
-                    for(var i=0;i<rsp.data.length;i++) {
-                        data.push({id: rsp.data[i].id, text: rsp.data[i].name});
-                    }
-                    code_action_module_list = rsp.data;
-                    var $select = $('#action_module');
-                    var instance;
-                    instance = $select.data('select2');
-                    if(instance){
-                        $select.select2('destroy').empty();
-                    }
-                    $('#action_module').select2({
-                        dropdownAutoWidth: true,
-                        multiple: false,
-                        data: data,
-                    });
-
-                }
-            }
-        });
-    }
-    function refresh_code_action() {
-        $.ajax({
-            type: "GET",
-            url: "/action/action_id/list",
-            data: {},
-            dataType: 'json',
-            success: function(rsp) {
-                if(rsp.code === SYS_DEF.CODE.SUCCESS){
-                    code_action_list = rsp.data;
-                    var $select = $('#action_id');
-                    var instance;
-                    instance = $select.data('select2');
-                    if(instance){
-                        $select.select2('destroy').empty();
-                    }
-                    $('#action_id').select2({
-                        dropdownAutoWidth: true,
-                        multiple: false,
-                    });
-                }
-            }
-        });
-    }
+        CKEDITOR.replace('notice_editor');
+        CKEDITOR.replace('update_notice_editor');
+    })
 </script>
 <script>
     var myTable;
     myTable = $("#login").DataTable({
         language: datatable_lang,  //提示信息
         autoWidth: false,  //禁用自动调整列宽
-        bSort: false,
         stripeClasses: ["odd", "even"],  //为奇偶行加上样式，兼容不支持CSS伪类的场合
         // processing: true,  //隐藏加载提示,自行处理
         serverSide: true,  //启用服务器端分页，即开启后端分页
@@ -306,57 +204,42 @@
         ordering: false,
         order: [],  //取消默认排序查询,否则复选框一列会出现小箭头
         columns: [
-            {"data": "record_at", "width": "100px"},
-            {"data": "operator_name", "width": "100px"},
-            {"data": "name", "width": "100px"},
-            {"data": "action_module", "width": "100px"},
-            {"data": "action_id", "width": "110px"},
-            {"data": "content", "width": "600px", "word-wrap":"break-all"},
-            {"data": "success", "width": "100px"},
-            {"data": "ip", "width": "100px"},
+            {"data": "name"},
+            {"data": "url"},
+            {"data": "user_agent"},
+            {"data": "ip"},
+            {"data": "record_at"},
+            {"data": "device_type"},
         ],
         columnDefs: [
             {
                 "render": function(data, type, row, meta) {
                     return format_time(row.record_at);
                 },
-                "targets": 0
-            },{
-                "render": function(data, type, row, meta) {
-                    for(var i=0;i<code_action_module_list.length;i++) {
-                        if (code_action_module_list[i].id === row.action_module){
-                            return code_action_module_list[i].name
-                        }
-                    }
-                    return row.action_module;
-                },
-                "targets": 3
-            },{
-                "render": function(data, type, row, meta) {
-                    for(var i=0;i<code_action_list.length;i++) {
-                        if (code_action_list[i].id === row.action_id){
-                            return code_action_list[i].name
-                        }
-                    }
-                    return row.action_id;
-                },
                 "targets": 4
-            }, {
+            },{
                 "render": function(data, type, row, meta) {
-
-                    return "<div style=\"width:600px;word-wrap:break-word;\">"+row.content+"</div>";
+                    x = "";
+                    switch (row.device_type) {
+                        case 0:
+                            x = "其他";
+                            break;
+                        case 1:
+                            x = "网页";
+                            break;
+                        case 2:
+                            x = "手机";
+                            break;
+                        case 3:
+                            x = "API";
+                            break;
+                        default:
+                            x = "暂定";
+                            break;
+                    }
+                    return x;
                 },
                 "targets": 5
-            }, {
-                "render": function(data, type, row, meta) {
-                    if (row.success === SYS_DEF.CODE.SUCCESS){
-
-                        return '<span class="label label-success">成功</span>';
-                    }else{
-                        return '<span class="label label-danger">失败</span>';
-                    }
-                },
-                "targets": 6
             }
         ],
         ajax:function(data, callback, settings){
@@ -385,7 +268,7 @@
             param.start_at = format_time_1($('#start_at').val());
             param.end_at = format_time_1($('#end_at').val());
 
-            var url = "/pages/action/record/list";
+            var url = "/pages/admin/record_login";
 
             $.ajax({
                 type: "GET",
@@ -397,7 +280,7 @@
                     setTimeout(function(){
                         //异常判断与处理
                         if (result.code !== SYS_DEF.CODE.SUCCESS) {
-                            bootbox.alert("查询失败。错误码："+result.code + ";内容:" + result.msg);
+                            $.dialog.alert("查询失败。错误码："+result.code);
                             return;
                         }
                         $("#login_data tr").remove();
@@ -422,7 +305,7 @@
                     },200);
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    bootbox.alert("查询失败");
+                    $.dialog.alert("查询失败");
                 }
             });
         },

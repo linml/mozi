@@ -47,18 +47,19 @@ func AuthAdminLogin(name string, password string, params map[string]string) erro
 		url = val
 	}
 
-	r := models.RecordAdminUserLogin{
+	r := models.RecordAdminLogin{
 		UserID:     u.UserID,
 		Name:       u.Name,
 		DeviceType: deviceType,
 		IP:         ip,
 		UserAgent:  userAgent,
 		Url:        url,
+		Status:     1,
 		RecordAt:   common.GetTimeNowString(),
 	}
-	models.LogRecordAdminUserLogin(&r)
+	err = models.LogRecordAdminLogin(&r)
 
-	return nil
+	return err
 }
 
 func UpdateRoleMenu(roleID int, newMenu []int) error {
@@ -107,4 +108,23 @@ func AddAdmin(name string, password string, role int) error {
 	}
 	_, err = models.CreateAdminUser(&u)
 	return err
+}
+
+func UpdateAdminPassword(uid int, oldPassword string, newPassword string) error {
+	if len(newPassword) < 6 {
+		return errors.New("新密码不能低于6位数")
+	}
+	uInfo, err := models.GetAdminUserByID(uid)
+	if err != nil {
+		return err
+	}
+	if common.CheckBCrypt(oldPassword, uInfo.Password) == false {
+		return errors.New("原密码错误")
+	}
+	hashPassword, err := common.HashPassword(newPassword)
+	if err != nil {
+		return err
+	}
+	return models.SetAdminInfo(uid, "password", hashPassword)
+
 }

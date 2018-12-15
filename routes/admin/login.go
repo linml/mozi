@@ -29,6 +29,7 @@ func Login(c *gin.Context) {
 	}
 	params.Set("url", scheme+c.Request.Host+c.Request.RequestURI)
 	err := service.AuthAdminLogin(name, password, params)
+
 	if err != nil {
 		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
 	} else {

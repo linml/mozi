@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 15/12/2018 16:51:48
+ Date: 15/12/2018 22:01:05
 */
 
 SET NAMES utf8mb4;
@@ -38,7 +38,7 @@ CREATE TABLE `admin` (
 -- Records of admin
 -- ----------------------------
 BEGIN;
-INSERT INTO `admin` VALUES (1, 'boss', '$2a$10$wneCJNoLkxjpbd4ti5mHC.JHDTrieDfz9aQPUY.eQd/hTMug0ftlC', '', 0, '1', 1, '');
+INSERT INTO `admin` VALUES (1, 'boss', '$2a$10$IIs/pS0smQ/rCY6nsSwoD.KaeiFB.5dLGWzfXBj5dd3k8ovotIM92', '', 0, '1', 1, '');
 COMMIT;
 
 -- ----------------------------
@@ -90,17 +90,17 @@ INSERT INTO `admin_menu` VALUES (234, 5, 5, 0, '游戏统计', 'fa fa-bar-chart'
 INSERT INTO `admin_menu` VALUES (250, 0, 6, 0, '银行卡管理', 'fa fa-fw fa-bank', 'html/bank/code_bank', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (251, 1, 6, 0, '收款账户', '', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (252, 2, 6, 0, '第三方收款账户', '', '', 'iframe-tab', 1);
-INSERT INTO `admin_menu` VALUES (253, 3, 6, 0, '会员入款单', '', '', '', 1);
-INSERT INTO `admin_menu` VALUES (254, 4, 6, 0, '会员收款单', '', '', '', 1);
+INSERT INTO `admin_menu` VALUES (253, 3, 6, 0, '会员入款单', '', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (254, 4, 6, 0, '会员收款单', '', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (255, 5, 6, 0, '手动入款', 'fa fa-fw fa-hand-o-right', 'pages/finance/manual_deposit.html', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (256, 6, 6, 0, '手动出款', 'fa fa-fw fa-hand-o-right', '', 'iframe-tab', 1);
-INSERT INTO `admin_menu` VALUES (257, 7, 6, 0, '手动转点', '', '', '', 1);
+INSERT INTO `admin_menu` VALUES (257, 7, 6, 0, '手动转点', '', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (258, 8, 6, 0, '流水查询', 'fa fa-fw fa-file-text', 'html/user/money_change', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (259, 9, 6, 0, '稽核分查询', 'fa fa-fw fa-file-text', 'pages/finance/record_audit_score.html', 'iframe-tab', 1);
-INSERT INTO `admin_menu` VALUES (260, 10, 6, 0, '财务汇总', '', '', '', 1);
-INSERT INTO `admin_menu` VALUES (261, 0, 7, 0, '分红管理', '', '', '', 1);
-INSERT INTO `admin_menu` VALUES (262, 1, 7, 0, '工资管理', '', '', '', 1);
-INSERT INTO `admin_menu` VALUES (263, 2, 7, 0, '退佣管理', '', '', '', 1);
+INSERT INTO `admin_menu` VALUES (260, 10, 6, 0, '财务汇总', '', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (261, 0, 7, 0, '分红管理', '', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (262, 1, 7, 0, '工资管理', '', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (263, 2, 7, 0, '退佣管理', '', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (270, 1, 8, 0, '游戏报表', 'fa fa-bar-chart', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (271, 2, 8, 0, '个人报表', 'fa fa-bar-chart', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (272, 3, 8, 0, '平台报表', 'fa fa-bar-chart', '', 'iframe-tab', 1);
@@ -108,6 +108,7 @@ INSERT INTO `admin_menu` VALUES (273, 4, 8, 0, '运营趋势', 'fa fa-bar-chart'
 INSERT INTO `admin_menu` VALUES (300, 1, 9, 0, '系统设置', 'fa fa-bar-chart', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (301, 2, 9, 0, '管理员操作记录', 'fa fa-bar-chart', 'html/record/admin_action', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (302, 3, 9, 0, '用户操作记录', 'fa fa-bar-chart', '', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (303, 4, 9, 0, '登录记录', 'fa fa-list-alt', 'html/admin/record_login', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (900, 1, 10, 0, '管理员', '', 'html/admin_list', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (902, 3, 10, 0, '角色', '', 'html/admin_role_menu', 'iframe-tab', 1);
 COMMIT;
@@ -189,6 +190,7 @@ INSERT INTO `admin_role_menu` VALUES (1, 273);
 INSERT INTO `admin_role_menu` VALUES (1, 300);
 INSERT INTO `admin_role_menu` VALUES (1, 301);
 INSERT INTO `admin_role_menu` VALUES (1, 302);
+INSERT INTO `admin_role_menu` VALUES (1, 303);
 INSERT INTO `admin_role_menu` VALUES (1, 900);
 INSERT INTO `admin_role_menu` VALUES (1, 902);
 COMMIT;
@@ -223,6 +225,7 @@ INSERT INTO `code_action_admin` VALUES (4, 9, '设置彩票状态', 9, 1);
 INSERT INTO `code_action_admin` VALUES (4, 10, '设置彩票排序', 10, 1);
 INSERT INTO `code_action_admin` VALUES (4, 11, '设置彩票显示', 11, 1);
 INSERT INTO `code_action_admin` VALUES (4, 12, '设置彩票赔率', 12, 1);
+INSERT INTO `code_action_admin` VALUES (4, 13, '修改管理员密码', 13, 1);
 COMMIT;
 
 -- ----------------------------
@@ -2020,6 +2023,29 @@ CREATE TABLE `lotto_result` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='彩票开奖结果';
 
 -- ----------------------------
+-- Table structure for record_admin_login
+-- ----------------------------
+DROP TABLE IF EXISTS `record_admin_login`;
+CREATE TABLE `record_admin_login` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(36) NOT NULL DEFAULT '',
+  `device_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:Other,1:Web, 2:Mobile, 3:Api',
+  `ip` varchar(16) NOT NULL DEFAULT '0.0.0.0' COMMENT '登入地址',
+  `user_agent` text NOT NULL COMMENT '浏览器详情',
+  `url` varchar(64) NOT NULL DEFAULT '' COMMENT '登入地址',
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `record_at` varchar(14) NOT NULL DEFAULT '' COMMENT '记录时间',
+  `remark` varchar(128) NOT NULL DEFAULT '' COMMENT '备注',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`,`record_at`),
+  KEY `user_name` (`record_at`),
+  KEY `ip` (`ip`,`record_at`),
+  KEY `url` (`url`,`record_at`),
+  KEY `record_time` (`record_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
+
+-- ----------------------------
 -- Table structure for record_log_admin_action
 -- ----------------------------
 DROP TABLE IF EXISTS `record_log_admin_action`;
@@ -2041,7 +2067,7 @@ CREATE TABLE `record_log_admin_action` (
   KEY `user_id` (`user_id`,`action_module`,`action_id`,`record_at`),
   KEY `user_id_2` (`user_id`,`record_at`),
   KEY `action_module` (`action_module`,`action_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员操作日志';
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员操作日志';
 
 -- ----------------------------
 -- Table structure for record_log_user_action

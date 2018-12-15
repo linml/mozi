@@ -1255,13 +1255,13 @@ var App = function() {
     // Handles Bootstrap Modals.
     var handleModals = function () {
         // fix stackable modal issue: when 2 or more modals opened, closing one of modal will remove .modal-open class. 
-        $('body').on('hide.bs.modal', function () {
-            if ($('.modal:visible').size() > 1 && $('html').hasClass('modal-open') === false) {
-                $('html').addClass('modal-open');
-            } else if ($('.modal:visible').size() <= 1) {
-                $('html').removeClass('modal-open');
-            }
-        });
+        // $('body').on('hide.bs.modal', function () {
+        //     if ($('.modal:visible').size() > 1 && $('html').hasClass('modal-open') === false) {
+        //         $('html').addClass('modal-open');
+        //     } else if ($('.modal:visible').size() <= 1) {
+        //         $('html').removeClass('modal-open');
+        //     }
+        // });
 
         // fix page scrollbars issue
         $('body').on('show.bs.modal', '.modal', function () {

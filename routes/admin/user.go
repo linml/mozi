@@ -9,6 +9,55 @@ import (
 	"github.com/xiuos/mozi/service"
 )
 
+func UpdateAdminPassword(c *gin.Context) {
+	uid, err := routes.GetAdminLoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+		return
+	}
+
+	params := routes.ParamHelper{}
+	params.GetPostFormNotEmpty(c, "old_password")
+	params.GetPostFormNotEmpty(c, "new_password")
+	if params.Exist("old_password") == false {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "旧密码不能为空"))
+		return
+	}
+	if params.Exist("new_password") == false {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "新密码不能为空"))
+		return
+	}
+
+	oldPassword := params.Get("old_password")
+	newPassword := params.Get("new_password")
+
+	err = service.UpdateAdminPassword(uid, oldPassword, newPassword)
+	au, _ := models.GetAdminUserByID(uid)
+	r := models.RecordAdminAction{
+		ActionModule: models.ActionAdminModuleSystem,
+		ActionID:     models.ActionAdminUpdateAdminPassword,
+		Content:      fmt.Sprintf("修改密码:%s", au.Name),
+		IP:           c.ClientIP(),
+		RecordAt:     common.GetTimeNowString(),
+		Success:      common.CodeOK,
+		Message:      "",
+		OperatorID:   uid,
+		OperatorName: au.Name,
+		OperatorType: models.OperatorTypeAdminSelf,
+	}
+
+	if err != nil {
+		r.Success = common.CodeFail
+		r.Message = fmt.Sprintf("修改失败:%s", err)
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+	} else {
+		r.Success = common.CodeOK
+		r.Message = "修改成功"
+		c.JSON(200, routes.ApiShowResult(common.CodeOK, ""))
+	}
+	models.LogRecordAdminAction(&r)
+}
+
 func PageFindUserList(c *gin.Context) {
 	params := routes.ParamHelper{}
 	params.GetQuery(c, "draw")
@@ -92,6 +141,37 @@ func PageFindUserRecordLogin(c *gin.Context) {
 	if err != nil {
 		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
 	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", pr))
+	}
+}
+
+func PageFindRecordAdminLogin(c *gin.Context) {
+	params := routes.ParamHelper{}
+	params.GetQuery(c, "draw")
+	params.GetQuery(c, "name")
+	params.GetQuery(c, "ip")
+	params.GetQuery(c, "status")
+	params.GetQuery(c, "start_at")
+	params.GetQuery(c, "end_at")
+	params.GetQuery(c, "status")
+	params.GetQuery(c, "curr_page")
+	params.GetQuery(c, "page_row")
+	currPage := common.GetInt(params.Get("curr_page"))
+	pageRow := common.GetInt(params.Get("page_row"))
+
+	if currPage < 1 {
+		currPage = common.PageDefaultPage
+	}
+
+	if pageRow < 1 {
+		pageRow = common.PageDefaultRow
+	}
+	pp := common.PageParams{CurrentPage: currPage, PageRow: pageRow, Params: params}
+	pr, _, err := models.PageFindRecordAdminLogin(pp)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+
 		c.JSON(200, routes.ApiResult(common.CodeOK, "", pr))
 	}
 }

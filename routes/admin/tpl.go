@@ -33,6 +33,10 @@ func TmplIndex(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", gin.H{"title": "管理后台", "admin_user": u.Name, "cur_ip": ip})
 }
 
+func TmplDashboard(c *gin.Context) {
+	c.HTML(http.StatusOK, "dashboard.html", gin.H{"title": "管理后台"})
+}
+
 func TmplAdminRole(c *gin.Context) {
 	c.HTML(http.StatusOK, "admin_role.html", gin.H{"title": "管理后台"})
 }
@@ -51,6 +55,10 @@ func TmplMemberList(c *gin.Context) {
 
 func TmplRecordLogin(c *gin.Context) {
 	c.HTML(http.StatusOK, "record_login.html", gin.H{})
+}
+
+func TmplRecordAdminLogin(c *gin.Context) {
+	c.HTML(http.StatusOK, "record_admin_login.html", gin.H{})
 }
 
 func TmplUserBank(c *gin.Context) {
