@@ -2,8 +2,8 @@ package models
 
 import (
 	"fmt"
-	"github.com/xiuos/lotto"
 	"github.com/xiuos/mozi/common"
+	"github.com/xiuos/mozi/models/lotto"
 )
 
 const (
