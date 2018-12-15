@@ -9,7 +9,7 @@ import (
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/routes"
 	"github.com/xiuos/mozi/routes/api"
-	"github.com/xiuos/xlog"
+	"github.com/xiuos/mozi/xlog"
 	"os"
 	"runtime"
 )

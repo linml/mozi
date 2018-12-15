@@ -7,7 +7,7 @@ import (
 	"github.com/xiuos/mozi/routes/game"
 
 	"github.com/xiuos/mozi/common"
-	"github.com/xiuos/xlog"
+	"github.com/xiuos/mozi/xlog"
 	"os"
 	"runtime"
 )

@@ -1,7 +1,7 @@
 package common
 
 import (
-	"github.com/xiuos/xlog"
+	"github.com/xiuos/mozi/xlog"
 )
 
 var Logger *xlog.Logger

@@ -20,6 +20,5 @@ import:
   version: ~1.1.0
 - package: github.com/shopspring/decimal
   version: ~1.1.0
-- package: github.com/xiuos/xlog
 - package: github.com/xiuos/xorm
 - package: golang.org/x/crypto/bcrypt
