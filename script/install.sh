@@ -14,6 +14,10 @@ function notify() {
         curl -X POST -s "${notify_url}$1" --data-urlencode "progress=$2" >/dev/null 2>&1
     fi
 }
+
+function insert_dep() {
+    go get -u github.com/Masterminds/glide
+}
 notify start 安装golang
 install_golang
 notify success 安装golang
