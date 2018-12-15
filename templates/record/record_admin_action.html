@@ -71,6 +71,17 @@
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
+                                <label class="text-center">快捷选时</label>
+                                <div class="input-group btn-group">
+                                    <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_time('today', 'start_at', 'end_at')">今天</button>
+                                    <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_time('yesterday', 'start_at', 'end_at')">昨天</button>
+                                    <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_time('this_month', 'start_at', 'end_at')">本月</button>
+                                    <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_time('last_month', 'start_at', 'end_at')">上月</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
                                 <label>起始时间</label>
                                 <div class="input-group date">
                                     <div class="input-group-addon">

@@ -29,7 +29,8 @@ func TmplRoot(c *gin.Context) {
 func TmplIndex(c *gin.Context) {
 	uid, _ := routes.GetAdminLoginID(c)
 	u, _ := models.GetAdminUserByID(uid)
-	c.HTML(http.StatusOK, "index.html", gin.H{"title": "管理后台", "admin_user": u.Name})
+	ip := c.ClientIP()
+	c.HTML(http.StatusOK, "index.html", gin.H{"title": "管理后台", "admin_user": u.Name, "cur_ip": ip})
 }
 
 func TmplAdminRole(c *gin.Context) {

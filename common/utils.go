@@ -118,6 +118,11 @@ func GetInt(str string) int {
 	return i
 }
 
+func GetInt2(str string) (int, error) {
+	i, err := strconv.Atoi(str)
+	return i, err
+}
+
 func GetContent(m map[string]string) string {
 	s := ""
 	for i, _ := range m {

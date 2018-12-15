@@ -30,6 +30,7 @@
 
 <!-- Content Header (Page header) -->
 <section class="content-header">
+
     <div class="row">
         <div class="col-md-2">
             <div class="form-group">
@@ -42,6 +43,28 @@
             <div class="form-group">
                 <label>期号</label>
                 <input type="text" class="form-control " id="issue" placeholder="">
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <div class="form-group">
+                <label>状态</label>
+                <select id="status" class="form-control select2" style="width: 100%;">
+                    <option value="">全部</option>
+                    <option value=1>已开奖</option>
+                    <option value=0>未开奖</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="text-center">快捷选时</label>
+                <div class="input-group btn-group">
+                    <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_time('today', 'start_at', 'end_at')">今天</button>
+                    <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_time('yesterday', 'start_at', 'end_at')">昨天</button>
+                    <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_time('this_month', 'start_at', 'end_at')">本月</button>
+                    <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_time('last_month', 'start_at', 'end_at')">上月</button>
+                </div>
             </div>
         </div>
         <div class="col-md-2">
@@ -68,19 +91,9 @@
         </div>
         <div class="col-md-1">
             <div class="form-group">
-                <label>状态</label>
-                <select id="status" class="form-control select2" style="width: 100%;">
-                    <option value="">全部</option>
-                    <option value=1>已开奖</option>
-                    <option value=0>未开奖</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
                 <label>操作</label>
                 <div class="row">
-                    <button onclick="query_result()" type="button" class="btn btn-primary  btn-sm" style="width: 100%;">查询</button>
+                    <button onclick="query_result()" type="button" class="btn btn-primary  btn-sm" > 点击查询 </button>
                 </div>
             </div>
         </div>
@@ -214,18 +227,6 @@
         });
         laydate.render({
             elem: '#end_at' //指定元素
-            ,type: 'datetime'
-            ,theme: '#393D49'
-            ,value: get_current_day_end_time()
-        });
-        laydate.render({
-            elem: '#add_start_at' //指定元素
-            ,type: 'datetime'
-            ,theme: '#393D49'
-            ,value: get_current_day_begin_time()
-        });
-        laydate.render({
-            elem: '#add_end_at' //指定元素
             ,type: 'datetime'
             ,theme: '#393D49'
             ,value: get_current_day_end_time()

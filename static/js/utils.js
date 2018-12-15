@@ -530,3 +530,72 @@ function TableDataIsNull(str){
         }
     }
 }
+
+
+function quick_select_time(key, start, end){
+    var rs = [];
+    var tmp;
+    switch (key){
+        case "today":
+            date = MZ_Utils.get_date_by_diff_days(null, 0);
+            rs[0] = date.format("yyyy-MM-dd 23:59:59");
+            rs[1] = date.format("yyyy-MM-dd 00:00:00");
+            break;
+        case "yesterday":
+            date = MZ_Utils.get_date_by_diff_days(null, -1);
+            rs[0] = date.format("yyyy-MM-dd 23:59:59");
+            rs[1] = date.format("yyyy-MM-dd 00:00:00");
+            break;
+        case "this_month":
+            tmp = MZ_Utils.get_month_date_range(null, 0);
+            rs[0] = tmp.date_max.format("yyyy-MM-dd 23:59:59");
+            rs[1] = tmp.date_min.format("yyyy-MM-dd 00:00:00");
+            break;
+        case "last_month":
+            tmp = MZ_Utils.get_month_date_range(null, -1);
+            rs[0] = tmp.date_max.format("yyyy-MM-dd 23:59:59");
+            rs[1] = tmp.date_min.format("yyyy-MM-dd 00:00:00");
+            break;
+        default:
+            date = MZ_Utils.get_date_by_diff_days(null, 0);
+            rs[0] = date.format("yyyy-MM-dd 23:59:59");
+            rs[1] = date.format("yyyy-MM-dd 00:00:00");
+    }
+
+    $("#"+start).val(rs[1]);
+    $("#"+end).val(rs[0]);
+}
+
+function quick_select_date(key, start, end){
+    var rs = [];
+    var tmp;
+    switch (key){
+        case "today":
+            date = MZ_Utils.get_date_by_diff_days(null, 0);
+            rs[0] = date.format("yyyy-MM-dd 23:59:59");
+            rs[1] = date.format("yyyy-MM-dd 00:00:00");
+            break;
+        case "yesterday":
+            date = MZ_Utils.get_date_by_diff_days(null, -1);
+            rs[0] = date.format("yyyy-MM-dd 23:59:59");
+            rs[1] = date.format("yyyy-MM-dd 00:00:00");
+            break;
+        case "this_month":
+            tmp = MZ_Utils.get_month_date_range(null, 0);
+            rs[0] = tmp.date_max.format("yyyy-MM-dd 23:59:59");
+            rs[1] = tmp.date_min.format("yyyy-MM-dd 00:00:00");
+            break;
+        case "last_month":
+            tmp = MZ_Utils.get_month_date_range(null, -1);
+            rs[0] = tmp.date_max.format("yyyy-MM-dd 23:59:59");
+            rs[1] = tmp.date_min.format("yyyy-MM-dd 00:00:00");
+            break;
+        default:
+            date = MZ_Utils.get_date_by_diff_days(null, 0);
+            rs[0] = date.format("yyyy-MM-dd 23:59:59");
+            rs[1] = date.format("yyyy-MM-dd 00:00:00");
+    }
+
+    $("#"+start).val(rs[1].slice(0, 10));
+    $("#"+end).val(rs[0].slice(0, 10));
+}

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/shopspring/decimal"
+	"github.com/xiuos/mozi/common"
 	"sort"
 	"strconv"
 	"strings"
@@ -14,9 +15,19 @@ var (
 )
 
 func FindWinDig(me MethodEngine, o *Order, drawNumber []string) (*[]WinInfo, error) {
-	n := drawNumber[me.GetOpt().Bit[0]]
+	//n := drawNumber[me.GetOpt().Bit[0]]
 	var w []WinInfo
-	if o.BetContent == n {
+
+	n, err := common.GetInt2(drawNumber[me.GetOpt().Bit[0]])
+	if err != nil {
+		return &w, nil
+	}
+
+	n1, err := common.GetInt2(o.BetContent)
+	if err != nil {
+		return &w, nil
+	}
+	if n1 == n {
 		w = append(w, WinInfo{Info: o.BetContent, Odds: o.Odds, Count: 1})
 		return &w, nil
 	}

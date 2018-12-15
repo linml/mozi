@@ -181,6 +181,7 @@
 <script type="text/javascript" src="/static/laydate/laydate.js"></script>
 <script type="text/javascript" src="/static/js/utils.js"></script>
 <script type="text/javascript" src="/static/js/sys_def.js"></script>
+<script type="text/javascript" src="/static/js/public.js"></script>
 <script type="text/javascript" src="/static/js/bootbox.min.js"></script>
 <script type="text/javascript">
     var LOTTO_TYPE = [];
@@ -374,60 +375,48 @@
     }
 
     function refresh_code_lotto() {
-        $.ajax({
-            type: "GET",
-            url: "/lotto/code_lotto/list",
-            data: {},
-            dataType: 'json',
-            success: function(rsp) {
-                if(rsp.code === SYS_DEF.CODE.SUCCESS){
-                    var data = [{id: "", text: "全部"}];
-                    for(var i=0;i<rsp.data.length;i++) {
-                        data.push({id: rsp.data[i].lotto_id, text: rsp.data[i].name});
-                    }
-                    var $select = $('#lotto_id');
-                    var instance;
-                    instance = $select.data('select2');
-                    if(instance){
-                        $select.select2('destroy').empty();
-                    }
-                    $('#lotto_id').select2({
-                        dropdownAutoWidth: true,
-                        multiple: false,
-                        data: data
-                    });
-
+        find_code_lotto_list({}, function (rsp) {
+            if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                var data = [{id: "", text: "全部"}];
+                for(var i=0;i<rsp.data.length;i++) {
+                    data.push({id: rsp.data[i].lotto_id, text: rsp.data[i].name});
                 }
+                var $select = $('#lotto_id');
+                var instance;
+                instance = $select.data('select2');
+                if(instance){
+                    $select.select2('destroy').empty();
+                }
+                $('#lotto_id').select2({
+                    dropdownAutoWidth: true,
+                    multiple: false,
+                    data: data
+                });
+
             }
         });
     }
 
     function refresh_code_lotto_type() {
-        $.ajax({
-            type: "GET",
-            url: "/lotto/code_lotto_type/list",
-            data: {},
-            dataType: 'json',
-            success: function(rsp) {
-                if(rsp.code === SYS_DEF.CODE.SUCCESS){
-                    LOTTO_TYPE = rsp.data;
+        find_code_lotto_type_list({}, function (rsp) {
+            if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                LOTTO_TYPE = rsp.data;
 
-                    var data = [{id: "", text: "全部"}];
-                    for(var i=0;i<rsp.data.length;i++) {
-                        data.push({id: rsp.data[i].id, text: rsp.data[i].name});
-                    }
-                    var $select = $('#lotto_type');
-                    var instance;
-                    instance = $select.data('select2');
-                    if(instance){
-                        $select.select2('destroy').empty();
-                    }
-                    $('#lotto_type').select2({
-                        dropdownAutoWidth: true,
-                        multiple: false,
-                        data: data
-                    });
+                var data = [{id: "", text: "全部"}];
+                for(var i=0;i<rsp.data.length;i++) {
+                    data.push({id: rsp.data[i].id, text: rsp.data[i].name});
                 }
+                var $select = $('#lotto_type');
+                var instance;
+                instance = $select.data('select2');
+                if(instance){
+                    $select.select2('destroy').empty();
+                }
+                $('#lotto_type').select2({
+                    dropdownAutoWidth: true,
+                    multiple: false,
+                    data: data
+                });
             }
         });
     }

@@ -29,10 +29,12 @@
 <div id="user_lotto_day_count" data-backdrop="static" class="modal fade bs-example-modal-lg" role="dialog" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <div class="box-header with-border">
-
-                <h3 class="box-title">详情日表</h3>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">彩票日报表</h4>
             </div>
+
             <div class="modal-body">
                 <input type="hidden" id="count_day_user_id" name="extra" value="">
                 <table id="lotto_day_count" class="table table-bordered table-hover  table_style table-striped">
@@ -51,7 +53,6 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
             </div>
         </div>
     </div>
@@ -71,7 +72,17 @@
                     <input type="text" class="form-control " id="parent_name" placeholder="">
                 </div>
             </div>
-
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="text-center">快捷选时</label>
+                    <div class="input-group btn-group">
+                        <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_date('today', 'start_at', 'end_at')">今天</button>
+                        <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_date('yesterday', 'start_at', 'end_at')">昨天</button>
+                        <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_date('this_month', 'start_at', 'end_at')">本月</button>
+                        <button class="btn btn-primary btn-sm" type="button" onclick="quick_select_date('last_month', 'start_at', 'end_at')">上月</button>
+                    </div>
+                </div>
+            </div>
             <div class="col-md-2">
                 <div class="form-group">
                     <label>起始时间</label>
@@ -156,6 +167,7 @@
 <script type="text/javascript" src="/static/laydate/laydate.js"></script>
 <script type="text/javascript" src="/static/js/utils.js"></script>
 <script type="text/javascript" src="/static/js/sys_def.js"></script>
+<script type="text/javascript" src="/static/js/public.js"></script>
 <script type="text/javascript" src="/static/js/bootbox.min.js"></script>
 <script type="text/javascript">
     $(function () {
@@ -184,6 +196,7 @@
     });
 </script>
 <script>
+    var CODE_LOTTO_LIST = [];
     var myTable;
     myTable = $("#report").DataTable({
         language: datatable_lang,  //提示信息
@@ -300,61 +313,10 @@
         myTable.ajax.reload();
     }
 
-    function lotto_tab(user_id) {
-
-    }
     function refresh_code_lotto() {
-        $.ajax({
-            type: "GET",
-            url: "/lotto/code_lotto/list",
-            data: {},
-            dataType: 'json',
-            success: function(rsp) {
-                if(rsp.code === SYS_DEF.CODE.SUCCESS){
-                    var data = [{id:"", text: "全部"}];
-                    for(var i=0;i<rsp.data.length;i++) {
-                        data.push({id: rsp.data[i].lotto_id, text: rsp.data[i].name});
-                    }
-
-
-                    var $select1 = $('#query_lotto_id');
-                    var $select2 = $('#cancel_lotto_id');
-                    var $select3 = $('#calc_lotto_id');
-                    var instance1;
-                    var instance2;
-                    var instance3;
-
-
-                    instance1 = $select1.data('select2');
-                    if(instance1){
-                        $select1.select2('destroy').empty();
-                    }
-                    $('#query_lotto_id').select2({
-                        dropdownAutoWidth: true,
-                        multiple: false,
-                        data: data
-                    });
-
-                    instance2 = $select2.data('select2');
-                    if(instance2){
-                        $select2.select2('destroy').empty();
-                    }
-                    $('#cancel_lotto_id').select2({
-                        dropdownAutoWidth: true,
-                        multiple: false,
-                        data: data
-                    });
-                    instance3 = $select3.data('select2');
-                    if(instance3){
-                        $select3.select2('destroy').empty();
-                    }
-                    $('#calc_lotto_id').select2({
-                        dropdownAutoWidth: true,
-                        multiple: false,
-                        data: data
-                    });
-
-                }
+        find_code_lotto_list({}, function (rsp) {
+            if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                CODE_LOTTO_LIST = rsp.data;
             }
         });
     }
@@ -386,10 +348,15 @@
         columnDefs: [
             {
                 "render": function(data, type, row, meta) {
-                    return row.count_date;
+                    for(var i=0;i<CODE_LOTTO_LIST.length;i++) {
+                        if (CODE_LOTTO_LIST[i].lotto_id === row.lotto_id){
+                            return CODE_LOTTO_LIST[i].name;
+                        }
+                    }
+                    return row.lotto_id;
 
                 },
-                "targets": 0
+                "targets": 2
             }
         ],
         ajax:function(data, callback, settings){
