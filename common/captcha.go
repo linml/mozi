@@ -11,7 +11,7 @@ func init() {
 
 	Captcha = captcha.New()
 
-	if err := Captcha.SetFont("comic.ttf"); err != nil {
+	if err := Captcha.SetFont("./comic.ttf"); err != nil {
 		panic(err.Error())
 	}
 
