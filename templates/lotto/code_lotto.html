@@ -339,7 +339,7 @@
                     setTimeout(function(){
                         //异常判断与处理
                         if (result.code !== SYS_DEF.CODE.SUCCESS) {
-                            bootbox.alert("查询失败。错误码："+result.code);
+                            bootbox.alert("查询失败。错误信息："+result.msg);
                             return;
                         }
                         $("#code_lotto_data tr").remove();

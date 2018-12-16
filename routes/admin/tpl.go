@@ -1,8 +1,8 @@
 package admin
 
 import (
-	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
 	"github.com/xiuos/mozi/routes"
 	"net/http"
@@ -16,9 +16,7 @@ func TmplLogin(c *gin.Context) {
 }
 
 func TmplLogout(c *gin.Context) {
-	session := sessions.Default(c)
-	session.Delete(routes.SessionAdminLoginID)
-	session.Save()
+	c.SetCookie(common.SID, "", -1, "/", "", false, true)
 	c.Redirect(http.StatusFound, "/login")
 }
 

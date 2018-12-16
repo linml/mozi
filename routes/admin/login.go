@@ -2,7 +2,6 @@ package admin
 
 import (
 	"fmt"
-	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/routes"
@@ -35,9 +34,11 @@ func Login(c *gin.Context) {
 	} else {
 		uid, err := service.GetAdminUserIDByName(name)
 		if err == nil {
-			session := sessions.Default(c)
-			session.Set(routes.SessionAdminLoginID, uid)
-			session.Save()
+			sessionID := common.RandString(32)
+			err = service.SetAdminOnline(sessionID, uid, 0)
+			if err == nil {
+				c.SetCookie(common.SID, sessionID, 0, "/", "", false, true)
+			}
 		}
 
 		c.JSON(200, routes.ApiResult(common.CodeOK, "", map[string]interface{}{

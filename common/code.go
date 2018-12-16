@@ -6,7 +6,8 @@ const (
 	CodeOK   = 0
 	CodeFail = 100
 
-	CodeUserNotLogin = 2
+	CodeUserNotLogin     = 101
+	CodeUserLoginExpired = 102
 )
 
 var codeText = map[int]string{
@@ -20,3 +21,5 @@ var codeText = map[int]string{
 func CodeText(code int) string {
 	return codeText[code]
 }
+
+const SID = "SID"

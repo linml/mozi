@@ -377,7 +377,7 @@
                     setTimeout(function(){
                         //异常判断与处理
                         if (result.code !== 0) {
-                            bootbox.alert("查询失败。错误码："+result.code);
+                            bootbox.alert("查询失败。错误信息："+result.msg);
                             return;
                         }
                         $("#member_data tr").remove();
@@ -402,7 +402,7 @@
                     },200);
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    bootbox.alert("查询失败");
+                    bootbox.alert("查询失败。错误信息：" + XMLHttpRequest.responseJSON.msg);
                 }
             });
         },

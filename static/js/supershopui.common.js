@@ -1907,7 +1907,7 @@ var addTabs = function(options) {
        // }
     $("#" + id).addClass("active");
 
-    };
+};
 
 
 
