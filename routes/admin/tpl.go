@@ -94,3 +94,11 @@ func TmplUserMoneyChange(c *gin.Context) {
 func TmplLottoReport(c *gin.Context) {
 	c.HTML(http.StatusOK, "lotto_report.html", gin.H{})
 }
+
+func TmplRollNotice(c *gin.Context) {
+	c.HTML(http.StatusOK, "roll_notice.html", gin.H{})
+}
+
+func TmplNormalNotice(c *gin.Context) {
+	c.HTML(http.StatusOK, "normal_notice.html", gin.H{})
+}

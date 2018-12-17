@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 15/12/2018 22:01:05
+ Date: 17/12/2018 15:43:59
 */
 
 SET NAMES utf8mb4;
@@ -77,8 +77,8 @@ INSERT INTO `admin_menu` VALUES (111, 2, 2, 0, '红包活动', 'fa fa-toggle-on'
 INSERT INTO `admin_menu` VALUES (112, 3, 2, 0, '签到活动', 'fa fa-toggle-on', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (113, 4, 2, 0, '首存礼包', 'fa fa-toggle-on', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (114, 5, 2, 0, '每日存款', 'fa fa-toggle-on', '', 'iframe-tab', 1);
-INSERT INTO `admin_menu` VALUES (130, 1, 3, 0, '通用公告', 'fa fa-edit', 'pages/notice/normal_notice.html', 'iframe-tab', 1);
-INSERT INTO `admin_menu` VALUES (131, 2, 3, 0, '滚动公告', 'fa fa-edit', 'pages/notice/roll_notice.html', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (130, 1, 3, 0, '通用公告', 'fa fa-edit', 'html/notice/normal_notice', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (131, 2, 3, 0, '滚动公告', 'fa fa-edit', 'html/notice/roll_notice', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (160, 1, 4, 0, '账户列表', 'fa fa-user', 'html/member/list', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (161, 2, 4, 0, '登入记录', 'fa fa-list-alt', 'html/member/record_login', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (162, 3, 4, 0, '账户银行', 'fa fa-list-alt', 'html/member/user_bank', 'iframe-tab', 1);
@@ -226,6 +226,8 @@ INSERT INTO `code_action_admin` VALUES (4, 10, '设置彩票排序', 10, 1);
 INSERT INTO `code_action_admin` VALUES (4, 11, '设置彩票显示', 11, 1);
 INSERT INTO `code_action_admin` VALUES (4, 12, '设置彩票赔率', 12, 1);
 INSERT INTO `code_action_admin` VALUES (4, 13, '修改管理员密码', 13, 1);
+INSERT INTO `code_action_admin` VALUES (4, 14, '添加公告', 14, 1);
+INSERT INTO `code_action_admin` VALUES (4, 15, '编辑公告', 15, 1);
 COMMIT;
 
 -- ----------------------------
@@ -2023,6 +2025,23 @@ CREATE TABLE `lotto_result` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='彩票开奖结果';
 
 -- ----------------------------
+-- Table structure for notice
+-- ----------------------------
+DROP TABLE IF EXISTS `notice`;
+CREATE TABLE `notice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `class_id` int(11) NOT NULL DEFAULT '1' COMMENT '1:滚动公告;2首页公告',
+  `title` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `content` text COLLATE utf8_bin NOT NULL,
+  `sort_index` int(11) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `start_at` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `end_at` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `update_at` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='公告';
+
+-- ----------------------------
 -- Table structure for record_admin_login
 -- ----------------------------
 DROP TABLE IF EXISTS `record_admin_login`;
@@ -2043,7 +2062,7 @@ CREATE TABLE `record_admin_login` (
   KEY `ip` (`ip`,`record_at`),
   KEY `url` (`url`,`record_at`),
   KEY `record_time` (`record_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
 
 -- ----------------------------
 -- Table structure for record_log_admin_action
@@ -2067,7 +2086,7 @@ CREATE TABLE `record_log_admin_action` (
   KEY `user_id` (`user_id`,`action_module`,`action_id`,`record_at`),
   KEY `user_id_2` (`user_id`,`record_at`),
   KEY `action_module` (`action_module`,`action_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员操作日志';
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员操作日志';
 
 -- ----------------------------
 -- Table structure for record_log_user_action
@@ -2369,7 +2388,7 @@ CREATE TABLE `users` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态(0:冻结,1:正常, 2:开户成功但部分功能未开通)',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 -- ----------------------------
 -- Records of users

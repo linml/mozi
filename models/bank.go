@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/xiuos/mozi/common"
+	"strings"
 )
 
 type Bank struct {
@@ -37,9 +38,10 @@ func CreatebankTx(tx *sql.Tx, b *Bank) (sql.Result, error) {
 }
 
 func PageFindCodeBankList(pageParam common.PageParams) (*common.PageResult, *[]Bank, error) {
-	conditionSql := " FROM code_bank WHERE 1=1 "
+	t := Bank{}
+	conditionSql := fmt.Sprintf(" FROM %s WHERE 1=1 ", t.TableName())
 	countSql := "SELECT COUNT(*) AS count " + conditionSql
-	querySql := "SELECT id, bank_code, bank_name, sort_index, group_type, status " + conditionSql
+	querySql := fmt.Sprintf("SELECT %s ", strings.Join(t.Field(), ",")) + conditionSql
 	sqlWhere, args := "", []interface{}{}
 	if v, ok := pageParam.Params["id"]; ok {
 		sqlWhere += " AND id = ?"
@@ -83,7 +85,7 @@ func PageFindCodeBankList(pageParam common.PageParams) (*common.PageResult, *[]B
 	}
 	for rows.Next() {
 		d := Bank{}
-		err = rows.Scan(&d.ID, &d.BankCode, &d.BankName, &d.SortIndex, &d.GroupType, &d.Status)
+		err = rows.Scan(d.FieldItem()...)
 		if err != nil {
 			return &pg, &data, err
 		}

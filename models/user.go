@@ -19,10 +19,10 @@ const (
 )
 
 type User struct {
-	UserID   int
-	Name     string
-	Password string
-	Status   int
+	UserID   int    `json:"user_id"`
+	Name     string `json:"name"`
+	Password string `json:"password"`
+	Status   int    `json:"status"`
 }
 
 func (u *User) TableName() string {

@@ -19,6 +19,8 @@ const (
 	ActionAdminSetCodeLottoIsShow    = 11 // 设置彩票显示
 	ActionAdminSetLottoOddsInfo      = 12 // 设置彩票赔率信息
 	ActionAdminUpdateAdminPassword   = 13 // 修改管理员密码
+	ActionAdminAddNotice             = 14 // 添加公告
+	ActionAdminUpdateNotice          = 15 // 修改公告
 )
 
 type CodeActionAdmin struct {
