@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/shopspring/decimal"
 	"github.com/xiuos/mozi/common"
-	"github.com/xiuos/xorm"
+	"github.com/xiuos/mozi/xorm"
 )
 
 const (

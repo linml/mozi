@@ -3,7 +3,7 @@ package models
 import (
 	"database/sql"
 	"github.com/xiuos/mozi/common"
-	"github.com/xiuos/xorm"
+	"github.com/xiuos/mozi/xorm"
 )
 
 type UserRelation struct {

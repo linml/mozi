@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/xiuos/mozi/common"
-	"github.com/xiuos/xorm"
+	"github.com/xiuos/mozi/xorm"
 )
 
 type AdminUser struct {

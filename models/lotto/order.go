@@ -6,6 +6,7 @@ import (
 	"github.com/shopspring/decimal"
 	"github.com/xiuos/mozi/common"
 	"strings"
+	"time"
 )
 
 const (
@@ -58,6 +59,13 @@ type LottoOrderCount struct {
 	TotalPayout decimal.Decimal `json:"total_payout"`
 	TotalProfit decimal.Decimal `json:"total_profit"`
 	CountDate   string          `json:"count_date"`
+}
+
+type Winning struct {
+	Name      string          `json:"name"`
+	LottoID   int             `json:"lotto_id"`
+	LottoName string          `json:"lotto_name"`
+	Amount    decimal.Decimal `json:"amount"`
 }
 
 func (d *LottoOrderCount) Field() []string {
@@ -330,4 +338,41 @@ func SettleUpdateLottoOrderTx(tx *sql.Tx, o *Order) error {
 	createSql := fmt.Sprintf("UPDATE %s SET order_id=?, user_id=?, name=?, lotto_id=?, lotto_type=?, game_kind=?, game_type=?, issue=?, method_code=?, play_code=?, bet_count=?, bet_content=?, win_count=?, win_content=?, draw_number=?, odds=?, amount=?, status=?, flag=?, payout=?, profit=?, bet_date=?, calc_date=?, bet_time=?, update_time=?, ip=? WHERE id=?", o.TableName())
 	_, err := tx.Exec(createSql, &o.OrderID, &o.UserID, &o.Name, &o.LottoID, &o.LottoType, &o.GameKind, &o.GameType, &o.Issue, &o.MethodCode, &o.PlayCode, &o.BetCount, &o.BetContent, &o.WinCount, &o.WinContent, &o.DrawNumber, &o.Odds, &o.Amount, &o.Status, &o.Flag, &o.Payout, &o.Profit, &o.BetDate, &o.CalcDate, &o.BetTime, &o.UpdateTime, &o.IP, &o.ID)
 	return err
+}
+
+func FinWinningList() (*[]Winning, error) {
+	t := Order{}
+	d, _ := time.ParseDuration("-240h")
+	day := time.Now()
+	day = day.Add(d)
+	bDay := common.Date2Str(day)
+
+	querySql := fmt.Sprintf("SELECT name, lotto_id, profit FROM %s WHERE calc_date >= %s GROUP BY name ORDER BY profit DESC  LIMIT 0, 20 ", t.TableName(), bDay)
+
+	var data []Winning
+
+	rows, err := common.BaseDb.Query(querySql)
+	if err != nil {
+		return &data, err
+	}
+	for rows.Next() {
+		d := Winning{}
+		err = rows.Scan(&d.Name, &d.LottoID, &d.Amount)
+		if err != nil {
+			return &data, err
+		}
+
+		d.Name = common.Mosaics(d.Name, 2, 2)
+		lInfo, err := GetLotto(d.LottoID)
+		if err != nil {
+			d.LottoName = "彩票"
+		} else {
+			d.LottoName = lInfo.Name
+		}
+
+		data = append(data, d)
+	}
+
+	return &data, err
+
 }

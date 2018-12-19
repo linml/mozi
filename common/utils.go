@@ -75,6 +75,10 @@ func Time2Str(t time.Time) string {
 	return t.Format("20060102150405")
 }
 
+func Date2Str(t time.Time) string {
+	return t.Format("20060102")
+}
+
 func GetTimeNowString() string {
 	return time.Now().Format("20060102150405")
 }

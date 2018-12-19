@@ -6,6 +6,8 @@ func New(text string) error {
 	return &errorString{text}
 }
 
+var ErrNotAccount = New("账号不存在")
+
 type errorString struct {
 	s string
 }
@@ -13,8 +15,6 @@ type errorString struct {
 func (e *errorString) Error() string {
 	return e.s
 }
-
-
 
 type NameNotLegal struct {
 	Name string
