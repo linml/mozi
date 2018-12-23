@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 17/12/2018 15:43:59
+ Date: 23/12/2018 13:19:23
 */
 
 SET NAMES utf8mb4;
@@ -56,7 +56,7 @@ CREATE TABLE `admin_menu` (
   `target_type` varchar(64) DEFAULT '' COMMENT '类型',
   `is_show` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=903 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员菜单';
+) ENGINE=InnoDB AUTO_INCREMENT=951 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员菜单';
 
 -- ----------------------------
 -- Records of admin_menu
@@ -72,6 +72,7 @@ INSERT INTO `admin_menu` VALUES (7, 6, 1, 0, '退佣管理', 'fa fa-fw fa-calcul
 INSERT INTO `admin_menu` VALUES (8, 7, 1, 0, '报表管理', 'fa fa-fw fa-area-chart', '', '', 1);
 INSERT INTO `admin_menu` VALUES (9, 8, 1, 0, '系统管理', 'fa fa-fw fa-cogs', '', '', 1);
 INSERT INTO `admin_menu` VALUES (10, 9, 1, 0, '权限管理', 'fa fa-fw fa-cogs', '', '', 1);
+INSERT INTO `admin_menu` VALUES (11, 10, 1, 0, '内容管理', 'fa fa-fw fa-cogs', '', '', 1);
 INSERT INTO `admin_menu` VALUES (110, 1, 2, 0, '活动记录', 'fa fa-list-alt', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (111, 2, 2, 0, '红包活动', 'fa fa-toggle-on', ' ', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (112, 3, 2, 0, '签到活动', 'fa fa-toggle-on', '', 'iframe-tab', 1);
@@ -111,6 +112,7 @@ INSERT INTO `admin_menu` VALUES (302, 3, 9, 0, '用户操作记录', 'fa fa-bar-
 INSERT INTO `admin_menu` VALUES (303, 4, 9, 0, '登录记录', 'fa fa-list-alt', 'html/admin/record_login', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (900, 1, 10, 0, '管理员', '', 'html/admin_list', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (902, 3, 10, 0, '角色', '', 'html/admin_role_menu', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (950, 1, 11, 0, '彩票', '', 'html/admin_role_menu', 'iframe-tab', 1);
 COMMIT;
 
 -- ----------------------------
@@ -121,7 +123,7 @@ CREATE TABLE `admin_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
   `name` varchar(64) NOT NULL DEFAULT '' COMMENT '管理员',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员角色';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='管理员角色';
 
 -- ----------------------------
 -- Records of admin_role
@@ -154,6 +156,7 @@ INSERT INTO `admin_role_menu` VALUES (1, 7);
 INSERT INTO `admin_role_menu` VALUES (1, 8);
 INSERT INTO `admin_role_menu` VALUES (1, 9);
 INSERT INTO `admin_role_menu` VALUES (1, 10);
+INSERT INTO `admin_role_menu` VALUES (1, 11);
 INSERT INTO `admin_role_menu` VALUES (1, 110);
 INSERT INTO `admin_role_menu` VALUES (1, 111);
 INSERT INTO `admin_role_menu` VALUES (1, 112);
@@ -193,6 +196,7 @@ INSERT INTO `admin_role_menu` VALUES (1, 302);
 INSERT INTO `admin_role_menu` VALUES (1, 303);
 INSERT INTO `admin_role_menu` VALUES (1, 900);
 INSERT INTO `admin_role_menu` VALUES (1, 902);
+INSERT INTO `admin_role_menu` VALUES (1, 950);
 COMMIT;
 
 -- ----------------------------
@@ -307,6 +311,10 @@ CREATE TABLE `code_lotto` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0:禁用,1:启用',
   `is_show` tinyint(1) NOT NULL DEFAULT '1',
   `introduction` varchar(64) NOT NULL DEFAULT '' COMMENT '简介',
+  `img_url` varchar(255) NOT NULL DEFAULT '' COMMENT '图片地址',
+  `extra_1_sort_index` int(11) NOT NULL DEFAULT '0',
+  `extra_2_sort_index` int(11) NOT NULL DEFAULT '0',
+  `extra_3_sort_index` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`lotto_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='彩票码表';
 
@@ -314,46 +322,46 @@ CREATE TABLE `code_lotto` (
 -- Records of code_lotto
 -- ----------------------------
 BEGIN;
-INSERT INTO `code_lotto` VALUES (1, '重庆时时彩', 1, 1, 0, 1, 1, 1, '每天120期');
-INSERT INTO `code_lotto` VALUES (2, '新疆时时彩', 1, 1, 0, 2, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (3, '天津时时彩', 1, 1, 0, 3, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (4, '分分彩', 1, 1, 0, 4, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (5, '两分彩', 1, 1, 0, 5, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (6, '三分彩', 1, 1, 0, 6, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (7, '五分彩', 1, 1, 0, 7, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (8, '山东11选5', 2, 1, 0, 8, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (9, '江西11选5', 2, 1, 0, 9, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (10, '广东11选5', 2, 1, 0, 10, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (11, '江苏11选5', 2, 1, 0, 11, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (12, '安徽11选5', 2, 1, 0, 12, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (13, '山西11选5', 2, 1, 0, 13, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (14, '上海11选5', 2, 1, 0, 14, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (15, '分分11选5', 2, 1, 0, 15, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (16, '江苏快3', 3, 1, 0, 16, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (17, '安徽快3', 3, 1, 0, 17, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (18, '湖北快3', 3, 1, 0, 18, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (19, '河南快3', 3, 1, 0, 19, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (20, '江苏骰宝', 3, 1, 0, 20, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (21, '分分快3', 3, 1, 0, 21, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (22, '北京PK10', 4, 1, 0, 22, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (23, '幸运飞艇', 4, 1, 0, 23, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (24, '分分PK10', 4, 1, 0, 24, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (25, '福彩3D', 5, 1, 0, 25, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (26, '排列3', 5, 1, 0, 26, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (27, '排列5', 6, 1, 0, 27, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (28, '广东快乐十分', 7, 1, 0, 28, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (29, '重庆快乐十分', 7, 1, 0, 29, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (30, '天津快乐十分', 7, 1, 0, 30, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (31, '北京快乐8', 8, 1, 0, 31, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (32, '加拿大基诺', 8, 1, 0, 32, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (33, '分分快乐彩', 8, 1, 0, 33, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (34, '台湾宾果', 8, 1, 0, 34, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (35, '北京幸运28', 9, 1, 0, 35, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (36, '加拿大幸运28', 9, 1, 0, 36, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (37, '台湾幸运28', 9, 1, 0, 37, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (38, '香港六合彩', 10, 1, 0, 38, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (39, '五分六合彩', 10, 1, 0, 39, 1, 1, '');
-INSERT INTO `code_lotto` VALUES (40, '十分六合彩', 10, 1, 0, 40, 1, 1, '');
+INSERT INTO `code_lotto` VALUES (1, '重庆时时彩', 1, 1, 0, 1, 1, 1, '每天120期', 'http://cdn.test.com/lotto/cqssc.png', 1, 1, 1);
+INSERT INTO `code_lotto` VALUES (2, '新疆时时彩', 1, 1, 0, 2, 1, 1, '', 'http://cdn.test.com/lotto/cqssc.png', 2, 2, 2);
+INSERT INTO `code_lotto` VALUES (3, '天津时时彩', 1, 1, 0, 3, 1, 1, '', 'http://cdn.test.com/lotto/cqssc.png', 3, 3, 3);
+INSERT INTO `code_lotto` VALUES (4, '分分彩', 1, 1, 0, 4, 1, 1, '', 'http://cdn.test.com/lotto/ffc.jpg', 4, 4, 4);
+INSERT INTO `code_lotto` VALUES (5, '两分彩', 1, 1, 0, 5, 1, 1, '', 'http://cdn.test.com/lotto/ffc.jpg', 5, 5, 5);
+INSERT INTO `code_lotto` VALUES (6, '三分彩', 1, 1, 0, 6, 1, 1, '', 'http://cdn.test.com/lotto/3fc.png', 6, 6, 6);
+INSERT INTO `code_lotto` VALUES (7, '五分彩', 1, 1, 0, 7, 1, 1, '', 'http://cdn.test.com/lotto/ffc.jpg', 7, 7, 7);
+INSERT INTO `code_lotto` VALUES (8, '山东11选5', 2, 1, 0, 8, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 8, 8, 8);
+INSERT INTO `code_lotto` VALUES (9, '江西11选5', 2, 1, 0, 9, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 9, 9, 9);
+INSERT INTO `code_lotto` VALUES (10, '广东11选5', 2, 1, 0, 10, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 10, 10, 10);
+INSERT INTO `code_lotto` VALUES (11, '江苏11选5', 2, 1, 0, 11, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 11, 11, 11);
+INSERT INTO `code_lotto` VALUES (12, '安徽11选5', 2, 1, 0, 12, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 12, 12, 12);
+INSERT INTO `code_lotto` VALUES (13, '山西11选5', 2, 1, 0, 13, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 13, 13, 13);
+INSERT INTO `code_lotto` VALUES (14, '上海11选5', 2, 1, 0, 14, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 14, 14, 14);
+INSERT INTO `code_lotto` VALUES (15, '分分11选5', 2, 1, 0, 15, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 15, 15, 15);
+INSERT INTO `code_lotto` VALUES (16, '江苏快3', 3, 1, 0, 16, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 16, 16, 16);
+INSERT INTO `code_lotto` VALUES (17, '安徽快3', 3, 1, 0, 17, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 17, 17, 17);
+INSERT INTO `code_lotto` VALUES (18, '湖北快3', 3, 1, 0, 18, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 18, 18, 18);
+INSERT INTO `code_lotto` VALUES (19, '河南快3', 3, 1, 0, 19, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 19, 19, 19);
+INSERT INTO `code_lotto` VALUES (20, '江苏骰宝', 3, 1, 0, 20, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 20, 20, 20);
+INSERT INTO `code_lotto` VALUES (21, '分分快3', 3, 1, 0, 21, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 21, 21, 21);
+INSERT INTO `code_lotto` VALUES (22, '北京PK10', 4, 1, 0, 22, 1, 1, '', 'http://cdn.test.com/lotto/pk10.png', 22, 22, 22);
+INSERT INTO `code_lotto` VALUES (23, '幸运飞艇', 4, 1, 0, 23, 1, 1, '', 'http://cdn.test.com/lotto/jsft.png', 23, 23, 23);
+INSERT INTO `code_lotto` VALUES (24, '分分PK10', 4, 1, 0, 24, 1, 1, '', 'http://cdn.test.com/lotto/pk10.png', 24, 24, 24);
+INSERT INTO `code_lotto` VALUES (25, '福彩3D', 5, 1, 0, 25, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 25, 25, 25);
+INSERT INTO `code_lotto` VALUES (26, '排列3', 5, 1, 0, 26, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 26, 26, 26);
+INSERT INTO `code_lotto` VALUES (27, '排列5', 6, 1, 0, 27, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 27, 27, 27);
+INSERT INTO `code_lotto` VALUES (28, '广东快乐十分', 7, 1, 0, 28, 1, 1, '', 'http://cdn.test.com/lotto/klsf.png', 28, 28, 28);
+INSERT INTO `code_lotto` VALUES (29, '重庆快乐十分', 7, 1, 0, 29, 1, 1, '', 'http://cdn.test.com/lotto/klsf.png', 29, 29, 29);
+INSERT INTO `code_lotto` VALUES (30, '天津快乐十分', 7, 1, 0, 30, 1, 1, '', 'http://cdn.test.com/lotto/klsf.png', 30, 30, 30);
+INSERT INTO `code_lotto` VALUES (31, '北京快乐8', 8, 1, 0, 31, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 31, 31, 31);
+INSERT INTO `code_lotto` VALUES (32, '加拿大基诺', 8, 1, 0, 32, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 32, 32, 32);
+INSERT INTO `code_lotto` VALUES (33, '分分快乐彩', 8, 1, 0, 33, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 33, 33, 33);
+INSERT INTO `code_lotto` VALUES (34, '台湾宾果', 8, 1, 0, 34, 1, 1, '', 'http://cdn.test.com/lotto/11x5.png', 34, 34, 34);
+INSERT INTO `code_lotto` VALUES (35, '北京幸运28', 9, 1, 0, 35, 1, 1, '', 'http://cdn.test.com/lotto/pcdd.png', 35, 35, 35);
+INSERT INTO `code_lotto` VALUES (36, '加拿大幸运28', 9, 1, 0, 36, 1, 1, '', 'http://cdn.test.com/lotto/jsxy28.png', 36, 36, 36);
+INSERT INTO `code_lotto` VALUES (37, '台湾幸运28', 9, 1, 0, 37, 1, 1, '', 'http://cdn.test.com/lotto/jsxy28.png', 37, 37, 37);
+INSERT INTO `code_lotto` VALUES (38, '香港六合彩', 10, 1, 0, 38, 1, 1, '', 'http://cdn.test.com/lotto/lhc.png', 38, 38, 38);
+INSERT INTO `code_lotto` VALUES (39, '五分六合彩', 10, 1, 0, 39, 1, 1, '', 'http://cdn.test.com/lotto/jslhc.png', 39, 39, 39);
+INSERT INTO `code_lotto` VALUES (40, '十分六合彩', 10, 1, 0, 40, 1, 1, '', 'http://cdn.test.com/lotto/jslhc.png', 40, 40, 40);
 COMMIT;
 
 -- ----------------------------
@@ -542,6 +550,33 @@ BEGIN;
 INSERT INTO `code_money_change_type` VALUES (1, 101, '下注', 1, 1);
 INSERT INTO `code_money_change_type` VALUES (1, 102, '派彩', 2, 1);
 INSERT INTO `code_money_change_type` VALUES (1, 103, '撤单', 3, 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for gift_task
+-- ----------------------------
+DROP TABLE IF EXISTS `gift_task`;
+CREATE TABLE `gift_task` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `description` text COLLATE utf8_bin NOT NULL,
+  `img_url` text COLLATE utf8_bin NOT NULL,
+  `content` text COLLATE utf8_bin NOT NULL,
+  `sort_index` int(11) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `show_banner` tinyint(1) NOT NULL DEFAULT '1',
+  `start_at` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `end_at` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of gift_task
+-- ----------------------------
+BEGIN;
+INSERT INTO `gift_task` VALUES (1, '', '', 'http://img.daimg.com/uploads/allimg/150627/1-15062H30P7.jpg', '', 1, 1, 1, '', '');
+INSERT INTO `gift_task` VALUES (2, '', '', 'https://www.da8088.com/static/images/slide/m2.jpg', '', 1, 1, 1, '', '');
+INSERT INTO `gift_task` VALUES (3, '', '', 'http://img.hb.aicdn.com/85457b4b944953fdca6452e07f63b5d8bce15a40157bf-rOJ7bJ_fw658', '', 1, 1, 1, '', '');
 COMMIT;
 
 -- ----------------------------
@@ -2039,7 +2074,7 @@ CREATE TABLE `notice` (
   `end_at` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '',
   `update_at` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='公告';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='公告';
 
 -- ----------------------------
 -- Table structure for record_admin_login
@@ -2062,7 +2097,7 @@ CREATE TABLE `record_admin_login` (
   KEY `ip` (`ip`,`record_at`),
   KEY `url` (`url`,`record_at`),
   KEY `record_time` (`record_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
 
 -- ----------------------------
 -- Table structure for record_log_admin_action
@@ -2086,7 +2121,7 @@ CREATE TABLE `record_log_admin_action` (
   KEY `user_id` (`user_id`,`action_module`,`action_id`,`record_at`),
   KEY `user_id_2` (`user_id`,`record_at`),
   KEY `action_module` (`action_module`,`action_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员操作日志';
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员操作日志';
 
 -- ----------------------------
 -- Table structure for record_log_user_action
@@ -2151,7 +2186,7 @@ CREATE TABLE `record_lotto_order` (
   KEY `bet_date` (`bet_date`),
   KEY `calc_date` (`calc_date`),
   KEY `lotto_id` (`lotto_id`,`issue`)
-) ENGINE=InnoDB AUTO_INCREMENT=639 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
+) ENGINE=InnoDB AUTO_INCREMENT=649 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
 
 -- ----------------------------
 -- Table structure for record_money_change
@@ -2179,7 +2214,7 @@ CREATE TABLE `record_money_change` (
   KEY `user_id_r` (`user_id`,`record_at`),
   KEY `user_id_g_m` (`user_id`,`game_kind`,`change_kind`),
   KEY `game_id_m_r` (`game_kind`,`change_kind`,`record_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=789 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户资金变动记录';
+) ENGINE=InnoDB AUTO_INCREMENT=809 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户资金变动记录';
 
 -- ----------------------------
 -- Table structure for record_user_login
@@ -2225,7 +2260,7 @@ CREATE TABLE `report_lotto_day_count` (
   `update_time` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `count_date` (`count_date`,`user_id`,`lotto_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2415 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='彩票游戏日统计';
+) ENGINE=InnoDB AUTO_INCREMENT=2421 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='彩票游戏日统计';
 
 -- ----------------------------
 -- Table structure for sys_settings
@@ -2388,7 +2423,7 @@ CREATE TABLE `users` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态(0:冻结,1:正常, 2:开户成功但部分功能未开通)',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 -- ----------------------------
 -- Records of users

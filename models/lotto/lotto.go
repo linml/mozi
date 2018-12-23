@@ -51,15 +51,19 @@ const (
 )
 
 type CodeLotto struct {
-	LottoID      int    `json:"lotto_id"`
-	Name         string `json:"name"`
-	LottoType    int    `json:"lotto_type"`
-	GameKind     int    `json:"game_kind"`
-	GameType     int    `json:"game_type"`
-	Status       int    `json:"status"`
-	SortIndex    int    `json:"sort_index"`
-	IsShow       int    `json:"is_show"`
-	Introduction string `json:"introduction"`
+	LottoID         int    `json:"lotto_id"`
+	Name            string `json:"name"`
+	LottoType       int    `json:"lotto_type"`
+	GameKind        int    `json:"game_kind"`
+	GameType        int    `json:"game_type"`
+	Status          int    `json:"status"`
+	SortIndex       int    `json:"sort_index"`
+	IsShow          int    `json:"is_show"`
+	Introduction    string `json:"introduction"`
+	ImgUrl          string `json:"img_url"`
+	Extra1SortIndex int    `json:"extra_1_sort_index"` // 大厅
+	Extra2SortIndex int    `json:"extra_2_sort_index"` // 首页
+	Extra3SortIndex int    `json:"extra_3_sort_index"` // 结果
 }
 
 func (l *CodeLotto) TableName() string {
@@ -67,11 +71,11 @@ func (l *CodeLotto) TableName() string {
 }
 
 func (l *CodeLotto) Field() []string {
-	return []string{"lotto_id", "name", "lotto_type", "game_kind", "game_type", "status", "sort_index", "is_show", "introduction"}
+	return []string{"lotto_id", "name", "lotto_type", "game_kind", "game_type", "status", "sort_index", "is_show", "introduction", "img_url", "extra_1_sort_index", "extra_2_sort_index", "extra_3_sort_index"}
 }
 
 func (l *CodeLotto) FieldItem() []interface{} {
-	return []interface{}{&l.LottoID, &l.Name, &l.LottoType, &l.GameKind, &l.GameType, &l.Status, &l.SortIndex, &l.IsShow, &l.Introduction}
+	return []interface{}{&l.LottoID, &l.Name, &l.LottoType, &l.GameKind, &l.GameType, &l.Status, &l.SortIndex, &l.IsShow, &l.Introduction, &l.ImgUrl, &l.Extra1SortIndex, &l.Extra2SortIndex, &l.Extra3SortIndex}
 }
 
 func GetLotto(lid int) (*CodeLotto, error) {
@@ -90,7 +94,6 @@ func SetCodeLottoInfo(lid int, filed string, val interface{}) error {
 	updateSql := fmt.Sprintf("UPDATE %s SET %s=? WHERE lotto_id=?", u.TableName(), filed)
 	_, err := common.BaseDb.Exec(updateSql, val, lid)
 	return err
-
 }
 
 func PageFindCodeLottoList(pageParam common.PageParams) (*common.PageResult, *[]CodeLotto, error) {
@@ -194,6 +197,32 @@ func FindCodeLottoList(param map[string]string) (*[]CodeLotto, error) {
 	if v, ok := param["is_show"]; ok {
 		sqlWhere += " AND is_show = ?"
 		args = append(args, v)
+	}
+
+	if v, ok := param["order_by"]; ok {
+		f, val := true, ""
+		switch v {
+		case "sort_index":
+			val = " ORDER BY sort_index "
+		case "extra_1_sort_index":
+			val = " ORDER BY extra_1_sort_index "
+		case "extra_2_sort_index":
+			val = " ORDER BY extra_2_sort_index "
+		case "extra_3_sort_index":
+			val = " ORDER BY extra_3_sort_index "
+		default:
+			f = false
+		}
+		sqlWhere += val
+		if f == true {
+			if v, ok := param["sort_type"]; ok {
+				if v == "ASC" {
+					sqlWhere += " ASC "
+				} else {
+					sqlWhere += " DESC "
+				}
+			}
+		}
 	}
 
 	querySql += sqlWhere

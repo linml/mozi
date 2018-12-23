@@ -5,6 +5,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/xiuos/mozi/routes/cms"
 
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/routes"
@@ -40,6 +41,9 @@ func main() {
 	{
 		apiV1.POST("/register", api.Register)
 		apiV1.POST("/login", api.Login)
+
+		apiV1.GET("/hall/lotto/list", cms.CMSFindHallLotto)
+		apiV1.GET("/home/init", cms.CMSHomeInit)
 	}
 
 	apiAuthV1 := app.Group("/api/v1")

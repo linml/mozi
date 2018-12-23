@@ -267,6 +267,14 @@
         columnDefs: [
             {
                 "render": function(data, type, row, meta) {
+
+                    return '<img src="'+row.img_url+'" style="width: 30px; height: 30px " >'+row.name;
+
+                },
+                "targets": 1
+            },
+            {
+                "render": function(data, type, row, meta) {
                     for(var i=0;i<LOTTO_TYPE.length;i++) {
                         if (row.lotto_type === LOTTO_TYPE[i].id){
                             return LOTTO_TYPE[i].name
