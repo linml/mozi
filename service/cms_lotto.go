@@ -1,8 +1,10 @@
 package service
 
 import (
+	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
 	"github.com/xiuos/mozi/models/lotto"
+	"strings"
 )
 
 type HallLotto struct {
@@ -89,4 +91,26 @@ func CMSHomeInit() (interface{}, error) {
 	ret["banner_list"] = bannerList
 
 	return &ret, err
+}
+
+func CMSBetPlayInfo(uid int, lid int) (interface{}, error) {
+	ret := map[string]interface{}{}
+
+	curIssueInfo, _ := lotto.GetCurIssue(lid)
+	lastIssueInfo, _ := lotto.GetLastIssue(lid)
+	lottoInfo, _ := lotto.GetLotto(lid)
+
+	num := []string{}
+	if lastIssueInfo.DrawNumber != "" {
+		num = strings.Split(lastIssueInfo.DrawNumber, ",")
+	}
+
+	ret["server_time"] = common.GetTimeNowString()
+	ret["curr_issue"] = &curIssueInfo
+	ret["lotto_info"] = &lottoInfo
+	ret["last_issue"] = map[string]interface{}{
+		"issue": lastIssueInfo.Issue,
+		"num":   num,
+	}
+	return ret, nil
 }

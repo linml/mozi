@@ -184,6 +184,13 @@ func GetCurIssue(lid int) (*LottoResult, error) {
 	return &l, err
 }
 
+func GetLastIssue(lid int) (*LottoResult, error) {
+	l := LottoResult{}
+	querySql := fmt.Sprintf("SELECT %s FROM %s WHERE status=1 AND result_time <= ? ORDER BY issue DESC LIMIT 1", strings.Join(l.Field(), ","), l.TableName(lid))
+	err := common.BaseDb.QueryRow(querySql, common.GetTimeNowString()).Scan(l.FieldItem()...)
+	return &l, err
+}
+
 func SettleLottoResult(lid int, issue string, drawNumber string) error {
 	u := LottoResult{}
 	updateSql := fmt.Sprintf("UPDATE %s SET draw_number=?, status=?, update_time=? WHERE issue=?", u.TableName(lid))

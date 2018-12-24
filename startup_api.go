@@ -19,10 +19,12 @@ func init() {
 
 	savePath, err := common.Conf.String("log", "path")
 	if err != nil {
+		fmt.Println("日志文件错误 ", err)
 		os.Exit(1)
 	}
 	filePrefix, err := common.Conf.String("log", "api_file_prefix")
 	if err != nil {
+		fmt.Println("日志文件头错误 ", err)
 		os.Exit(1)
 	}
 	common.Logger = xlog.NewLogger(savePath, filePrefix, xlog.Ldate|xlog.Ltime|xlog.Lmicroseconds|xlog.Llongfile, xlog.LevelInfo)
@@ -44,6 +46,8 @@ func main() {
 
 		apiV1.GET("/hall/lotto/list", cms.CMSFindHallLotto)
 		apiV1.GET("/home/init", cms.CMSHomeInit)
+		apiV1.GET("/bet/play_info", cms.CMSBetPlay)
+		apiV1.GET("/lotto/curr_issue_info", api.GetCurrIssueInfo)
 	}
 
 	apiAuthV1 := app.Group("/api/v1")
@@ -64,6 +68,7 @@ func main() {
 
 	port, err := common.Conf.Int("port", "api_port")
 	if err != nil {
+		fmt.Println("启动端口错误", err)
 		os.Exit(1)
 	}
 	common.Logger.Info("Start API!")

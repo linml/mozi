@@ -75,5 +75,32 @@ func Bet(c *gin.Context) {
 	}
 	c.JSON(200, routes.ApiShowResult(common.CodeOK, "下单成功"))
 	return
+}
+
+func GetCurrIssueInfo(c *gin.Context) {
+	params := routes.ParamHelper{}
+	params.GetQueryNotEmpty(c, "lotto_id")
+	if params.Exist("lotto_id") == false {
+		c.JSON(200, routes.ApiResult(common.CodeFail, "彩票不能为空", map[string]string{}))
+		return
+	}
+	lid, err := common.GetInt2(params.Get("lotto_id"))
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, "彩票编号错误", map[string]string{}))
+		return
+	}
+	_, err = lotto.GetLotto(lid)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, "彩票编号错误", map[string]string{}))
+		return
+	}
+	currIssue, err := lotto.GetCurIssue(lid)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, "暂无数据", map[string]string{}))
+		return
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", currIssue))
+		return
+	}
 
 }
