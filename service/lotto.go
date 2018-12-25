@@ -71,7 +71,7 @@ func Bet(o *lotto.Order) error {
 		return errors.New("找不到该玩法")
 	}
 
-	mInfo, err := lotto.GEtLottoMethodTemplate(li.LottoType, o.MethodCode)
+	mInfo, err := lotto.GetLottoMethodTemplate(li.LottoType, o.MethodCode)
 	if err != nil {
 		return errors.New("找不到该玩法[-1]")
 	}
@@ -254,6 +254,40 @@ func CheckAndCreateOdds() {
 						fmt.Println(err)
 					}
 				}
+			}
+		}
+	}
+}
+
+// 	玩法组生成
+func CheckAndCreateCMSLottoMethodGroup() {
+	lottoInfoList, err := lotto.FindCodeLottoList(map[string]string{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	lmgList, err := lotto.FindCMSLottoMethodGroupTemplateList(map[string]string{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for i := range *lottoInfoList {
+		for j := range *lmgList {
+			if (*lottoInfoList)[i].LottoType != (*lmgList)[j].LottoType {
+				continue
+			}
+			g := lotto.CMSLottoMethodGroup{
+				LottoID:    (*lottoInfoList)[i].LottoID,
+				GroupID:    (*lmgList)[j].GroupID,
+				GroupName:  (*lmgList)[j].GroupName,
+				GroupAlias: (*lmgList)[j].GroupAlias,
+				SortIndex:  (*lmgList)[j].SortIndex,
+				Status:     (*lmgList)[j].Status,
+			}
+			err := lotto.CreateLottoMethodGroup(g)
+			if err != nil {
+				fmt.Println(err)
 			}
 		}
 	}

@@ -18,7 +18,7 @@ type CheckAndCreateOddsJob struct {
 }
 
 func (g CheckAndCreateOddsJob) Run() {
-	service.CreateIssueCorn()
+	service.CheckAndCreateOdds()
 }
 
 type LottoDayCountJob struct {
@@ -30,11 +30,21 @@ func (g LottoDayCountJob) Run() {
 	fmt.Println(common.GetTimeNowString(), ":  end LottoDayCountJob")
 
 }
+
+type CheckAndCreateCMSLottoMethodGroupJob struct {
+}
+
+func (g CheckAndCreateCMSLottoMethodGroupJob) Run() {
+	service.CheckAndCreateCMSLottoMethodGroup()
+}
+
 func main() {
 	service.CreateIssueCorn()
 	service.CheckAndCreateOdds()
+	service.CheckAndCreateCMSLottoMethodGroup()
 	c := cron.New()
 	c.AddJob("0 0 3 * * *", CheckAndCreateOddsJob{})
+	c.AddJob("0 0 3 * * *", CheckAndCreateCMSLottoMethodGroupJob{})
 	c.AddJob("0 0 4 * * *", GenIssueJob{})
 	c.AddJob("0 */1 * * * *", LottoDayCountJob{})
 	c.Start()

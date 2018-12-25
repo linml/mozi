@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
 	"github.com/xiuos/mozi/models/lotto"
@@ -99,6 +100,10 @@ func CMSBetPlayInfo(uid int, lid int) (interface{}, error) {
 	curIssueInfo, _ := lotto.GetCurIssue(lid)
 	lastIssueInfo, _ := lotto.GetLastIssue(lid)
 	lottoInfo, _ := lotto.GetLotto(lid)
+	methodGroup, err := lotto.FindCMSLottoMethodGroupList(map[string]string{"lotto_id": fmt.Sprintf("%d", lid), "status": "1"})
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	num := []string{}
 	if lastIssueInfo.DrawNumber != "" {
@@ -108,9 +113,11 @@ func CMSBetPlayInfo(uid int, lid int) (interface{}, error) {
 	ret["server_time"] = common.GetTimeNowString()
 	ret["curr_issue"] = &curIssueInfo
 	ret["lotto_info"] = &lottoInfo
+	ret["method_group"] = &methodGroup
 	ret["last_issue"] = map[string]interface{}{
 		"issue": lastIssueInfo.Issue,
 		"num":   num,
 	}
+
 	return ret, nil
 }
