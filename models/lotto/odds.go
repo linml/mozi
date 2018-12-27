@@ -134,12 +134,33 @@ func FindLottoOddsList(params map[string]string) (*[]LottoOdds, error) {
 		args = append(args, v)
 	}
 
+	if v, ok := params["order_by"]; ok {
+		if v == "sort_index" {
+			sqlWhere += " ORDER BY play_code "
+		} else {
+			sqlWhere += " ORDER BY lotto_id  "
+		}
+	} else {
+		sqlWhere += " ORDER BY lotto_id "
+	}
+
+	if v, ok := params["sort_type"]; ok {
+		if v == "ASC" {
+			sqlWhere += " ASC "
+		} else {
+			sqlWhere += " DESC "
+		}
+	} else {
+		sqlWhere += " DESC "
+	}
+
 	var data []LottoOdds
 	var err error
 
 	querySql += sqlWhere
 	rows, err := common.BaseDb.Query(querySql, args...)
 	if err != nil {
+		fmt.Println(err)
 		return &data, err
 	}
 	for rows.Next() {

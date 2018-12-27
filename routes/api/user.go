@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
@@ -66,15 +65,18 @@ func Login(c *gin.Context) {
 		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
 	} else {
 		uid, err := service.GetUserIDByName(name)
+		sessionID := common.RandString(32)
 		if err == nil {
-			session := sessions.Default(c)
-			session.Set(routes.SessionApiLoginID, uid)
-			session.Save()
+			err = service.SetUserOnline(sessionID, uid, 0)
+			if err == nil {
+				c.SetCookie(common.SID, sessionID, 0, "/", "", false, true)
+			}
 		}
 
 		c.JSON(200, routes.ApiResult(common.CodeOK, "", map[string]interface{}{
-			"user_id": uid,
-			"name":    name,
+			"user_id":  uid,
+			"name":     name,
+			common.SID: sessionID,
 		}))
 	}
 

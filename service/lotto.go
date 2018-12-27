@@ -272,6 +272,12 @@ func CheckAndCreateCMSLottoMethodGroup() {
 		return
 	}
 
+	lmgpList, err := lotto.FindCMSLottoMethodGroupPlayTemplateList(map[string]string{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	for i := range *lottoInfoList {
 		for j := range *lmgList {
 			if (*lottoInfoList)[i].LottoType != (*lmgList)[j].LottoType {
@@ -288,6 +294,25 @@ func CheckAndCreateCMSLottoMethodGroup() {
 			err := lotto.CreateLottoMethodGroup(g)
 			if err != nil {
 				fmt.Println(err)
+			}
+			for k := range *lmgpList {
+				if (*lmgList)[j].GroupID == (*lmgpList)[k].GroupID {
+					gp := lotto.CMSLottoMethodGroupPlay{
+						LottoID:     (*lottoInfoList)[i].LottoID,
+						GroupID:     (*lmgList)[j].GroupID,
+						GroupName:   (*lmgList)[j].GroupName,
+						GroupAlias:  (*lmgList)[j].GroupAlias,
+						MethodCode:  (*lmgpList)[k].MethodCode,
+						MethodName:  (*lmgpList)[k].MethodName,
+						MethodAlias: (*lmgpList)[k].MethodAlias,
+						SortIndex:   (*lmgpList)[k].SortIndex,
+						Status:      (*lmgpList)[k].Status,
+					}
+					err := lotto.CreateLottoMethodGroupPlay(gp)
+					if err != nil {
+						fmt.Println(err)
+					}
+				}
 			}
 		}
 	}

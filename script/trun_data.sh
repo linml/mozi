@@ -58,10 +58,13 @@ DELETE FROM record_lotto_order;
 DELETE FROM record_money_change;
 DELETE FROM record_user_login;
 DELETE FROM record_admin_login;
+DELETE FROM report_lotto_day_count;
 DELETE FROM notice;
 
 DELETE FROM lotto_odds;
-DELETE FROM report_lotto_day_count;
+DELETE FROM gift_task;
+DELETE FROM cms_lotto_method_group;
+DELETE FROM cms_lotto_method_group_play;
 
 DELETE FROM users WHERE user_id > 1;
 DELETE FROM user_wallet WHERE user_id > 1;

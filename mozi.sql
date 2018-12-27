@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 23/12/2018 13:19:23
+ Date: 27/12/2018 22:27:18
 */
 
 SET NAMES utf8mb4;
@@ -197,6 +197,152 @@ INSERT INTO `admin_role_menu` VALUES (1, 303);
 INSERT INTO `admin_role_menu` VALUES (1, 900);
 INSERT INTO `admin_role_menu` VALUES (1, 902);
 INSERT INTO `admin_role_menu` VALUES (1, 950);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for cms_lotto_method_group
+-- ----------------------------
+DROP TABLE IF EXISTS `cms_lotto_method_group`;
+CREATE TABLE `cms_lotto_method_group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `lotto_id` int(11) NOT NULL DEFAULT '0',
+  `group_id` int(11) NOT NULL DEFAULT '0',
+  `group_name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `group_alias` varchar(64) COLLATE utf8_bin NOT NULL,
+  `sort_index` int(11) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `lotto_id` (`lotto_id`,`group_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=356 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Table structure for cms_lotto_method_group_play
+-- ----------------------------
+DROP TABLE IF EXISTS `cms_lotto_method_group_play`;
+CREATE TABLE `cms_lotto_method_group_play` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `lotto_id` int(11) NOT NULL DEFAULT '0',
+  `group_id` int(11) NOT NULL DEFAULT '0',
+  `group_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `group_alias` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `method_code` varchar(255) COLLATE utf8_bin NOT NULL,
+  `method_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `method_alias` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `sort_index` int(11) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `lotto_type` (`lotto_id`,`group_id`,`method_code`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1320 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Table structure for cms_lotto_method_group_play_template
+-- ----------------------------
+DROP TABLE IF EXISTS `cms_lotto_method_group_play_template`;
+CREATE TABLE `cms_lotto_method_group_play_template` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL DEFAULT '0',
+  `method_code` varchar(255) COLLATE utf8_bin NOT NULL,
+  `method_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `method_alias` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `sort_index` int(11) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `lotto_type` (`group_id`,`method_code`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of cms_lotto_method_group_play_template
+-- ----------------------------
+BEGIN;
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (1, 1, '10001', '第1球', '第1球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (2, 1, '10002', '第2球', '第2球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (3, 1, '10003', '第3球', '第3球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (4, 1, '10004', '第4球', '第4球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (5, 1, '10005', '第5球', '第5球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (6, 2, '10006', '第1球', '第1球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (7, 2, '10007', '第2球', '第2球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (8, 2, '10008', '第3球', '第3球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (9, 2, '10009', '第4球', '第4球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (10, 2, '10010', '第5球', '第5球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (11, 2, '10011', '总和大小单双', '总和大小单双', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (12, 3, '10012', '前三', '前三', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (13, 3, '10013', '中三', '中三', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (14, 3, '10014', '后三', '后三', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (15, 4, '11001', '第1球', '第1球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (16, 4, '11002', '第2球', '第2球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (17, 4, '11003', '第3球', '第3球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (18, 4, '11004', '第4球', '第4球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (19, 4, '11005', '第5球', '第5球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (20, 5, '11006', '第1球', '第1球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (21, 5, '11007', '第2球', '第2球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (22, 5, '11008', '第3球', '第3球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (23, 5, '11009', '第4球', '第4球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (24, 5, '11010', '第5球', '第5球', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (26, 6, '12001', '点数', '点数', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (27, 7, '12002', '三军', '三军', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (28, 8, '12003', '大小', '大小', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (29, 9, '12004', '围骰', '围骰', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (30, 9, '12005', '全骰', '全骰', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (31, 10, '12006', '长牌', '长牌', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (32, 10, '12007', '短牌', '短牌', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (33, 11, '13001', '冠军', '冠军', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (34, 11, '13002', '亚军', '亚军', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (35, 11, '13003', '第三名', '第三名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (36, 11, '13004', '第四名', '第四名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (37, 11, '13005', '第五名', '第五名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (38, 11, '13006', '第六名', '第六名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (39, 11, '13007', '第七名', '第七名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (40, 11, '13008', '第八名', '第八名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (41, 11, '13009', '第九名', '第九名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (42, 11, '13010', '第十名', '第十名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (43, 12, '13011', '冠军', '冠军', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (44, 12, '13012', '亚军', '亚军', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (45, 12, '13013', '第三名', '第三名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (46, 12, '13014', '第四名', '第四名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (47, 12, '13015', '第五名', '第五名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (48, 12, '13016', '第六名', '第六名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (49, 12, '13017', '第七名', '第七名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (50, 12, '13018', '第八名', '第八名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (51, 12, '13019', '第九名', '第九名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (53, 12, '13020', '第十名', '第十名', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (54, 13, '13021', '冠亚和', '冠亚和', 1, 1);
+INSERT INTO `cms_lotto_method_group_play_template` VALUES (55, 13, '13022', '冠亚和', '冠亚和', 1, 1);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for cms_lotto_method_group_template
+-- ----------------------------
+DROP TABLE IF EXISTS `cms_lotto_method_group_template`;
+CREATE TABLE `cms_lotto_method_group_template` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `lotto_type` int(11) NOT NULL DEFAULT '0',
+  `group_id` int(11) NOT NULL DEFAULT '0',
+  `group_name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `group_alias` varchar(64) COLLATE utf8_bin NOT NULL,
+  `sort_index` int(11) NOT NULL DEFAULT '1',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `lotto_type` (`lotto_type`,`group_id`) USING BTREE,
+  UNIQUE KEY `group_id` (`group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Records of cms_lotto_method_group_template
+-- ----------------------------
+BEGIN;
+INSERT INTO `cms_lotto_method_group_template` VALUES (1, 1, 1, '1-5球', '1-5球', 1, 1);
+INSERT INTO `cms_lotto_method_group_template` VALUES (2, 1, 2, '双面盘', '双面盘', 2, 1);
+INSERT INTO `cms_lotto_method_group_template` VALUES (3, 1, 3, '趣味', '趣味', 3, 1);
+INSERT INTO `cms_lotto_method_group_template` VALUES (4, 2, 4, '1-5球', '1-5球', 1, 1);
+INSERT INTO `cms_lotto_method_group_template` VALUES (5, 2, 5, '双面盘', '双面盘', 2, 1);
+INSERT INTO `cms_lotto_method_group_template` VALUES (6, 3, 6, '点数', '点数', 1, 1);
+INSERT INTO `cms_lotto_method_group_template` VALUES (7, 3, 7, '三军', '三军', 1, 1);
+INSERT INTO `cms_lotto_method_group_template` VALUES (8, 3, 8, '大小', '大小', 1, 1);
+INSERT INTO `cms_lotto_method_group_template` VALUES (9, 3, 9, '骰', '骰', 1, 1);
+INSERT INTO `cms_lotto_method_group_template` VALUES (10, 3, 10, '长短牌', '长短牌', 1, 1);
+INSERT INTO `cms_lotto_method_group_template` VALUES (11, 4, 11, '1-10', '1-10', 1, 1);
+INSERT INTO `cms_lotto_method_group_template` VALUES (12, 4, 12, '双面盘', '双面盘', 1, 1);
+INSERT INTO `cms_lotto_method_group_template` VALUES (13, 4, 13, '冠亚', '冠亚', 1, 1);
 COMMIT;
 
 -- ----------------------------
@@ -571,15 +717,6 @@ CREATE TABLE `gift_task` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
--- Records of gift_task
--- ----------------------------
-BEGIN;
-INSERT INTO `gift_task` VALUES (1, '', '', 'http://img.daimg.com/uploads/allimg/150627/1-15062H30P7.jpg', '', 1, 1, 1, '', '');
-INSERT INTO `gift_task` VALUES (2, '', '', 'https://www.da8088.com/static/images/slide/m2.jpg', '', 1, 1, 1, '', '');
-INSERT INTO `gift_task` VALUES (3, '', '', 'http://img.hb.aicdn.com/85457b4b944953fdca6452e07f63b5d8bce15a40157bf-rOJ7bJ_fw658', '', 1, 1, 1, '', '');
-COMMIT;
-
--- ----------------------------
 -- Table structure for issue_factory
 -- ----------------------------
 DROP TABLE IF EXISTS `issue_factory`;
@@ -623,7 +760,7 @@ INSERT INTO `issue_factory` VALUES (18, 1, 78, 600, 3, 90, '090000', '220000', 1
 INSERT INTO `issue_factory` VALUES (19, 1, 84, 600, 3, 90, '083500', '223500', 1, 0, ' ');
 INSERT INTO `issue_factory` VALUES (20, 1, 82, 600, 3, 90, '082000', '221000', 1, 0, ' ');
 INSERT INTO `issue_factory` VALUES (21, 1, 1440, 60, 4, 5, '000000', '235959', 1, 0, ' ');
-INSERT INTO `issue_factory` VALUES (22, 1, 179, 300, 0, 45, '090230', '235730', 4, 0, '673722|20180329235700');
+INSERT INTO `issue_factory` VALUES (22, 1, 179, 300, 0, 45, '090230', '235730', 4, 0, '721873|20181223235700');
 INSERT INTO `issue_factory` VALUES (23, 1, 180, 500, 3, 45, '120400', '040400', 2, 0, ' ');
 INSERT INTO `issue_factory` VALUES (24, 1, 1440, 60, 4, 5, '000000', '235959', 1, 0, ' ');
 INSERT INTO `issue_factory` VALUES (25, 1, 1, 85500, 3, 900, '203000', '203000', 5, 0, ' ');
@@ -2097,7 +2234,7 @@ CREATE TABLE `record_admin_login` (
   KEY `ip` (`ip`,`record_at`),
   KEY `url` (`url`,`record_at`),
   KEY `record_time` (`record_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
 
 -- ----------------------------
 -- Table structure for record_log_admin_action
@@ -2121,7 +2258,7 @@ CREATE TABLE `record_log_admin_action` (
   KEY `user_id` (`user_id`,`action_module`,`action_id`,`record_at`),
   KEY `user_id_2` (`user_id`,`record_at`),
   KEY `action_module` (`action_module`,`action_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员操作日志';
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员操作日志';
 
 -- ----------------------------
 -- Table structure for record_log_user_action
@@ -2186,7 +2323,7 @@ CREATE TABLE `record_lotto_order` (
   KEY `bet_date` (`bet_date`),
   KEY `calc_date` (`calc_date`),
   KEY `lotto_id` (`lotto_id`,`issue`)
-) ENGINE=InnoDB AUTO_INCREMENT=649 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
+) ENGINE=InnoDB AUTO_INCREMENT=730 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
 
 -- ----------------------------
 -- Table structure for record_money_change
@@ -2214,7 +2351,7 @@ CREATE TABLE `record_money_change` (
   KEY `user_id_r` (`user_id`,`record_at`),
   KEY `user_id_g_m` (`user_id`,`game_kind`,`change_kind`),
   KEY `game_id_m_r` (`game_kind`,`change_kind`,`record_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=809 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户资金变动记录';
+) ENGINE=InnoDB AUTO_INCREMENT=890 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户资金变动记录';
 
 -- ----------------------------
 -- Table structure for record_user_login
@@ -2237,7 +2374,7 @@ CREATE TABLE `record_user_login` (
   KEY `ip` (`ip`,`record_at`),
   KEY `url` (`url`,`record_at`),
   KEY `record_time` (`record_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
 
 -- ----------------------------
 -- Table structure for report_lotto_day_count
@@ -2423,7 +2560,7 @@ CREATE TABLE `users` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态(0:冻结,1:正常, 2:开户成功但部分功能未开通)',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 -- ----------------------------
 -- Records of users
