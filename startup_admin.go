@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/xiuos/mozi/common"
@@ -117,5 +118,11 @@ func main() {
 		appAuthV1.GET("/pages/action/record/list", admin.PageFindLogRecordAdminActionList)
 
 	}
-	app.Run(":9980")
+	port, err := common.Conf.Int("port", "admin_port")
+	if err != nil {
+		fmt.Println("启动端口错误", err)
+		os.Exit(1)
+	}
+	common.Logger.Info("Start Admin!")
+	app.Run(fmt.Sprintf(":%d", port))
 }
