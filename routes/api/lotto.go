@@ -66,7 +66,7 @@ func Bet(c *gin.Context) {
 			PlayCode:   betList[i].PlayCode,
 			BetContent: betList[i].BetContent,
 			Amount:     betList[i].Amount,
-			IP:         ip,
+			//IP:         ip,
 		})
 		if err != nil {
 			c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("下注失败：%s", err)))
