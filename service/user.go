@@ -1,6 +1,7 @@
 package service
 
 import (
+	"database/sql"
 	"github.com/shopspring/decimal"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
@@ -105,6 +106,9 @@ func GetInfos(uid int) (*models.UserInfos, error) {
 	var ui models.UserInfos
 	u, err := models.GetUserByID(uid)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return &ui, errors.New("账号不存在")
+		}
 		return &ui, err
 	}
 	up, err := models.GetUserProfile(uid)

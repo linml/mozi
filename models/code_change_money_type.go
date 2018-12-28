@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"github.com/xiuos/mozi/common"
+	"strings"
 )
 
 const (
@@ -13,9 +14,11 @@ const (
 	ChangeKindDepositManual   = 200 //入款-人工入款
 	ChangeKindDepositCencel   = 201 //入款-冲账-取消出款
 	ChangeKindDepositRepeate  = 202 //入款-冲账-重复出款
-	ChangeKindDepositPayoff   = 203 //入款-优惠(活动)
-	ChangeKindDepositActivity = 204 //入款-活动(活动)
-	ChangeKindDepositOther    = 205 //入款-其他(活动)
+	ChangeKindDepositPayoff   = 203 //入款-入款优惠(活动)
+	ChangeKindDepositActivity = 204 //入款-活动优惠(活动)
+	ChangeKindDepositZero     = 205 //负数额度归零
+	ChangeKindDepositBonus    = 206 //红利
+	ChangeKindDepositOther    = 220 //入款-其他(活动)
 )
 
 type CodeChangeMoneyType struct {
@@ -36,6 +39,13 @@ func (b *CodeChangeMoneyType) Field() []string {
 
 func (b *CodeChangeMoneyType) FieldItem() []interface{} {
 	return []interface{}{&b.ChangeKind, &b.ID, &b.Name, &b.SortIndex, &b.Status}
+}
+
+func GetCodeChangeMoneyType(id int) (*CodeChangeMoneyType, error) {
+	t := CodeChangeMoneyType{}
+	querySql := fmt.Sprintf("SELECT %s FROM %s WHERE id=?", strings.Join(t.Field(), ","), t.TableName())
+	err := common.BaseDb.QueryRow(querySql, id).Scan(t.FieldItem()...)
+	return &t, err
 }
 
 func FindCodeChangeMoneyTypeList(param map[string]string) (*[]CodeChangeMoneyType, error) {

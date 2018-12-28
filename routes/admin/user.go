@@ -233,7 +233,18 @@ func AddMember(c *gin.Context) {
 }
 
 func GetMemberInfos(c *gin.Context) {
-	uid := common.GetInt(c.Query("user_id"))
+	params := routes.ParamHelper{}
+	params.GetQueryNotEmpty(c, "user_id")
+	params.GetQueryNotEmpty(c, "name")
+
+	uid := common.GetInt(params.Get("user_id"))
+	if params.Exist("name") == true {
+		uInfo, err := models.GetUserByName(params.Get("name"))
+		if err == nil {
+			uid = uInfo.UserID
+		}
+	}
+
 	infos, err := service.GetInfos(uid)
 	if err != nil {
 		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))

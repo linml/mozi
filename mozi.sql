@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 27/12/2018 22:27:18
+ Date: 28/12/2018 23:45:39
 */
 
 SET NAMES utf8mb4;
@@ -93,7 +93,7 @@ INSERT INTO `admin_menu` VALUES (251, 1, 6, 0, '收款账户', '', '', 'iframe-t
 INSERT INTO `admin_menu` VALUES (252, 2, 6, 0, '第三方收款账户', '', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (253, 3, 6, 0, '会员入款单', '', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (254, 4, 6, 0, '会员收款单', '', '', 'iframe-tab', 1);
-INSERT INTO `admin_menu` VALUES (255, 5, 6, 0, '手动入款', 'fa fa-fw fa-hand-o-right', 'pages/finance/manual_deposit.html', 'iframe-tab', 1);
+INSERT INTO `admin_menu` VALUES (255, 5, 6, 0, '手动入款', 'fa fa-fw fa-hand-o-right', 'html/member/manual_deposit', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (256, 6, 6, 0, '手动出款', 'fa fa-fw fa-hand-o-right', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (257, 7, 6, 0, '手动转点', '', '', 'iframe-tab', 1);
 INSERT INTO `admin_menu` VALUES (258, 8, 6, 0, '流水查询', 'fa fa-fw fa-file-text', 'html/user/money_change', 'iframe-tab', 1);
@@ -213,7 +213,7 @@ CREATE TABLE `cms_lotto_method_group` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `lotto_id` (`lotto_id`,`group_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=356 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=432 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Table structure for cms_lotto_method_group_play
@@ -232,7 +232,7 @@ CREATE TABLE `cms_lotto_method_group_play` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `lotto_type` (`lotto_id`,`group_id`,`method_code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1320 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=1606 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Table structure for cms_lotto_method_group_play_template
@@ -696,6 +696,14 @@ BEGIN;
 INSERT INTO `code_money_change_type` VALUES (1, 101, '下注', 1, 1);
 INSERT INTO `code_money_change_type` VALUES (1, 102, '派彩', 2, 1);
 INSERT INTO `code_money_change_type` VALUES (1, 103, '撤单', 3, 1);
+INSERT INTO `code_money_change_type` VALUES (2, 200, '入款-人工入款', 1, 1);
+INSERT INTO `code_money_change_type` VALUES (2, 201, '入款-冲账-取消出款', 2, 1);
+INSERT INTO `code_money_change_type` VALUES (2, 202, '入款-冲账-重复出款', 3, 1);
+INSERT INTO `code_money_change_type` VALUES (2, 203, '入款-入款优惠', 4, 1);
+INSERT INTO `code_money_change_type` VALUES (2, 204, '入款-活动优惠', 5, 1);
+INSERT INTO `code_money_change_type` VALUES (2, 205, '负数额度归零', 6, 1);
+INSERT INTO `code_money_change_type` VALUES (2, 206, '红利', 6, 1);
+INSERT INTO `code_money_change_type` VALUES (2, 207, '入款-其他', 7, 1);
 COMMIT;
 
 -- ----------------------------
@@ -714,7 +722,7 @@ CREATE TABLE `gift_task` (
   `start_at` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '',
   `end_at` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Table structure for issue_factory
@@ -2234,7 +2242,7 @@ CREATE TABLE `record_admin_login` (
   KEY `ip` (`ip`,`record_at`),
   KEY `url` (`url`,`record_at`),
   KEY `record_time` (`record_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
 
 -- ----------------------------
 -- Table structure for record_log_admin_action
@@ -2258,7 +2266,7 @@ CREATE TABLE `record_log_admin_action` (
   KEY `user_id` (`user_id`,`action_module`,`action_id`,`record_at`),
   KEY `user_id_2` (`user_id`,`record_at`),
   KEY `action_module` (`action_module`,`action_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员操作日志';
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='管理员操作日志';
 
 -- ----------------------------
 -- Table structure for record_log_user_action
@@ -2323,7 +2331,7 @@ CREATE TABLE `record_lotto_order` (
   KEY `bet_date` (`bet_date`),
   KEY `calc_date` (`calc_date`),
   KEY `lotto_id` (`lotto_id`,`issue`)
-) ENGINE=InnoDB AUTO_INCREMENT=730 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
+) ENGINE=InnoDB AUTO_INCREMENT=753 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
 
 -- ----------------------------
 -- Table structure for record_money_change
@@ -2351,7 +2359,7 @@ CREATE TABLE `record_money_change` (
   KEY `user_id_r` (`user_id`,`record_at`),
   KEY `user_id_g_m` (`user_id`,`game_kind`,`change_kind`),
   KEY `game_id_m_r` (`game_kind`,`change_kind`,`record_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=890 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户资金变动记录';
+) ENGINE=InnoDB AUTO_INCREMENT=926 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户资金变动记录';
 
 -- ----------------------------
 -- Table structure for record_user_login
@@ -2374,7 +2382,7 @@ CREATE TABLE `record_user_login` (
   KEY `ip` (`ip`,`record_at`),
   KEY `url` (`url`,`record_at`),
   KEY `record_time` (`record_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
 
 -- ----------------------------
 -- Table structure for report_lotto_day_count
@@ -2397,7 +2405,7 @@ CREATE TABLE `report_lotto_day_count` (
   `update_time` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `count_date` (`count_date`,`user_id`,`lotto_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2421 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='彩票游戏日统计';
+) ENGINE=InnoDB AUTO_INCREMENT=2887 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='彩票游戏日统计';
 
 -- ----------------------------
 -- Table structure for sys_settings
@@ -2560,7 +2568,7 @@ CREATE TABLE `users` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态(0:冻结,1:正常, 2:开户成功但部分功能未开通)',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 -- ----------------------------
 -- Records of users

@@ -21,7 +21,7 @@ func (b *Bank) TableName() string {
 }
 
 func (b *Bank) Field() []string {
-	return []string{"id", "bank_code", "bank_name", "sort_index", "group", "status"}
+	return []string{"id", "bank_code", "bank_name", "sort_index", "group_type", "status"}
 }
 
 func (b *Bank) FieldItem() []interface{} {
@@ -55,8 +55,8 @@ func PageFindCodeBankList(pageParam common.PageParams) (*common.PageResult, *[]B
 		sqlWhere += " AND bank_name = ?"
 		args = append(args, v)
 	}
-	if v, ok := pageParam.Params["group"]; ok {
-		sqlWhere += " AND group = ?"
+	if v, ok := pageParam.Params["group_type"]; ok {
+		sqlWhere += " AND group_type = ?"
 		args = append(args, v)
 	}
 	if v, ok := pageParam.Params["status"]; ok {

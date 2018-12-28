@@ -3,9 +3,11 @@ package admin
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/shopspring/decimal"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models"
 	"github.com/xiuos/mozi/routes"
+	"github.com/xiuos/mozi/service"
 )
 
 func PageFindRecordMoneyList(c *gin.Context) {
@@ -81,5 +83,42 @@ func FindCodeChangeMoneyTypeList(c *gin.Context) {
 		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
 	} else {
 		c.JSON(200, routes.ApiResult(common.CodeOK, "", data))
+	}
+}
+
+func ManualAddMoney(c *gin.Context) {
+	uid, err := routes.GetAdminLoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+		return
+	}
+	params := routes.ParamHelper{}
+
+	params.GetPostFormNotEmpty(c, "user_id")
+	params.GetPostFormNotEmpty(c, "amount")
+	params.GetPostFormNotEmpty(c, "change_type")
+
+	if params.Exist("user_id") == false {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "用户编号不能为空"))
+		return
+	}
+	if params.Exist("amount") == false {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "金额不能为空"))
+		return
+	}
+	if params.Exist("change_type") == false {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "变动类型不能为空"))
+		return
+	}
+	userID := common.GetInt(params.Get("user_id"))
+	changeType := common.GetInt(params.Get("change_type"))
+	amount, _ := decimal.NewFromString(params.Get("amount"))
+
+	err = service.ManualAddMoney(uid, userID, amount, changeType)
+
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+	} else {
+		c.JSON(200, routes.ApiShowResult(common.CodeOK, ""))
 	}
 }

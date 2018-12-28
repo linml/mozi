@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>手动入款</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="/static/css/ionicons.min.css">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="/static/plugins/iCheck/all.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="/static/select2/dist/css/select2.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/static/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="/static/css/skins/_all-skins.min.css">
+
+</head>
+
+
+<body class="hold-transition skin-blue sidebar-mini">
+
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <!-- Content Header (Page header) -->
+                <div class="box-header">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>账户</label>
+                                <input type="text" class="form-control" id="query_name">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>操作</label>
+                                <div class="row">
+                                    <button onclick="query_login_history()" type="button" class="btn btn-primary " >点击查询</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="box">
+                <!-- Content Header (Page header) -->
+                <div class="box-header">
+                    <div class="row">
+                        <input type="hidden" id="user_id" name="extra" value="">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>账户</label>
+                                <input type="text" class="form-control" id="name" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>当前余额</label>
+                                <input type="text" class="form-control" id="balance" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>真实姓名</label>
+                                <input type="text" class="form-control" id="real_name" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>添加金额</label>
+                                <input type="text" class="form-control" id="add_money">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group" style="width: 100%">
+                                <label>类型</label>
+                                <div class="input-group" style="width: 100%">
+                                    <select id="change_type" class="form-control select2" style="width: 100%;">
+                                        <option value=200>人工入款</option>
+                                        <option value=201>冲帐-取消出款</option>
+                                        <option value=202>冲帐-重复出款</option>
+                                        <option value=203>入款优惠</option>
+                                        <option value=204>活动优惠</option>
+                                        <option value=205>负数额度归零</option>
+                                        <option value=206>人工存入-红利</option>
+                                        <option value=220>其他</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>操作</label>
+                                <div class="row">
+                                    <button onclick="add_money()" type="button" class="btn btn-danger " >确定添加</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+</section>
+<!-- /.content -->
+
+<!-- ./wrapper -->
+
+
+<!-- jQuery 3 -->
+<script src="/static/js/jquery.min.js"></script>
+<!--<script src="/js/jquery-3.2.1.js"></script>-->
+<!-- Bootstrap 3.3.7 -->
+<script src="/static/js/bootstrap.min.js"></script>
+<!-- DataTables -->
+<script src="/static/datatables.net/js/jquery.dataTables.js"></script>
+<script src="/static/datatables.net-bs/js/dataTables.bootstrap.js"></script>
+
+<!-- Select2 -->
+<script src="/static/select2/dist/js/select2.full.min.js"></script>
+<!-- SlimScroll -->
+<script src="/static/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="/static/plugins/iCheck/icheck.min.js"></script>
+<!-- FastClick -->
+<script src="/static/fastclick/lib/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="/static/js/adminlte.min.js"></script>
+<script src="/static/ckeditor/ckeditor.js"></script>
+
+<!-- page script -->
+<script src="/static/laydate/laydate.js"></script>
+<script src="/static/js/utils.js"></script>
+<script src="/static/js/sys_def.js"></script>
+<script src="/static/js/public.js"></script>
+{{/*<script type="text/javascript" src="/js/app.js"></script>*/}}
+<script src="/static/js/bootbox.min.js"></script>
+<script>
+    $(function () {
+        $('.select2').select2();
+        laydate.render({
+            elem: '#start_at' //指定元素
+            ,type: 'datetime'
+            ,theme: '#393D49'
+            ,value: get_current_day_begin_time()
+        });
+        laydate.render({
+            elem: '#end_at' //指定元素
+            ,type: 'datetime'
+            ,theme: '#393D49'
+            ,value: get_current_day_end_time()
+        });
+        laydate.render({
+            elem: '#add_start_at' //指定元素
+            ,type: 'datetime'
+            ,theme: '#393D49'
+            ,value: get_current_day_begin_time()
+        });
+        laydate.render({
+            elem: '#add_end_at' //指定元素
+            ,type: 'datetime'
+            ,theme: '#393D49'
+            ,value: get_current_day_end_time()
+        });
+    })
+</script>
+<script>
+    function query_login_history() {
+        $('#manual_name').val('');
+        $('#balance').val('');
+        $('#real_name').val('');
+        var params = {};
+        params.name = $('#query_name').val();
+        get_user_detail(params, function (rsp) {
+            if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                $('#user_id').val(rsp.data.user_id);
+                $('#name').val(rsp.data.name);
+                $('#balance').val(rsp.data.balance);
+                $('#real_name').val(rsp.data.real_name);
+            }else {
+                bootbox.alert(rsp.msg)
+            }
+        })
+    }
+    function add_money() {
+        var user_id = $('#user_id').val();
+        var name = $('#name').val();
+        var query_name = $('#query_name').val();
+        if (user_id === ''){
+            bootbox.alert('请先填写用户名');
+            return
+        }
+        if (name !== query_name){
+            bootbox.alert('请再次确认账号是否正确');
+            return
+        }
+       var params = {};
+        params.user_id = user_id;
+        params.amount = $('#add_money').val();
+        params.change_type = $('#change_type').val();
+        manual_depost(params, function (rsp) {
+            if(rsp.code === SYS_DEF.CODE.SUCCESS){
+                bootbox.alert(rsp.msg||"添加成功")
+            }else {
+                bootbox.alert(rsp.msg||"添加失败")
+            }
+        })
+    }
+
+</script>
+
+</body>
+</html>
