@@ -49,7 +49,7 @@ func Bet(c *gin.Context) {
 	lottoID := common.GetInt(params.Get("lotto_id"))
 	issue := params.Get("issue")
 	bets := params.Get("bets")
-	ip := common.InetAton(c.ClientIP())
+	//ip := common.InetAton(c.ClientIP())
 
 	var betList []BetContent
 	err = json.Unmarshal([]byte(bets), &betList)
