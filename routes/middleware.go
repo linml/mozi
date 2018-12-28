@@ -34,7 +34,7 @@ func APIAuthMiddleWare() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		sid := c.Request.Header.Get("Authorization")
 		if sid == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{
+			c.JSON(http.StatusOK, gin.H{
 				"code": common.CodeUserNotLogin,
 				"msg":  "请先登录",
 				"data": gin.H{}})
@@ -44,7 +44,7 @@ func APIAuthMiddleWare() gin.HandlerFunc {
 
 		obj, err := service.GetUserSessionInfo(sid)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{
+			c.JSON(http.StatusOK, gin.H{
 				"code": common.CodeUserLoginExpired,
 				"msg":  "请重新登录",
 				"data": gin.H{}})
