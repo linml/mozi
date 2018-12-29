@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/shopspring/decimal"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/xorm"
@@ -49,4 +50,13 @@ func GetUserScore(uid int) (*UserScore, error) {
 	}
 	err = common.BaseDb.QueryRow(querySql, o.Args()...).Scan(us.FieldItem()...)
 	return &us, err
+}
+
+// score为正数表示加钱，负数表示减钱
+func ChangeAuditScoreTx(tx *sql.Tx, uid int, score decimal.Decimal) error {
+	s := UserScore{}
+	updateSql := fmt.Sprintf("UPDATE %s SET audit_score=audit_score+? WHERE user_id = ?", s.TableName())
+	_, err := tx.Exec(updateSql, score, uid)
+
+	return err
 }

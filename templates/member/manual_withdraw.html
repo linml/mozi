@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>手动入款</title>
+    <title>手动出款</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -45,7 +45,7 @@
                             <div class="form-group">
                                 <label>操作</label>
                                 <div class="row">
-                                    <button onclick="query_login_history()" type="button" class="btn btn-primary " >点击查询</button>
+                                    <button onclick="query_user()" type="button" class="btn btn-primary " >点击查询</button>
                                 </div>
                             </div>
                         </div>
@@ -82,13 +82,13 @@
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>添加金额</label>
+                                <label>扣除金额</label>
                                 <input type="text" class="form-control" id="add_money">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>稽核分</label>
+                                <label>扣除稽核分</label>
                                 <input type="text" class="form-control" id="audit_score">
                             </div>
                         </div>
@@ -105,14 +105,11 @@
                                 <label>类型</label>
                                 <div class="input-group" style="width: 100%">
                                     <select id="change_type" class="form-control select2" style="width: 100%;">
-                                        <option value=200>人工入款</option>
-                                        <option value=201>冲帐-取消出款</option>
-                                        <option value=202>冲帐-重复出款</option>
-                                        <option value=203>入款优惠</option>
-                                        <option value=204>活动优惠</option>
-                                        <option value=205>负数额度归零</option>
-                                        <option value=206>人工存入-红利</option>
-                                        <option value=220>其他</option>
+                                        <option value=300>人工出款</option>
+                                        <option value=303>人工扣除-入款优惠</option>
+                                        <option value=304>人工扣除-活动优惠</option>
+                                        <option value=306>人工扣除-红利</option>
+                                        <option value=320>出款-其他</option>
                                     </select>
                                 </div>
                             </div>
@@ -121,7 +118,7 @@
                             <div class="form-group">
                                 <label>操作</label>
                                 <div class="row">
-                                    <button id="btn-add-money" onclick="add_money()" type="button" class="btn btn-danger " >确定添加</button>
+                                    <button id="btn-add-money" onclick="fetch_manual_withdraw()" type="button" class="btn btn-danger " >确定扣除</button>
                                 </div>
                             </div>
                         </div>
@@ -195,7 +192,7 @@
     })
 </script>
 <script>
-    function query_login_history() {
+    function query_user() {
         $('#name').val('');
         $('#balance').val('');
         $('#real_name').val('');
@@ -216,7 +213,7 @@
             }
         })
     }
-    function add_money() {
+    function fetch_manual_withdraw() {
         var user_id = $('#user_id').val();
         var name = $('#name').val();
         var query_name = $('#query_name').val();
@@ -232,16 +229,16 @@
         params.user_id = user_id;
         params.amount = $('#add_money').val();
         params.change_type = $('#change_type').val();
-        params.audit_score = $('#audit_score').val();
+        params.audit_score = -$('#audit_score').val();
         params.remark = $('#remark').val();
 
         $('#btn-add-money').attr('disabled',true);
-        manual_depost(params, function (rsp) {
+        manual_withdraw(params, function (rsp) {
             $('#btn-add-money').attr('disabled',false);
             if(rsp.code === SYS_DEF.CODE.SUCCESS){
-                bootbox.alert(rsp.msg||"添加成功")
+                bootbox.alert(rsp.msg||"扣除成功")
             }else {
-                bootbox.alert(rsp.msg||"添加失败")
+                bootbox.alert(rsp.msg||"扣除失败")
             }
         })
     }

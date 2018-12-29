@@ -66,6 +66,9 @@ func TmplUserBank(c *gin.Context) {
 func TmplManualDeposit(c *gin.Context) {
 	c.HTML(http.StatusOK, "manual_deposit.html", gin.H{})
 }
+func TmplManualWithDraw(c *gin.Context) {
+	c.HTML(http.StatusOK, "manual_withdraw.html", gin.H{})
+}
 
 func TmplcodeBank(c *gin.Context) {
 	c.HTML(http.StatusOK, "code_bank.html", gin.H{})

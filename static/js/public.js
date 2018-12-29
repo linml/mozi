@@ -22,3 +22,9 @@ function manual_depost(params, callback) {
         callback(rsp);
     });
 }
+
+function manual_withdraw(params, callback) {
+    $.post("/money/manual_withdraw", params, function (rsp) {
+        callback(rsp);
+    });
+}

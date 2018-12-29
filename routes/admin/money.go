@@ -86,7 +86,7 @@ func FindCodeChangeMoneyTypeList(c *gin.Context) {
 	}
 }
 
-func ManualAddMoney(c *gin.Context) {
+func ManualDeposit(c *gin.Context) {
 	uid, err := routes.GetAdminLoginID(c)
 	if err != nil {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
@@ -97,6 +97,8 @@ func ManualAddMoney(c *gin.Context) {
 	params.GetPostFormNotEmpty(c, "user_id")
 	params.GetPostFormNotEmpty(c, "amount")
 	params.GetPostFormNotEmpty(c, "change_type")
+	params.GetPostFormNotEmpty(c, "audit_score")
+	params.GetPostFormNotEmpty(c, "remark")
 
 	if params.Exist("user_id") == false {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, "用户编号不能为空"))
@@ -113,8 +115,69 @@ func ManualAddMoney(c *gin.Context) {
 	userID := common.GetInt(params.Get("user_id"))
 	changeType := common.GetInt(params.Get("change_type"))
 	amount, _ := decimal.NewFromString(params.Get("amount"))
+	auditScore, _ := decimal.NewFromString(params.Get("audit_score"))
+	remark := params.Get("remark")
 
-	err = service.ManualAddMoney(uid, userID, amount, changeType)
+	mm := service.ManualMoney{
+		OperatorID: uid,
+		UserID:     userID,
+		Amount:     amount,
+		AuditScore: auditScore,
+		ChangeType: changeType,
+		Remark:     remark,
+	}
+
+	err = service.ManualAddMoney(mm)
+
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+	} else {
+		c.JSON(200, routes.ApiShowResult(common.CodeOK, ""))
+	}
+}
+
+func ManualWithdraw(c *gin.Context) {
+	uid, err := routes.GetAdminLoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))
+		return
+	}
+	params := routes.ParamHelper{}
+
+	params.GetPostFormNotEmpty(c, "user_id")
+	params.GetPostFormNotEmpty(c, "amount")
+	params.GetPostFormNotEmpty(c, "change_type")
+	params.GetPostFormNotEmpty(c, "audit_score")
+	params.GetPostFormNotEmpty(c, "remark")
+
+	if params.Exist("user_id") == false {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "用户编号不能为空"))
+		return
+	}
+	if params.Exist("amount") == false {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "金额不能为空"))
+		return
+	}
+	if params.Exist("change_type") == false {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "变动类型不能为空"))
+		return
+	}
+	userID := common.GetInt(params.Get("user_id"))
+	changeType := common.GetInt(params.Get("change_type"))
+	amount, _ := decimal.NewFromString(params.Get("amount"))
+	auditScore, _ := decimal.NewFromString(params.Get("audit_score"))
+	remark := params.Get("remark")
+
+	mm := service.ManualMoney{
+		OperatorID: uid,
+		UserID:     userID,
+		Amount:     amount,
+		AuditScore: auditScore,
+		ChangeType: changeType,
+		Remark:     remark,
+	}
+
+	err = service.ManualSubMoney(mm)
 
 	if err != nil {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))

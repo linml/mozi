@@ -19,6 +19,12 @@ const (
 	ChangeKindDepositZero     = 205 //负数额度归零
 	ChangeKindDepositBonus    = 206 //红利
 	ChangeKindDepositOther    = 220 //入款-其他(活动)
+
+	ChangeKindWithdrawManual   = 300 //出款-人工出款
+	ChangeKindWithdrawPayoff   = 303 //出款-人工扣除-入款优惠(活动)
+	ChangeKindWithdrawActivity = 304 //出款-人工扣除-活动优惠(活动)
+	ChangeKindWithdrawBonus    = 306 //人工扣除-红利
+	ChangeKindWithdrawOther    = 320 //出款-其他
 )
 
 type CodeChangeMoneyType struct {
@@ -45,6 +51,12 @@ func GetCodeChangeMoneyType(id int) (*CodeChangeMoneyType, error) {
 	t := CodeChangeMoneyType{}
 	querySql := fmt.Sprintf("SELECT %s FROM %s WHERE id=?", strings.Join(t.Field(), ","), t.TableName())
 	err := common.BaseDb.QueryRow(querySql, id).Scan(t.FieldItem()...)
+	return &t, err
+}
+func GetCodeChangeMoneyType1(changeKind int, id int) (*CodeChangeMoneyType, error) {
+	t := CodeChangeMoneyType{}
+	querySql := fmt.Sprintf("SELECT %s FROM %s WHERE change_kind=? AND id=? ", strings.Join(t.Field(), ","), t.TableName())
+	err := common.BaseDb.QueryRow(querySql, changeKind, id).Scan(t.FieldItem()...)
 	return &t, err
 }
 
