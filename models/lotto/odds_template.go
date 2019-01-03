@@ -19,6 +19,7 @@ type LottoOddsTemplate struct {
 	BetMin     decimal.Decimal `json:"bet_min"`
 	BetMax     decimal.Decimal `json:"bet_max"`
 	Status     int             `json:"status"`
+	SortIndex  int             `json:"sort_index"`
 	IsShow     int             `json:"is_show"`
 }
 
@@ -27,11 +28,11 @@ func (d *LottoOddsTemplate) TableName() string {
 }
 
 func (d *LottoOddsTemplate) Field() []string {
-	return []string{"method_code", "play_code", "method_name", "play_name", "base_odds", "odds", "odds_min", "odds_max", "bet_min", "bet_max", "status", "is_show"}
+	return []string{"method_code", "play_code", "method_name", "play_name", "base_odds", "odds", "odds_min", "odds_max", "bet_min", "bet_max", "status", "sort_index", "is_show"}
 }
 
 func (d *LottoOddsTemplate) FieldItem() []interface{} {
-	return []interface{}{&d.MethodCode, &d.PlayCode, &d.MethodName, &d.PlayName, &d.BaseOdds, &d.Odds, &d.OddsMin, &d.OddsMax, &d.BetMin, &d.BetMax, &d.Status, &d.IsShow}
+	return []interface{}{&d.MethodCode, &d.PlayCode, &d.MethodName, &d.PlayName, &d.BaseOdds, &d.Odds, &d.OddsMin, &d.OddsMax, &d.BetMin, &d.BetMax, &d.Status, &d.SortIndex, &d.IsShow}
 }
 
 func FindLottoOddsTemplateList(param map[string]string) (*[]LottoOddsTemplate, error) {

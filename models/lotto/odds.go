@@ -20,6 +20,7 @@ type LottoOdds struct {
 	BetMin     decimal.Decimal `json:"bet_min"`
 	BetMax     decimal.Decimal `json:"bet_max"`
 	Status     int             `json:"status"`
+	SortIndex  int             `json:"sort_index"`
 	IsShow     int             `json:"is_show"`
 }
 
@@ -28,16 +29,16 @@ func (d *LottoOdds) TableName() string {
 }
 
 func (d *LottoOdds) Field() []string {
-	return []string{"lotto_id", "method_code", "play_code", "method_name", "play_name", "base_odds", "odds", "odds_min", "odds_max", "bet_min", "bet_max", "status", "is_show"}
+	return []string{"lotto_id", "method_code", "play_code", "method_name", "play_name", "base_odds", "odds", "odds_min", "odds_max", "bet_min", "bet_max", "status", "sort_index", "is_show"}
 }
 
 func (d *LottoOdds) FieldItem() []interface{} {
-	return []interface{}{&d.LottoID, &d.MethodCode, &d.PlayCode, &d.MethodName, &d.PlayName, &d.BaseOdds, &d.Odds, &d.OddsMin, &d.OddsMax, &d.BetMin, &d.BetMax, &d.Status, &d.IsShow}
+	return []interface{}{&d.LottoID, &d.MethodCode, &d.PlayCode, &d.MethodName, &d.PlayName, &d.BaseOdds, &d.Odds, &d.OddsMin, &d.OddsMax, &d.BetMin, &d.BetMax, &d.Status, &d.SortIndex, &d.IsShow}
 }
 
 func CreateLottoOdds(lo LottoOdds) error {
-	createSql := fmt.Sprintf("INSERT IGNORE INTO %s SET lotto_id=?,method_code=?,play_code=?,method_name=?,play_name=?,base_odds=?,odds=?,odds_min=?,odds_max=?,bet_min=?,bet_max=?,status=?,is_show=?", lo.TableName())
-	_, err := common.BaseDb.Exec(createSql, lo.LottoID, lo.MethodCode, lo.PlayCode, lo.MethodName, lo.PlayName, lo.BaseOdds, lo.Odds, lo.OddsMin, lo.OddsMax, lo.BetMin, lo.BetMax, lo.Status, lo.IsShow)
+	createSql := fmt.Sprintf("INSERT IGNORE INTO %s SET lotto_id=?,method_code=?,play_code=?,method_name=?,play_name=?,base_odds=?,odds=?,odds_min=?,odds_max=?,bet_min=?,bet_max=?,status=?,sort_index=?,is_show=?", lo.TableName())
+	_, err := common.BaseDb.Exec(createSql, lo.LottoID, lo.MethodCode, lo.PlayCode, lo.MethodName, lo.PlayName, lo.BaseOdds, lo.Odds, lo.OddsMin, lo.OddsMax, lo.BetMin, lo.BetMax, lo.Status, lo.SortIndex, lo.IsShow)
 	return err
 }
 
@@ -136,7 +137,7 @@ func FindLottoOddsList(params map[string]string) (*[]LottoOdds, error) {
 
 	if v, ok := params["order_by"]; ok {
 		if v == "sort_index" {
-			sqlWhere += " ORDER BY play_code "
+			sqlWhere += " ORDER BY sort_index "
 		} else {
 			sqlWhere += " ORDER BY lotto_id  "
 		}

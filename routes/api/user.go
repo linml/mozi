@@ -21,6 +21,12 @@ func Register(c *gin.Context) {
 	params.GetPostForm(c, "ref")
 	params.Set("register_ip", c.ClientIP())
 
+	code := c.PostForm("code")
+	if b := routes.CheckCaptcha(c, code); b == false {
+		c.JSON(200, routes.ApiResult(common.CodeFail, "验证码错误", map[string]string{}))
+		return
+	}
+
 	err := service.RegisterUser(name, password, params, models.OperatorTypeSelf)
 	if err != nil {
 		c.JSON(200, routes.ApiShowResult(common.CodeFail, fmt.Sprintf("%s", err)))

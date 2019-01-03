@@ -247,6 +247,7 @@ func CheckAndCreateOdds() {
 						BetMin:     (*lottoOddTmpList)[k].BetMin,
 						BetMax:     (*lottoOddTmpList)[k].BetMax,
 						Status:     (*lottoOddTmpList)[k].Status,
+						SortIndex:  (*lottoOddTmpList)[k].SortIndex,
 						IsShow:     (*lottoOddTmpList)[k].IsShow,
 					}
 					err := lotto.CreateLottoOdds(lo)

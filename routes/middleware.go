@@ -32,8 +32,8 @@ func GetAdminLoginID(c *gin.Context) (int, error) {
 
 func APIAuthMiddleWare() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		sid := c.Request.Header.Get("Authorization")
-		if sid == "" {
+		sid, err := c.Cookie(common.SID)
+		if err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"code": common.CodeUserNotLogin,
 				"msg":  "请先登录",
