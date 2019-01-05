@@ -39,6 +39,7 @@ func main() {
 	{
 		apiV1.POST("/register", api.Register)
 		apiV1.POST("/login", api.Login)
+		apiV1.POST("/login/guest", api.GuestLogin)
 
 		apiV1.GET("/captcha", routes.GenCaptcha)
 		apiV1.GET("/hall/lotto/list", cms.CMSFindHallLotto)

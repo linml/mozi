@@ -8,9 +8,10 @@ import (
 )
 
 const (
-	SID         = "SID"
-	PrefixUser  = "user"
-	PrefixAdmin = "admin"
+	SID             = "SID"
+	PrefixUser      = "user"
+	PrefixAdmin     = "admin"
+	PrefixGuestUser = "guest_user"
 )
 
 type Session struct {
@@ -119,10 +120,34 @@ func SetUserOnline(sessionID string, uid int, deviceType int) error {
 	return SetOnline(sessionID, PrefixUser, uid, deviceType)
 }
 
+func SetGuestUserOnline(sessionID string, uid int, deviceType int) error {
+	return SetOnline(sessionID, PrefixGuestUser, uid, deviceType)
+}
+
 func GetAdminSessionInfo(sessionID string) (*Session, error) {
 	return GetSessionInfo(sessionID, PrefixAdmin)
 }
 
 func GetUserSessionInfo(sessionID string) (*Session, error) {
 	return GetSessionInfo(sessionID, PrefixUser)
+}
+
+func GetGuestUserSessionInfo(sessionID string) (*Session, error) {
+	return GetSessionInfo(sessionID, PrefixGuestUser)
+}
+
+func SetAccountOnline(uid int, accountType string, deviceType int) (string, error) {
+	sid := common.RandString(32)
+	var err error
+	switch accountType {
+	case PrefixUser:
+		err = SetUserOnline(sid, uid, deviceType)
+	case PrefixAdmin:
+		err = SetAdminOnline(sid, uid, deviceType)
+	case PrefixGuestUser:
+		err = SetGuestUserOnline(sid, uid, deviceType)
+	default:
+		err = errors.New("账户类型未找到")
+	}
+	return sid, err
 }

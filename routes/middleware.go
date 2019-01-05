@@ -58,6 +58,34 @@ func APIAuthMiddleWare() gin.HandlerFunc {
 	}
 }
 
+func APIGuestAuthMiddleWare() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		sid, err := c.Cookie(common.SID)
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"code": common.CodeUserNotLogin,
+				"msg":  "请先登录",
+				"data": gin.H{}})
+			c.Abort()
+			return
+		}
+
+		obj, err := service.GetGuestUserSessionInfo(sid)
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"code": common.CodeUserLoginExpired,
+				"msg":  "请重新登录",
+				"data": gin.H{}})
+			c.Abort()
+			return
+		}
+		c.Set(SessionApiLoginID, obj.UserID)
+		c.Next()
+		return
+
+	}
+}
+
 func AdminAuthMiddleWare() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		sid, err := c.Cookie(common.SID)

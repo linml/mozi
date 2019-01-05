@@ -49,7 +49,7 @@ func Register(c *gin.Context) {
 	}
 }
 
-// 登录接口。
+// 登录接口
 // 参数 name: 用户名, password: 密码
 func Login(c *gin.Context) {
 	params := routes.ParamHelper{}
@@ -71,21 +71,23 @@ func Login(c *gin.Context) {
 		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
 	} else {
 		uid, err := service.GetUserIDByName(name)
-		sessionID := common.RandString(32)
-		if err == nil {
-			err = service.SetUserOnline(sessionID, uid, 0)
-			if err == nil {
-				c.SetCookie(common.SID, sessionID, 0, "/", "", false, true)
-			}
+		if err != nil {
+			c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
 		}
 
+		sid, err := service.SetAccountOnline(uid, service.PrefixUser, 0)
+
+		if err != nil {
+			c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+		}
+
+		c.SetCookie(common.SID, sid, 0, "/", "", false, true)
 		c.JSON(200, routes.ApiResult(common.CodeOK, "", map[string]interface{}{
 			"user_id":  uid,
 			"name":     name,
-			common.SID: sessionID,
+			common.SID: sid,
 		}))
 	}
-
 }
 
 // 获取用户余额

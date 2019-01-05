@@ -172,6 +172,129 @@ func Bet(o *lotto.Order) error {
 	return nil
 }
 
+// 游客下单
+func GuestBet(o *lotto.Order) error {
+	/*
+		检查用户
+		检查彩票
+		检查彩票期号
+		检查用户权限
+		检查玩法编号
+		检查用户余额
+
+		检查下注信息
+	*/
+
+	u, err := models.GetGuestUser(o.UserID)
+	if err != nil {
+		return err
+	}
+
+	li, err := lotto.GetLotto(o.LottoID)
+	if err != nil {
+		return errors.New("彩票编号错误")
+	}
+
+	if li.Status != models.LottoStatusEnable {
+		return errors.New("该彩种暂未开放")
+	}
+
+	lr, err := lotto.GetLottoResult(o.LottoID, o.Issue)
+	if err != nil {
+		return errors.New("期号异常")
+	}
+	if lr.StopTime < common.GetTimeNowString() {
+		return errors.New("当期已停止投注,请投注下一期")
+	}
+	if lr.Status != lotto.LottoResultOpen {
+		return errors.New("当期已开奖,请投注下一期")
+	}
+
+	err = models.MethodCheckBetLegal(o.MethodCode, o)
+	if err != nil {
+		return err
+	}
+
+	pInfo, err := lotto.GetOdds(o.LottoID, o.MethodCode, o.PlayCode)
+	if err != nil {
+		fmt.Println(err)
+		return errors.New("找不到该玩法")
+	}
+
+	mInfo, err := lotto.GetLottoMethodTemplate(li.LottoType, o.MethodCode)
+	if err != nil {
+		return errors.New("找不到该玩法[-1]")
+	}
+	if mInfo.OddsType == 1 {
+		if o.PlayCode != o.BetContent {
+			return errors.New("下注内容不匹配")
+		}
+	}
+
+	if pInfo.Status != 1 {
+		return errors.New("该玩法已停售")
+	}
+
+	if pInfo.BetMin.GreaterThan(o.Amount) {
+		return errors.New("投注金额过低")
+	}
+
+	if pInfo.BetMax.LessThan(o.Amount) {
+		return errors.New("投注金额过高")
+	}
+
+	if o.Amount.GreaterThan(u.Balance) {
+		return errors.New("账户余额不足")
+	}
+
+	betCount, err := models.MethodBetCount(o.MethodCode, o)
+	if err != nil {
+		return err
+	}
+	if betCount < 1 {
+		return errors.New("下注注数异常")
+	}
+	minS, _ := decimal.NewFromString("0.001")
+	bcD, _ := decimal.NewFromString(fmt.Sprintf("%d", betCount))
+	if o.Amount.Div(bcD).LessThan(minS) {
+		return errors.New(fmt.Sprintf("单注最低金额不能低于%s", minS))
+	}
+
+	orderID := common.GetTimeNowString()[4:] + common.RandDigitString(8)
+	o.LottoType = li.LottoType
+	o.Odds = pInfo.Odds
+	o.BetCount = betCount
+	o.Name = u.Name
+	o.OrderID = orderID
+	o.GameKind = li.GameKind
+	o.GameType = li.GameType
+	o.BetTime = common.GetTimeNowString()
+	o.UpdateTime = common.GetTimeNowString()
+	o.BetDate = common.GetDateNowString()
+
+	tx, err := common.BaseDb.Begin()
+	if err != nil {
+		return errors.New(fmt.Sprintf("事务开始失败: %s", err))
+	}
+	err = lotto.CreateGuestRecordLottoOrderTx(tx, o)
+	if err != nil {
+		tx.Rollback()
+		return errors.New(fmt.Sprintf("下单异常.%s", err))
+	}
+
+	err = models.GuestChangeMoneyTx(tx, o.UserID, o.Amount.Abs().Neg())
+	if err != nil {
+		tx.Rollback()
+		return errors.New(fmt.Sprintf("扣款异常.%s", err))
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		return errors.New(fmt.Sprintf("添加下单事务失败! 详情:%s", err))
+	}
+	return nil
+}
+
 // 期号生成
 func CreateIssueCorn() {
 
