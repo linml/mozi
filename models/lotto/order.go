@@ -372,7 +372,5 @@ func FinWinningList() (*[]Winning, error) {
 
 		data = append(data, d)
 	}
-
 	return &data, err
-
 }

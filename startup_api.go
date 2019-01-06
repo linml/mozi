@@ -62,6 +62,7 @@ func main() {
 		apiAuthV1.POST("/wallet/password/reset", api.ResetUserWalletPassword)
 		apiAuthV1.GET("/wallet/password/status", api.UserWalletPasswordStatus)
 		apiAuthV1.POST("/lotto/bet", api.Bet)
+		apiAuthV1.GET("/lotto/order", api.PageFindLottOdds4UserList)
 	}
 
 	port, err := common.Conf.Int("port", "api_port")

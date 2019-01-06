@@ -163,3 +163,42 @@ func GetCurrIssueInfo(c *gin.Context) {
 	}
 
 }
+
+func PageFindLottOdds4UserList(c *gin.Context) {
+	uid, err := routes.GetAPILoginID(c)
+	if err != nil {
+		c.JSON(200, routes.ApiShowResult(common.CodeFail, "登录校验失败"))
+	}
+
+	params := routes.ParamHelper{}
+	params.GetQueryNotEmpty(c, "curr_page")
+
+	params.GetQueryNotEmpty(c, "lotto_id")
+	params.GetQueryNotEmpty(c, "bet_date")
+	params.GetQueryNotEmpty(c, "method_code")
+	params.GetQueryNotEmpty(c, "play_code")
+	params.GetQueryNotEmpty(c, "status")
+
+	currPage := common.GetInt(params.Get("curr_page"))
+	pageRow := common.GetInt(params.Get("page_row"))
+
+	if currPage < 1 {
+		currPage = common.PageDefaultPage
+	}
+
+	if pageRow < 1 {
+		pageRow = common.PageDefaultRow
+	}
+
+	params["user_id"] = fmt.Sprintf("%d", uid)
+	params["order_by"] = "id"
+	params["sort_type"] = "DESC"
+
+	pp := common.PageParams{CurrentPage: currPage, PageRow: pageRow, Params: params}
+	pr, err := service.PageFindLottoOrder4UserList(pp)
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", pr))
+	}
+}
