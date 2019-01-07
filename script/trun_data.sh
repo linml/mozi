@@ -56,6 +56,8 @@ DELETE FROM record_log_admin_action;
 DELETE FROM record_log_user_action;
 DELETE FROM record_lotto_order;
 DELETE FROM record_money_change;
+DELETE FROM guest_record_lotto_order;
+DELETE FROM guest_user;
 DELETE FROM record_user_login;
 DELETE FROM record_admin_login;
 DELETE FROM report_lotto_day_count;

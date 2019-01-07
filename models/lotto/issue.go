@@ -63,6 +63,117 @@ func CreateIssueInfo(lid int, data *[]LottoResult) error {
 	return err
 }
 
+func FindLottoResultList(lid int, params map[string]string) (*[]LottoResult, error) {
+	t := LottoResult{}
+	querySql := fmt.Sprintf("SELECT %s FROM %s WHERE 1=1", strings.Join(t.Field(), ","), t.TableName(lid))
+	sqlWhere, args := "", []interface{}{}
+	if v, ok := params["id"]; ok {
+		sqlWhere += " AND id = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["lotto_id"]; ok {
+		sqlWhere += " AND lotto_id = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["issue"]; ok {
+		sqlWhere += " AND issue = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["draw_number"]; ok {
+		sqlWhere += " AND draw_number = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["issue_date"]; ok {
+		sqlWhere += " AND issue_date = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["status"]; ok {
+		sqlWhere += " AND status = ?"
+		args = append(args, v)
+	}
+
+	if v, ok := params["start_time_from"]; ok {
+		sqlWhere += " AND start_time >= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["start_time_to"]; ok {
+		sqlWhere += " AND start_time <= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["stop_time_from"]; ok {
+		sqlWhere += " AND stop_time >= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["stop_time_to"]; ok {
+		sqlWhere += " AND stop_time <= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["result_time_from"]; ok {
+		sqlWhere += " AND result_time >= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["result_time_to"]; ok {
+		sqlWhere += " AND result_time <= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["issue_date_from"]; ok {
+		sqlWhere += " AND issue_date >= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["issue_date_to"]; ok {
+		sqlWhere += " AND issue_date <= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["update_time_from"]; ok {
+		sqlWhere += " AND update_time >= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["update_time_to"]; ok {
+		sqlWhere += " AND update_time <= ?"
+		args = append(args, v)
+	}
+
+	if v, ok := params["order_by"]; ok {
+		if v == "issue" {
+			sqlWhere += " ORDER BY issue "
+		} else if v == "id" {
+			sqlWhere += " ORDER BY id "
+		} else {
+			sqlWhere += " ORDER BY id  "
+		}
+	} else {
+		sqlWhere += " ORDER BY id "
+	}
+
+	if v, ok := params["sort_type"]; ok {
+		if v == "ASC" {
+			sqlWhere += " ASC "
+		} else {
+			sqlWhere += " DESC "
+		}
+	} else {
+		sqlWhere += " DESC "
+	}
+
+	var data []LottoResult
+	var err error
+
+	querySql += sqlWhere
+	rows, err := common.BaseDb.Query(querySql, args...)
+	if err != nil {
+		return &data, err
+	}
+	for rows.Next() {
+		d := LottoResult{}
+		err = rows.Scan(d.FieldItem()...)
+		if err != nil {
+			return &data, err
+		}
+		data = append(data, d)
+	}
+	return &data, err
+}
+
 func PageFindLottoResultList(lottoID int, pageParam common.PageParams) (*common.PageResult, *[]LottoResult, error) {
 	t := LottoResult{}
 	conditionSql := fmt.Sprintf(" FROM %s WHERE 1=1 ", t.TableName(lottoID))

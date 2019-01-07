@@ -27,6 +27,15 @@ func CMSHomeInit(c *gin.Context) {
 	}
 }
 
+func CMSCodeLottoList(c *gin.Context) {
+	dataList, err := service.CMSCodeLottoList()
+	if err != nil {
+		c.JSON(200, routes.ApiResult(common.CodeFail, fmt.Sprintf("%s", err), map[string]string{}))
+	} else {
+		c.JSON(200, routes.ApiResult(common.CodeOK, "", dataList))
+	}
+}
+
 func CMSBetPlay(c *gin.Context) {
 	params := routes.ParamHelper{}
 	params.GetQueryNotEmpty(c, "lotto_id")

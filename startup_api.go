@@ -44,6 +44,7 @@ func main() {
 		apiV1.GET("/captcha", routes.GenCaptcha)
 		apiV1.GET("/hall/lotto/list", cms.CMSFindHallLotto)
 		apiV1.GET("/home/init", cms.CMSHomeInit)
+		apiV1.GET("/lotto/code/list", cms.CMSCodeLottoList)
 		apiV1.GET("/bet/play_info", cms.CMSBetPlay)
 		apiV1.GET("/lotto/curr_issue_info", api.GetCurrIssueInfo)
 	}

@@ -95,6 +95,34 @@ func CMSHomeInit() (interface{}, error) {
 	return &ret, err
 }
 
+// 彩票列表
+func CMSCodeLottoList() (*[]HomeLotto, error) {
+	dataList := []HomeLotto{}
+	hl, err := lotto.FindCMSHomeLotto(map[string]string{"status": "1"})
+	if err != nil {
+		return &dataList, err
+	}
+	for i := range *hl {
+		lid := (*hl)[i].LottoID
+		lottoInfo, err := lotto.GetLotto(lid)
+		if err != nil {
+			continue
+		}
+		issueInfo, err := lotto.GetCurIssue(lid)
+		if err != nil {
+
+		}
+		data := HomeLotto{
+			LottoID: lottoInfo.LottoID,
+			Name:    lottoInfo.Name,
+			Issue:   issueInfo.Issue,
+			ImgUrl:  lottoInfo.ImgUrl,
+		}
+		dataList = append(dataList, data)
+	}
+	return &dataList, err
+}
+
 type outGroup struct {
 	ID          int                  `json:"id"`
 	LottoID     int                  `json:"lotto_id"`

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"github.com/shopspring/decimal"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models/errors"
@@ -30,10 +31,12 @@ type LottoOrder4User struct {
 func PageFindLottoOrder4UserList(pageParam common.PageParams) (*common.PageResult, error) {
 	retpr := common.PageResult{}
 	if _, ok := pageParam.Params["user_id"]; !ok {
+		fmt.Println("用户编码错误")
 		return &retpr, errors.New("用户编码错误")
 	}
 	pr, ol, err := lotto.PageFindLottoOrderList(pageParam)
 	if err != nil {
+		fmt.Println("eee:", err)
 		return &retpr, errors.New("查询异常")
 	}
 	o4ul := []LottoOrder4User{}

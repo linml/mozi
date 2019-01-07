@@ -7,6 +7,7 @@ import (
 
 const (
 	SysDefaultParentID = "default_parent_id"
+	SysLottoCalcMyself = "lotto_calc_myself"
 )
 
 type SysSettings struct {

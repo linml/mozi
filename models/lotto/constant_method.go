@@ -1,6 +1,19 @@
 package lotto
 
 const (
+	LottoTypeSSC  = 1  // 彩票类型-时时彩
+	LottoType11X5 = 2  // 彩票类型-11选5
+	LottoTypeK3   = 3  // 彩票类型-快三
+	LottoTypePK10 = 4  // 彩票类型-PK10
+	LottoTypePL3  = 5  // 彩票类型-排列3
+	LottoTypePL5  = 6  // 彩票类型-排列5
+	LottoTypeKLSF = 7  // 彩票类型-快乐十分
+	LottoTypeKENO = 8  // 彩票类型-基诺
+	LottoTypePC28 = 9  // 彩票类型-幸运28
+	LottoTypeLHC  = 10 // 彩票类型-六合彩
+)
+
+const (
 	/* ssc */
 	SscNumber1          = "10001" // 数字盘 第1球 (范围0～9)
 	SscNumber2          = "10002" // 数字盘 第2球 (范围0～9)

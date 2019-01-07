@@ -115,6 +115,183 @@ func FindOrder4Settle(lastID int, lottoID int, issue string) (*[]Order, error) {
 	return &data, err
 }
 
+func FindLottoOrderList(params map[string]string) (*[]Order, error) {
+	t := Order{}
+	conditionSql := fmt.Sprintf(" FROM %s WHERE 1=1 ", t.TableName(""))
+	querySql := fmt.Sprintf("SELECT %s ", strings.Join(t.Field(), ",")) + conditionSql
+	sqlWhere, args := "", []interface{}{}
+	if v, ok := params["id"]; ok {
+		sqlWhere += " AND id = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["order_id"]; ok {
+		sqlWhere += " AND order_id = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["user_id"]; ok {
+		sqlWhere += " AND user_id = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["name"]; ok {
+		sqlWhere += " AND name = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["lotto_id"]; ok {
+		sqlWhere += " AND lotto_id = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["lotto_type"]; ok {
+		sqlWhere += " AND lotto_type = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["game_kind"]; ok {
+		sqlWhere += " AND game_kind = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["game_type"]; ok {
+		sqlWhere += " AND game_type = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["issue"]; ok {
+		sqlWhere += " AND issue = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["method_code"]; ok {
+		sqlWhere += " AND method_code = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["play_code"]; ok {
+		sqlWhere += " AND play_code = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["status"]; ok {
+		sqlWhere += " AND status = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["flag"]; ok {
+		sqlWhere += " AND flag = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["bet_date"]; ok {
+		sqlWhere += " AND bet_date = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["calc_date"]; ok {
+		sqlWhere += " AND calc_date = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["bet_time"]; ok {
+		sqlWhere += " AND bet_time = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["update_time"]; ok {
+		sqlWhere += " AND update_time = ?"
+		args = append(args, v)
+	}
+	if v, ok := params["ip"]; ok {
+		sqlWhere += " AND ip = ?"
+		args = append(args, v)
+	}
+
+	if v, ok := params["amount_min"]; ok {
+		sqlWhere += " AND amount >= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["amount_max"]; ok {
+		sqlWhere += " AND amount <= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["payout_min"]; ok {
+		sqlWhere += " AND payout >= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["payout_max"]; ok {
+		sqlWhere += " AND payout <= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["profit_min"]; ok {
+		sqlWhere += " AND profit >= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["profit_max"]; ok {
+		sqlWhere += " AND profit <= ?"
+		args = append(args, v)
+	}
+
+	if v, ok := params["bet_date_from"]; ok {
+		sqlWhere += " AND bet_date >= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["bet_date_to"]; ok {
+		sqlWhere += " AND bet_date <= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["calc_date_from"]; ok {
+		sqlWhere += " AND calc_date >= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["calc_date_to"]; ok {
+		sqlWhere += " AND calc_date <= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["bet_time_from"]; ok {
+		sqlWhere += " AND bet_time >= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["bet_time_to"]; ok {
+		sqlWhere += " AND bet_time <= ?"
+		args = append(args, v)
+	}
+	if v, ok := params["update_time_from"]; ok {
+		sqlWhere += " AND update_time >= ?"
+		args = append(args, v)
+	}
+
+	if v, ok := params["order_by"]; ok {
+		if v == "issue" {
+			sqlWhere += " ORDER BY issue "
+		} else if v == "amount" {
+			sqlWhere += " ORDER BY amount "
+		} else if v == "payout" {
+			sqlWhere += " ORDER BY payout "
+		} else if v == "profit" {
+			sqlWhere += " ORDER BY profit "
+		} else {
+			sqlWhere += " ORDER BY id  "
+		}
+	} else {
+		sqlWhere += " ORDER BY id "
+	}
+
+	if v, ok := params["sort_type"]; ok {
+		if v == "ASC" {
+			sqlWhere += " ASC "
+		} else {
+			sqlWhere += " DESC "
+		}
+	} else {
+		sqlWhere += " DESC "
+	}
+
+	var data []Order
+	var err error
+
+	querySql += sqlWhere
+	rows, err := common.BaseDb.Query(querySql, args...)
+	if err != nil {
+		return &data, err
+	}
+	for rows.Next() {
+		d := Order{}
+		err = rows.Scan(d.FieldItem()...)
+		if err != nil {
+			return &data, err
+		}
+		data = append(data, d)
+	}
+	return &data, err
+}
+
 func PageFindLottoOrderList(pageParam common.PageParams) (*common.PageResult, *[]Order, error) {
 	t := Order{}
 	conditionSql := fmt.Sprintf(" FROM %s WHERE 1=1 ", t.TableName(""))
@@ -278,6 +455,8 @@ func PageFindLottoOrderList(pageParam common.PageParams) (*common.PageResult, *[
 	var data []Order
 	var err error
 	countSql += sqlWhere
+	pg.PageRow = pageParam.PageRow
+	pg.CurrentPage = pageParam.CurrentPage
 	err = common.BaseDb.QueryRow(countSql, args...).Scan(&pg.TotalCount)
 	if err != nil {
 		return &pg, &data, err

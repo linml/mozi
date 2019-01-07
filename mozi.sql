@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 03/01/2019 22:50:05
+ Date: 07/01/2019 23:07:15
 */
 
 SET NAMES utf8mb4;
@@ -213,7 +213,7 @@ CREATE TABLE `cms_lotto_method_group` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `lotto_id` (`lotto_id`,`group_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=888 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=1192 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Table structure for cms_lotto_method_group_play
@@ -232,7 +232,7 @@ CREATE TABLE `cms_lotto_method_group_play` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `lotto_type` (`lotto_id`,`group_id`,`method_code`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3322 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4466 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Table structure for cms_lotto_method_group_play_template
@@ -727,7 +727,62 @@ CREATE TABLE `gift_task` (
   `start_at` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '',
   `end_at` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Table structure for guest_record_lotto_order
+-- ----------------------------
+DROP TABLE IF EXISTS `guest_record_lotto_order`;
+CREATE TABLE `guest_record_lotto_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` varchar(32) NOT NULL DEFAULT '' COMMENT '订单号',
+  `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户编号',
+  `name` varchar(32) NOT NULL DEFAULT '' COMMENT '用户名',
+  `lotto_id` int(11) NOT NULL DEFAULT '0' COMMENT '彩票编号',
+  `lotto_type` int(11) NOT NULL COMMENT '彩票类型',
+  `game_kind` int(11) NOT NULL DEFAULT '0',
+  `game_type` int(11) NOT NULL DEFAULT '0',
+  `issue` varchar(32) NOT NULL DEFAULT '' COMMENT '期号',
+  `method_code` varchar(16) NOT NULL DEFAULT '' COMMENT '玩法',
+  `play_code` varchar(16) NOT NULL COMMENT '玩法项',
+  `bet_count` int(11) NOT NULL DEFAULT '0' COMMENT '下注注数',
+  `bet_content` text NOT NULL COMMENT '下注内容',
+  `win_count` int(11) NOT NULL DEFAULT '0' COMMENT '中奖注数',
+  `win_content` text NOT NULL COMMENT '中奖内容',
+  `draw_number` varchar(64) NOT NULL DEFAULT '' COMMENT '开奖号码',
+  `odds` decimal(11,3) NOT NULL DEFAULT '0.000' COMMENT '赔率',
+  `amount` decimal(12,3) NOT NULL DEFAULT '0.000' COMMENT '下注金额',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单状态 0:未结算;1:中奖;2:未中奖;3:撤销;4:异常',
+  `flag` tinyint(1) NOT NULL DEFAULT '1' COMMENT '订单标识 0:无效投注,1:有效投注(当Status 是1/2)',
+  `payout` decimal(12,3) NOT NULL DEFAULT '0.000' COMMENT '派奖',
+  `profit` decimal(12,3) NOT NULL DEFAULT '0.000' COMMENT '盈亏',
+  `bet_date` varchar(8) NOT NULL DEFAULT '' COMMENT '下注日期',
+  `calc_date` varchar(8) NOT NULL DEFAULT '' COMMENT '结算日期',
+  `bet_time` varchar(14) NOT NULL DEFAULT '' COMMENT '下注时间',
+  `update_time` varchar(14) NOT NULL DEFAULT '' COMMENT '最后更新时间',
+  `ip` int(11) NOT NULL DEFAULT '0' COMMENT 'IP',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `order_id` (`order_id`) USING BTREE,
+  KEY `user_id` (`user_id`),
+  KEY `name` (`name`),
+  KEY `bet_time` (`bet_time`),
+  KEY `update_time` (`update_time`),
+  KEY `bet_date` (`bet_date`),
+  KEY `calc_date` (`calc_date`),
+  KEY `lotto_id` (`lotto_id`,`issue`)
+) ENGINE=InnoDB AUTO_INCREMENT=802 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
+
+-- ----------------------------
+-- Table structure for guest_user
+-- ----------------------------
+DROP TABLE IF EXISTS `guest_user`;
+CREATE TABLE `guest_user` (
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `balance` decimal(12,3) NOT NULL DEFAULT '0.000',
+  `create_at` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '',
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Table structure for issue_factory
@@ -2295,7 +2350,7 @@ CREATE TABLE `record_log_user_action` (
   KEY `user_id` (`user_id`,`action_module`,`action_id`,`record_at`),
   KEY `user_id_2` (`user_id`,`record_at`),
   KEY `action_module` (`action_module`,`action_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='操作日志';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='操作日志';
 
 -- ----------------------------
 -- Table structure for record_lotto_order
@@ -2338,7 +2393,7 @@ CREATE TABLE `record_lotto_order` (
   KEY `bet_date` (`bet_date`),
   KEY `calc_date` (`calc_date`),
   KEY `lotto_id` (`lotto_id`,`issue`)
-) ENGINE=InnoDB AUTO_INCREMENT=759 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
+) ENGINE=InnoDB AUTO_INCREMENT=820 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单';
 
 -- ----------------------------
 -- Table structure for record_money_change
@@ -2366,7 +2421,7 @@ CREATE TABLE `record_money_change` (
   KEY `user_id_r` (`user_id`,`record_at`),
   KEY `user_id_g_m` (`user_id`,`game_kind`,`change_kind`),
   KEY `game_id_m_r` (`game_kind`,`change_kind`,`record_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=950 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户资金变动记录';
+) ENGINE=InnoDB AUTO_INCREMENT=1013 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户资金变动记录';
 
 -- ----------------------------
 -- Table structure for record_user_login
@@ -2389,7 +2444,7 @@ CREATE TABLE `record_user_login` (
   KEY `ip` (`ip`,`record_at`),
   KEY `url` (`url`,`record_at`),
   KEY `record_time` (`record_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户登录日志';
 
 -- ----------------------------
 -- Table structure for report_lotto_day_count
@@ -2412,7 +2467,7 @@ CREATE TABLE `report_lotto_day_count` (
   `update_time` varchar(14) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `count_date` (`count_date`,`user_id`,`lotto_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2887 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='彩票游戏日统计';
+) ENGINE=InnoDB AUTO_INCREMENT=2971 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='彩票游戏日统计';
 
 -- ----------------------------
 -- Table structure for sys_settings
@@ -2429,6 +2484,7 @@ CREATE TABLE `sys_settings` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `sys_settings` VALUES ('default_parent_id', '1');
+INSERT INTO `sys_settings` VALUES ('lotto_calc_myself', '4,5,6,7,15,21,24');
 COMMIT;
 
 -- ----------------------------
@@ -2575,7 +2631,7 @@ CREATE TABLE `users` (
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态(0:冻结,1:正常, 2:开户成功但部分功能未开通)',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户表';
 
 -- ----------------------------
 -- Records of users
