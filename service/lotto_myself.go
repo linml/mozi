@@ -1,28 +1,19 @@
 package service
 
 import (
+	"crypto/rand"
 	"errors"
 	"fmt"
 	"github.com/xiuos/mozi/common"
 	"github.com/xiuos/mozi/models/lotto"
-	"math/rand"
+	"math/big"
 	"strings"
 	"time"
 )
 
-func Shuffle(vals []string) []string {
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	ret := make([]string, len(vals))
-	perm := r.Perm(len(vals))
-	for i, randIndex := range perm {
-		ret[i] = vals[randIndex]
-	}
-	return ret
-}
-
 func GenerateRangeNum(min, max int) int {
-	rand.Seed(time.Now().UnixNano())
-	randNum := rand.Intn(max-min) + min
+	i, _ := rand.Int(rand.Reader, big.NewInt(int64(max-min)))
+	randNum := int(i.Int64()) + min
 	return randNum
 }
 
@@ -45,9 +36,12 @@ func GenLotto(ballList []int, count int, resultType int) ([]int, error) {
 		salt = salt << 1
 		salt = salt + time.Now().UnixNano()
 		salt = salt + 1
-		seed := rand.NewSource(salt)
-		rng := rand.New(seed)
-		v := rng.Int()%maxBall + minBall
+		idx, _ := rand.Int(rand.Reader, big.NewInt(int64(len(ballList))*100))
+		v := ballList[int(idx.Int64())%(len(ballList))]
+		//seed := rand.NewSource(idx.Int64())
+		//rng := rand.New(seed)
+		//v := rng.Int()%maxBall + minBall
+
 		if 1 == resultType {
 			flag := false
 			for _, j := range ret {
@@ -211,9 +205,8 @@ func SelfCalcLottoV1(lottoID int) {
 		nextDrawTime = nextDrawTime.Add(d)
 		var subSeconds time.Duration
 		subSeconds = time.Duration(nextDrawTime.Sub(time.Now()).Seconds())
-		offsetSec := time.Duration(rand.Intn(5))
 		if subSeconds > 0 {
-			time.Sleep(subSeconds*time.Second + offsetSec*time.Second)
+			time.Sleep(subSeconds * time.Second)
 		} else {
 			time.Sleep(time.Second * 3)
 		}
